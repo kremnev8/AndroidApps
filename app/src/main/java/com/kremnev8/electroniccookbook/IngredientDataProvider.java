@@ -6,14 +6,11 @@ import com.kremnev8.electroniccookbook.model.Ingredient;
 import java.util.ArrayList;
 import java.util.List;
 
-public class IngredientService {
+public class IngredientDataProvider {
 
-    public static IngredientService Instance;
-    public List<Ingredient> ingredients;
-
-    public IngredientService(){
+    public List<Ingredient> getIngredientData(){
         Faker faker = new Faker();
-        ingredients = new ArrayList<>(50);
+        var ingredients = new ArrayList<Ingredient>(50);
 
         for (int i = 0; i < 50; i++) {
             ingredients.add(new Ingredient(
@@ -24,7 +21,7 @@ public class IngredientService {
                     "pc."
             ));
         }
-        Instance = this;
+        return ingredients;
     }
 
 }
