@@ -3,6 +3,7 @@ package com.kremnev8.electroniccookbook.viewmodels;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.view.View;
 import android.widget.ImageView;
 
 import androidx.core.graphics.drawable.RoundedBitmapDrawable;
@@ -19,9 +20,11 @@ import com.kremnev8.electroniccookbook.model.Ingredient;
 public class IngredientViewModel extends ItemViewModel<Ingredient> {
 
     private static RoundedBitmapDrawable image;
+    private final IngredientClickHandler clickHandler;
     public Ingredient ingredient;
 
-    public IngredientViewModel(Ingredient ingredient) {
+    public IngredientViewModel(Ingredient ingredient, IngredientClickHandler clickHandler) {
+        this.clickHandler = clickHandler;
         setItem(ingredient);
     }
 
@@ -50,6 +53,14 @@ public class IngredientViewModel extends ItemViewModel<Ingredient> {
         }
 
         view.setImageDrawable(image);
+    }
+
+    public void onRemoveClicked(View view){
+        clickHandler.onRemoveIngredient(ingredient.id);
+    }
+
+    public void onEditClicked(View view){
+        clickHandler.openIngredientDetails(ingredient);
     }
 
     @Override

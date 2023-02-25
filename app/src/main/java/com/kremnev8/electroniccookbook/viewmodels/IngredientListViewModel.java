@@ -1,18 +1,23 @@
 package com.kremnev8.electroniccookbook.viewmodels;
 
 import android.app.Application;
+import android.os.Bundle;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.viewmodel.ViewModelInitializer;
+
+import com.kremnev8.electroniccookbook.MainActivity;
 import com.kremnev8.electroniccookbook.database.AppRepository;
+import com.kremnev8.electroniccookbook.fragments.IngredientEditFragment;
 import com.kremnev8.electroniccookbook.model.Ingredient;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class IngredientListViewModel extends ViewModel {
+public class IngredientListViewModel extends ViewModel implements IngredientClickHandler {
 
     private AppRepository repository;
     private LiveData<List<Ingredient>> rawData;
@@ -22,8 +27,8 @@ public class IngredientListViewModel extends ViewModel {
         return ingredients;
     }
 
-    public IngredientListViewModel(AppRepository repository){
-        this.repository = repository;
+    public IngredientListViewModel(){
+        this.repository = MainActivity.Instance.repository;
 
         rawData = repository.getIngredients();
         rawData.observeForever(this::updateViewData);
@@ -39,7 +44,7 @@ public class IngredientListViewModel extends ViewModel {
 
         var viewData = new ArrayList<IngredientViewModel>(dataValue.size());
         for (Ingredient item: dataValue) {
-            viewData.add(new IngredientViewModel(item));
+            viewData.add(new IngredientViewModel(item, this));
         }
         return viewData;
     }
@@ -53,7 +58,7 @@ public class IngredientListViewModel extends ViewModel {
             if (i < ingredientsData.size()){
                 ingredientsData.get(i).setItem(newData.get(i));
             }else{
-                ingredientsData.add(new IngredientViewModel(newData.get(i)));
+                ingredientsData.add(new IngredientViewModel(newData.get(i), this));
             }
         }
 
@@ -66,14 +71,17 @@ public class IngredientListViewModel extends ViewModel {
         rawData.removeObserver(this::updateViewData);
     }
 
-    public static final ViewModelInitializer<IngredientListViewModel> initializer = new ViewModelInitializer<>(
-            IngredientListViewModel.class,
-            creationExtras -> {
-                Application app = (Application) creationExtras.get(ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY);
-                assert app != null;
+    @Override
+    public void onRemoveIngredient(int id) {
+        repository.deleteById(id);
+    }
 
-                return new IngredientListViewModel(new AppRepository(app));
-            }
-    );
+    @Override
+    public void openIngredientDetails(Ingredient ingredient) {
+        Bundle args = new Bundle();
+        args.putParcelable(IngredientEditFragment.InspectIngredient, ingredient);
+
+        MainActivity.Instance.setFragment(IngredientEditFragment.class, args);
+    }
 }
 

@@ -4,4 +4,11 @@
     <string name="menu">menu</string>
     <string name="more">more</string>
     <string name="ingredient_icon_desc">Ingredient Image</string>
+    <string name="editText">Input Field</string>
+    <string name="imagePick">Select image</string>
+    <string name="iconFieldDesc">Icon</string>
+    <string name="ConfirmText">Save</string>
+    <string name="nameFieldLabel">Name</string>
+    <string name="AddButtonLabel">Add</string>
+    <string name="amountFieldLabel">Amount</string>
 </resources>

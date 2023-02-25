@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import com.kremnev8.electroniccookbook.IngredientDataProvider;
 import com.kremnev8.electroniccookbook.MainActivity;
+import com.kremnev8.electroniccookbook.model.Ingredient;
 import com.kremnev8.electroniccookbook.viewmodels.IngredientListViewModel;
 import com.kremnev8.electroniccookbook.databinding.FragmentIngredientsBinding;
 
@@ -31,14 +32,14 @@ public class IngredientsFragment extends Fragment {
         binding = FragmentIngredientsBinding.inflate(inflater, container, false);
         binding.setLifecycleOwner(this);
 
-
-
-        ingredientListViewModel = new ViewModelProvider(
-                MainActivity.Instance,
-                ViewModelProvider.Factory.from(IngredientListViewModel.initializer))
-                .get(IngredientListViewModel.class);
+        ingredientListViewModel = new ViewModelProvider(MainActivity.Instance).get(IngredientListViewModel.class);
 
         binding.setViewModel(ingredientListViewModel);
+        binding.addButton.setOnClickListener(v -> {
+            Bundle args = new Bundle();
+            args.putParcelable(IngredientEditFragment.InspectIngredient, new Ingredient());
+            MainActivity.Instance.setFragment(IngredientEditFragment.class, args);
+        });
 
         return binding.getRoot();
     }

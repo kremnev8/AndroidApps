@@ -58,6 +58,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_more"
+        android:onClick="@{itemViewModel::onEditClicked}"
         app:tint="#8F8F8F" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
