@@ -25,7 +25,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:ingredientImage="@{itemViewModel.iconUri}" />
+        app:ingredientImage="@{itemViewModel.ingredient.iconUrl}" />
 
     <TextView
         android:id="@+id/name"
@@ -33,7 +33,7 @@
         android:layout_height="27dp"
         android:layout_marginStart="10dp"
         android:textSize="20sp"
-        android:text="@{itemViewModel.name}"
+        android:text="@{itemViewModel.ingredient.name}"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/icon"
         app:layout_constraintTop_toTopOf="parent" />
@@ -43,7 +43,7 @@
         android:layout_width="wrap_content"
         android:layout_height="19dp"
         android:layout_marginEnd="20dp"
-        android:text="@{String.valueOf(itemViewModel.amount)}"
+        android:text="@{String.valueOf(itemViewModel.ingredient.amount)}"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/more"
         app:layout_constraintTop_toTopOf="parent" />

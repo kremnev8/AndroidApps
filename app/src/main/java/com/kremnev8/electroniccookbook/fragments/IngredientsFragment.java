@@ -3,12 +3,14 @@ package com.kremnev8.electroniccookbook.fragments;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.kremnev8.electroniccookbook.IngredientDataProvider;
+import com.kremnev8.electroniccookbook.MainActivity;
 import com.kremnev8.electroniccookbook.viewmodels.IngredientListViewModel;
 import com.kremnev8.electroniccookbook.databinding.FragmentIngredientsBinding;
 
@@ -22,19 +24,20 @@ public class IngredientsFragment extends Fragment {
         // Required empty public constructor
     }
 
-
-    public static IngredientsFragment newInstance() {
-        return new IngredientsFragment();
-    }
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentIngredientsBinding.inflate(inflater, container, false);
         binding.setLifecycleOwner(this);
-        ingredientListViewModel = new IngredientListViewModel(new IngredientDataProvider());
+
+
+
+        ingredientListViewModel = new ViewModelProvider(
+                MainActivity.Instance,
+                ViewModelProvider.Factory.from(IngredientListViewModel.initializer))
+                .get(IngredientListViewModel.class);
+
         binding.setViewModel(ingredientListViewModel);
 
         return binding.getRoot();

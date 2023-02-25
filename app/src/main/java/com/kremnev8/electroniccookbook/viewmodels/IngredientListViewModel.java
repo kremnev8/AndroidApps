@@ -1,19 +1,12 @@
 package com.kremnev8.electroniccookbook.viewmodels;
 
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-
-import androidx.core.graphics.drawable.RoundedBitmapDrawable;
-import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
+import android.app.Application;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.kremnev8.electroniccookbook.IngredientDataProvider;
-import com.kremnev8.electroniccookbook.R;
-import com.kremnev8.electroniccookbook.adapters.BindableRecyclerViewAdapter;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.viewmodel.ViewModelInitializer;
+import com.kremnev8.electroniccookbook.database.AppRepository;
 import com.kremnev8.electroniccookbook.model.Ingredient;
 
 import java.util.ArrayList;
@@ -21,42 +14,66 @@ import java.util.List;
 
 public class IngredientListViewModel extends ViewModel {
 
-    private MutableLiveData<List<BindableRecyclerViewAdapter.IItemViewModel>> ingredients = new MutableLiveData<>();
+    private AppRepository repository;
+    private LiveData<List<Ingredient>> rawData;
+    private MutableLiveData<ArrayList<IngredientViewModel>> ingredients = new MutableLiveData<>();
 
-    public LiveData<List<BindableRecyclerViewAdapter.IItemViewModel>> getIngredients(){
+    public LiveData<ArrayList<IngredientViewModel>> getIngredients(){
         return ingredients;
     }
 
+    public IngredientListViewModel(AppRepository repository){
+        this.repository = repository;
 
-
-    public IngredientListViewModel(IngredientDataProvider dataProvider){
-        var data = dataProvider.getIngredientData();
-        var viewModels = createViewData(data);
+        rawData = repository.getIngredients();
+        rawData.observeForever(this::updateViewData);
+        var viewModels = createViewData(rawData);
         ingredients.postValue(viewModels);
     }
 
-    public List<BindableRecyclerViewAdapter.IItemViewModel> createViewData(List<Ingredient> ingredients){
-        var viewData = new ArrayList<BindableRecyclerViewAdapter.IItemViewModel>(ingredients.size());
-        for (Ingredient item: ingredients) {
+    public ArrayList<IngredientViewModel> createViewData(LiveData<List<Ingredient>> data){
+        var dataValue = data.getValue();
+        if (dataValue == null){
+            return new ArrayList<>();
+        }
+
+        var viewData = new ArrayList<IngredientViewModel>(dataValue.size());
+        for (Ingredient item: dataValue) {
             viewData.add(new IngredientViewModel(item));
         }
         return viewData;
     }
 
+    public void updateViewData(List<Ingredient> newData){
+        var ingredientsData = ingredients.getValue();
+        assert ingredientsData != null;
 
-    /*public void RemoveIngredient(Ingredient ingredient){
-        int index = Iterables.indexOf(ingredients.getValue(), item -> Objects.equals(((IngredientViewModel)item).id, ingredient.id));
-        if (index == -1) return;
+        ingredientsData.ensureCapacity(newData.size());
+        for (int i = 0; i < newData.size(); i++) {
+            if (i < ingredientsData.size()){
+                ingredientsData.get(i).setItem(newData.get(i));
+            }else{
+                ingredientsData.add(new IngredientViewModel(newData.get(i)));
+            }
+        }
 
-        ingredients.remove(index);
+        ingredients.setValue(ingredientsData);
     }
 
-    public void SetAmount(Ingredient ingredient, float amount){
-        int index = Iterables.indexOf(ingredients.getValue(), item -> Objects.equals(((IngredientViewModel)item).id, ingredient.id));
-        if (index == -1) return;
-
-        ingredient.amount = amount;
-        ingredients.set(index, ingredient);
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        rawData.removeObserver(this::updateViewData);
     }
-*/
+
+    public static final ViewModelInitializer<IngredientListViewModel> initializer = new ViewModelInitializer<>(
+            IngredientListViewModel.class,
+            creationExtras -> {
+                Application app = (Application) creationExtras.get(ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY);
+                assert app != null;
+
+                return new IngredientListViewModel(new AppRepository(app));
+            }
+    );
 }
+

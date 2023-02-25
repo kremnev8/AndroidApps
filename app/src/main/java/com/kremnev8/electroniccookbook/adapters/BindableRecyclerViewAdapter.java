@@ -1,7 +1,5 @@
 package com.kremnev8.electroniccookbook.adapters;
 
-import static java.util.Collections.emptyList;
-
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -9,25 +7,21 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.databinding.DataBindingUtil;
-import androidx.databinding.ViewDataBinding;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.kremnev8.electroniccookbook.BR;
-import com.kremnev8.electroniccookbook.databinding.ItemIngredientBinding;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class BindableRecyclerViewAdapter extends RecyclerView.Adapter<BindableRecyclerViewAdapter.BindableViewHolder> {
+public class BindableRecyclerViewAdapter<T, VT extends ItemViewModel<T>> extends RecyclerView.Adapter<BindableViewHolder<T, VT>> {
 
-    private List<IItemViewModel> itemViewModels = new ArrayList<>();
-    private HashMap<Integer, Integer> viewTypeToLayoutId = new HashMap<>();
+    private List<VT> itemViewModels = new ArrayList<>();
+    private final HashMap<Integer, Integer> viewTypeToLayoutId = new HashMap<>();
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @NonNull
     @Override
-    public BindableViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public BindableViewHolder<T, VT> onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         var binding = DataBindingUtil.inflate(
                 LayoutInflater.from(parent.getContext()),
@@ -35,11 +29,11 @@ public class BindableRecyclerViewAdapter extends RecyclerView.Adapter<BindableRe
                 parent,
                 false);
 
-        return new BindableViewHolder(binding);
+        return new BindableViewHolder<>(binding);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull BindableViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull BindableViewHolder<T, VT> holder, int position) {
         holder.bind(itemViewModels.get(position));
     }
 
@@ -57,7 +51,7 @@ public class BindableRecyclerViewAdapter extends RecyclerView.Adapter<BindableRe
         return item.getViewType();
     }
 
-    public void updateItems(List<IItemViewModel> items) {
+    public void updateItems(List<VT> items) {
         if (items != null)
             itemViewModels = items;
         else
@@ -65,22 +59,4 @@ public class BindableRecyclerViewAdapter extends RecyclerView.Adapter<BindableRe
         notifyDataSetChanged();
     }
 
-    class BindableViewHolder extends RecyclerView.ViewHolder{
-
-        public ViewDataBinding binding;
-
-        public BindableViewHolder(ViewDataBinding binding) {
-            super(binding.getRoot());
-            this.binding = binding;
-        }
-
-        public void bind(IItemViewModel itemViewModel){
-            binding.setVariable(BR.itemViewModel, itemViewModel);
-        }
-    }
-
-    public interface IItemViewModel {
-        int getLayoutId();
-        int getViewType();
-    }
 }
