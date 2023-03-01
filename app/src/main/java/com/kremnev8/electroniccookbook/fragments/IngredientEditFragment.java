@@ -50,7 +50,6 @@ public class IngredientEditFragment extends Fragment {
 
         binding.nameField.propertyNameText.setText(R.string.nameFieldLabel);
         binding.amountField.propertyNameText.setText(R.string.amountFieldLabel);
-        binding.iconSelector.propertyNameText.setText(R.string.iconFieldDesc);
 
         return binding.getRoot();
     }

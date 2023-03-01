@@ -11,39 +11,110 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
     tools:context=".fragments.IngredientEditFragment">
 
-    <include
-        android:id="@+id/iconSelector"
-        layout="@layout/element_image_field"
-        android:layout_width="0dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/iconArea"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/background"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:value="@={viewModel.model.iconUrl}" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/background"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="15dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/round_rect_shape"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:contentDescription="@string/ingredient_icon_desc"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:roundedImage="@{viewModel.model.iconUrl}" />
+
+        <ImageButton
+            android:id="@+id/imageButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="-25dp"
+            android:background="@drawable/round_button"
+            android:backgroundTint="@color/primaryColor"
+            android:backgroundTintMode="multiply"
+            android:contentDescription="@string/imagePick"
+            android:clickable="true"
+            android:focusable="true"
+            android:onClick="@{viewModel::selectIconClicked}"
+            android:padding="0dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/add_icon"
+            android:tintMode="multiply"
+            app:layout_constraintStart_toEndOf="@+id/takePhotoButton"
+            app:layout_constraintTop_toBottomOf="@+id/imageView"
+            app:tint="@color/primaryColor" />
+
+        <ImageButton
+            android:id="@+id/takePhotoButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="-25dp"
+            android:background="@drawable/round_button"
+            android:backgroundTint="@color/primaryColor"
+            android:backgroundTintMode="multiply"
+            android:contentDescription="@string/takePhotoDesc"
+            android:clickable="true"
+            android:focusable="true"
+            android:onClick="@{viewModel::takePhotoClicked}"
+            android:padding="5dp"
+            android:scaleType="centerInside"
+            android:src="@android:drawable/ic_menu_camera"
+            android:tintMode="multiply"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView"
+            app:tint="#000000" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <include
         android:id="@+id/nameField"
         layout="@layout/element_string_field"
-        app:value="@={viewModel.model.name}"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/iconSelector" />
+        app:layout_constraintTop_toBottomOf="@+id/iconArea"
+        app:value="@={viewModel.model.name}" />
 
     <include
         android:id="@+id/amountField"
         layout="@layout/element_number_field"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:value="@={viewModel.model.amount}"
+        android:layout_marginTop="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nameField" />
+        app:layout_constraintTop_toBottomOf="@+id/nameField"
+        app:value="@={viewModel.model.amount}" />
 
     <Button
         android:id="@+id/saveButton"

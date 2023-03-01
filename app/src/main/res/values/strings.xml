@@ -11,4 +11,5 @@
     <string name="nameFieldLabel">Name</string>
     <string name="AddButtonLabel">Add</string>
     <string name="amountFieldLabel">Amount</string>
+    <string name="takePhotoDesc">Make Photo</string>
 </resources>
