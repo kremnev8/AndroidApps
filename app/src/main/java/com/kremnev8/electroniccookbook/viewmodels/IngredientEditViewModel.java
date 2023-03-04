@@ -1,5 +1,6 @@
 package com.kremnev8.electroniccookbook.viewmodels;
 
+import android.os.Handler;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -26,6 +27,7 @@ public class IngredientEditViewModel extends ViewModel implements IPhotoRequestC
 
     private static final ExecutorService executor = Executors.newSingleThreadExecutor();
     private static final RequestOptions requestOptions;
+    private Handler handler = new Handler();
 
     static {
         requestOptions = new RequestOptions().transform(new CenterCrop(), new RoundedCorners(16));
@@ -54,11 +56,15 @@ public class IngredientEditViewModel extends ViewModel implements IPhotoRequestC
     }
 
     public void selectIconClicked(View view){
-        MainActivity.Instance.requestPhoto(this);
+        handler.postDelayed(() -> {
+            MainActivity.Instance.requestPhoto(this);
+        }, 100);
     }
 
     public void takePhotoClicked(View view){
-        MainActivity.Instance.takePicture(this);
+        handler.postDelayed(() -> {
+            MainActivity.Instance.takePicture(this);
+        }, 100);
     }
 
     @Override

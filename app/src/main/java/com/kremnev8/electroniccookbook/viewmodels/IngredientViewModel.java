@@ -1,5 +1,6 @@
 package com.kremnev8.electroniccookbook.viewmodels;
 
+import android.os.Handler;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -15,6 +16,8 @@ public class IngredientViewModel extends ItemViewModel<Ingredient> {
 
     private final IngredientClickHandler clickHandler;
     public Ingredient ingredient;
+    private Handler handler = new Handler();
+
 
     public IngredientViewModel(Ingredient ingredient, IngredientClickHandler clickHandler) {
         this.clickHandler = clickHandler;
@@ -42,7 +45,9 @@ public class IngredientViewModel extends ItemViewModel<Ingredient> {
     }
 
     public void onEditClicked(View view) {
-        clickHandler.openIngredientDetails(ingredient);
+        handler.postDelayed(() -> {
+            clickHandler.openIngredientDetails(ingredient);
+        }, 100);
     }
 
     @Override
