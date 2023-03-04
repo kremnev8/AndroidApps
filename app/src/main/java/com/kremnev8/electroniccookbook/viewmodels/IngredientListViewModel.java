@@ -1,25 +1,28 @@
 package com.kremnev8.electroniccookbook.viewmodels;
 
-import android.app.Application;
 import android.os.Bundle;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.viewmodel.ViewModelInitializer;
 
 import com.kremnev8.electroniccookbook.MainActivity;
-import com.kremnev8.electroniccookbook.database.AppRepository;
+import com.kremnev8.electroniccookbook.database.IngredientDao;
 import com.kremnev8.electroniccookbook.fragments.IngredientEditFragment;
 import com.kremnev8.electroniccookbook.model.Ingredient;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.lifecycle.HiltViewModel;
+
+@HiltViewModel
 public class IngredientListViewModel extends ViewModel implements IngredientClickHandler {
 
-    private AppRepository repository;
+    private final IngredientDao ingredientDao;
     private LiveData<List<Ingredient>> rawData;
     private MutableLiveData<ArrayList<IngredientViewModel>> ingredients = new MutableLiveData<>();
 
@@ -27,10 +30,11 @@ public class IngredientListViewModel extends ViewModel implements IngredientClic
         return ingredients;
     }
 
-    public IngredientListViewModel(){
-        this.repository = MainActivity.Instance.repository;
+    @Inject
+    IngredientListViewModel(SavedStateHandle handle, IngredientDao ingredientDao) {
+        this.ingredientDao = ingredientDao;
 
-        rawData = repository.getIngredients();
+        rawData = ingredientDao.getIngredients();
         rawData.observeForever(this::updateViewData);
         var viewModels = createViewData(rawData);
         ingredients.postValue(viewModels);
@@ -73,7 +77,7 @@ public class IngredientListViewModel extends ViewModel implements IngredientClic
 
     @Override
     public void onRemoveIngredient(int id) {
-        repository.deleteById(id);
+        ingredientDao.deleteById(id);
     }
 
     @Override

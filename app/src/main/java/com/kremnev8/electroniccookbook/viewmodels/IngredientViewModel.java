@@ -29,17 +29,6 @@ public class IngredientViewModel extends ItemViewModel<Ingredient> {
         this.ingredient = item;
     }
 
-    @BindingAdapter("circleImage")
-    public static void loadImage(ImageView view, String imageUrl) {
-        Glide
-                .with(MainActivity.Instance)
-                .load(imageUrl)
-                .placeholder(R.drawable.empty_round_placeholder)
-                .circleCrop()
-                .into(view);
-
-    }
-
     public void onRemoveClicked(View view) {
         clickHandler.onRemoveIngredient(ingredient.id);
     }

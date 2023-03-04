@@ -20,15 +20,19 @@ import android.util.Log;
 import com.google.common.base.Optional;
 import com.google.common.collect.Iterables;
 import com.kremnev8.electroniccookbook.contract.TakePictureWithUriReturnContract;
-import com.kremnev8.electroniccookbook.database.AppRepository;
 import com.kremnev8.electroniccookbook.databinding.ActivityMainBinding;
+import com.kremnev8.electroniccookbook.interfaces.IPhotoProvider;
+import com.kremnev8.electroniccookbook.interfaces.IPhotoRequestCallback;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
+public class MainActivity extends AppCompatActivity implements IPhotoProvider {
 
     private static final int FILES_REQUEST_CODE = 1;
     private static final int CAMERA_REQUEST_CODE = 2;
@@ -38,8 +42,6 @@ public class MainActivity extends AppCompatActivity {
     private FragmentManager fragmentManager;
     private List<Fragment> fragments = new ArrayList<>();
     private IPhotoRequestCallback lastRequester;
-
-    public AppRepository repository;
 
     ActivityResultLauncher<String> mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(),
             uri -> {
@@ -67,7 +69,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Instance = this;
-        repository = new AppRepository(getApplication());
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());

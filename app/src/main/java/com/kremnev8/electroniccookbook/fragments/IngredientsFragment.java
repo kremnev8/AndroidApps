@@ -15,7 +15,10 @@ import com.kremnev8.electroniccookbook.model.Ingredient;
 import com.kremnev8.electroniccookbook.viewmodels.IngredientListViewModel;
 import com.kremnev8.electroniccookbook.databinding.FragmentIngredientsBinding;
 
+import dagger.hilt.android.AndroidEntryPoint;
 
+
+@AndroidEntryPoint
 public class IngredientsFragment extends Fragment {
 
     private FragmentIngredientsBinding binding;

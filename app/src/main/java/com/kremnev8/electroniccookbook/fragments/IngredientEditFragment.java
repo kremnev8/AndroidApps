@@ -16,7 +16,10 @@ import com.kremnev8.electroniccookbook.databinding.FragmentIngredientEditBinding
 import com.kremnev8.electroniccookbook.model.Ingredient;
 import com.kremnev8.electroniccookbook.viewmodels.IngredientEditViewModel;
 
+import dagger.hilt.android.AndroidEntryPoint;
 
+
+@AndroidEntryPoint
 public class IngredientEditFragment extends Fragment {
 
     public static final String InspectIngredient = "targetIngredient";

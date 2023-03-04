@@ -1,4 +1,4 @@
-package com.kremnev8.electroniccookbook;
+package com.kremnev8.electroniccookbook.interfaces;
 
 public interface IPhotoRequestCallback {
 
