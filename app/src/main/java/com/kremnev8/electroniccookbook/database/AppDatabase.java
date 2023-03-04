@@ -1,28 +1,45 @@
 package com.kremnev8.electroniccookbook.database;
 
 import android.content.Context;
-import android.os.AsyncTask;
-import android.os.Handler;
-import android.os.Looper;
 
 import androidx.annotation.NonNull;
+import androidx.room.AutoMigration;
 import androidx.room.Database;
+import androidx.room.RenameColumn;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.migration.AutoMigrationSpec;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.kremnev8.electroniccookbook.IngredientDataProvider;
 import com.kremnev8.electroniccookbook.model.Ingredient;
+import com.kremnev8.electroniccookbook.model.Recipe;
+import com.kremnev8.electroniccookbook.model.RecipeIngredient;
+import com.kremnev8.electroniccookbook.model.RecipeStep;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Ingredient.class}, version = 1, exportSchema = false)
+@Database(entities = {
+        Ingredient.class,
+        Recipe.class,
+        RecipeStep.class,
+        RecipeIngredient.class},
+        version = 2,
+        autoMigrations = {
+            @AutoMigration(from = 1, to = 2, spec = AppDatabase.UriRenameMigration.class)
+        }
+)
 public abstract class AppDatabase extends RoomDatabase {
 
     private static final String DATABASE_NAME = "app_database.db";
 
+    @RenameColumn(tableName = "ingredients",fromColumnName = "iconUrl", toColumnName = "iconUri")
+    static class UriRenameMigration implements AutoMigrationSpec { }
+
+
     public abstract IngredientDao ingredientDao();
+    public abstract RecipeDao recipeDao();
     public static volatile AppDatabase instance = null;
 
     public static AppDatabase getInstance(Context context) {

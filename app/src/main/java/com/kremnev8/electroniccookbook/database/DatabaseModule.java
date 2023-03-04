@@ -20,8 +20,19 @@ public class DatabaseModule {
     }
 
     @Provides
+    public RecipeDao provideRecipeDao(AppDatabase database) {
+        return database.recipeDao();
+    }
+
+    @Provides
     @Singleton
     public AppDatabase provideDatabase(@ApplicationContext Context context) {
         return AppDatabase.getInstance(context);
+    }
+
+    @Provides
+    @Singleton
+    public DatabaseExecutor provideDatabaseExecutor(){
+        return new DatabaseExecutor();
     }
 }

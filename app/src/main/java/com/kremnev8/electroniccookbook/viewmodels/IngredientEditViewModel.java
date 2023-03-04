@@ -8,14 +8,10 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.ViewModel;
 
+import com.kremnev8.electroniccookbook.database.DatabaseExecutor;
 import com.kremnev8.electroniccookbook.interfaces.IPhotoProvider;
 import com.kremnev8.electroniccookbook.interfaces.IPhotoRequestCallback;
-import com.kremnev8.electroniccookbook.database.IngredientDao;
 import com.kremnev8.electroniccookbook.model.Ingredient;
-
-import java.util.Objects;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import javax.inject.Inject;
 
@@ -24,10 +20,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 @HiltViewModel
 public class IngredientEditViewModel extends ViewModel implements IPhotoRequestCallback {
 
-    private static final ExecutorService executor = Executors.newSingleThreadExecutor();
-
     private final Handler handler = new Handler();
-    private final IngredientDao ingredientDao;
+    private final DatabaseExecutor databaseExecutor;
     private final IPhotoProvider photoProvider;
 
     private final MutableLiveData<Ingredient> model;
@@ -37,8 +31,8 @@ public class IngredientEditViewModel extends ViewModel implements IPhotoRequestC
     }
 
     @Inject
-    IngredientEditViewModel(SavedStateHandle handle, IngredientDao ingredientDao, IPhotoProvider photoProvider) {
-        this.ingredientDao = ingredientDao;
+    IngredientEditViewModel(SavedStateHandle handle, DatabaseExecutor ingredientDao, IPhotoProvider photoProvider) {
+        this.databaseExecutor = ingredientDao;
         this.photoProvider = photoProvider;
         model = new MutableLiveData<>();
     }
@@ -48,9 +42,7 @@ public class IngredientEditViewModel extends ViewModel implements IPhotoRequestC
     }
 
     public void saveData(){
-        executor.execute(() -> {
-            ingredientDao.insert(model.getValue());
-        });
+        databaseExecutor.insert(model.getValue());
     }
 
     public void selectIconClicked(View view){
@@ -70,7 +62,7 @@ public class IngredientEditViewModel extends ViewModel implements IPhotoRequestC
         Ingredient ingredient = model.getValue();
         assert ingredient != null;
 
-        ingredient.iconUrl = imageUri;
+        ingredient.iconUri = imageUri;
         model.postValue(ingredient);
     }
 }

@@ -12,15 +12,15 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "ingredients",indices = @Index(value = {"id"},unique = true))
 public class Ingredient implements Parcelable {
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     public int id;
 
     @ColumnInfo(name = "name")
     public String name;
 
-    @ColumnInfo(name = "iconUrl")
-    public String iconUrl;
+    @ColumnInfo(name = "iconUri")
+    public String iconUri;
 
     @ColumnInfo(name = "amount")
     public float amount;
@@ -31,10 +31,10 @@ public class Ingredient implements Parcelable {
     public Ingredient(){}
 
     @Ignore
-    public Ingredient(int id, String name, String iconUrl, float amount, String units) {
+    public Ingredient(int id, String name, String iconUri, float amount, String units) {
         this.id = id;
         this.name = name;
-        this.iconUrl = iconUrl;
+        this.iconUri = iconUri;
         this.amount = amount;
         this.units = units;
     }
@@ -48,7 +48,7 @@ public class Ingredient implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(this.id);
         dest.writeString(this.name);
-        dest.writeString(this.iconUrl);
+        dest.writeString(this.iconUri);
         dest.writeFloat(this.amount);
         dest.writeString(this.units);
     }
@@ -56,7 +56,7 @@ public class Ingredient implements Parcelable {
     protected Ingredient(Parcel in) {
         this.id = in.readInt();
         this.name = in.readString();
-        this.iconUrl = in.readString();
+        this.iconUri = in.readString();
         this.amount = in.readFloat();
         this.units = in.readString();
     }

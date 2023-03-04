@@ -29,8 +29,4 @@ public interface IngredientDao {
 
     @Delete
     void delete(Ingredient ingredient);
-
-    @Query("DELETE FROM ingredients")
-    void deleteAll();
-
 }
