@@ -30,16 +30,17 @@ import java.util.concurrent.Executors;
             @AutoMigration(from = 1, to = 2, spec = AppDatabase.UriRenameMigration.class)
         }
 )
-public abstract class AppDatabase extends RoomDatabase {
+public abstract class AppDatabase extends RoomDatabase implements DaoAccess {
 
     private static final String DATABASE_NAME = "app_database.db";
 
     @RenameColumn(tableName = "ingredients",fromColumnName = "iconUrl", toColumnName = "iconUri")
     static class UriRenameMigration implements AutoMigrationSpec { }
 
-
     public abstract IngredientDao ingredientDao();
     public abstract RecipeDao recipeDao();
+    public abstract RecipeStepDao recipeStepDao();
+    public abstract RecipeIngredientDao recipeIngredientDao();
     public static volatile AppDatabase instance = null;
 
     public static AppDatabase getInstance(Context context) {

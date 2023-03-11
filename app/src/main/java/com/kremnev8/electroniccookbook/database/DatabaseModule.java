@@ -14,7 +14,7 @@ import dagger.hilt.components.SingletonComponent;
 @Module
 public class DatabaseModule {
 
-    @Provides
+   /* @Provides
     public IngredientDao provideIngredientDAO(AppDatabase database) {
         return database.ingredientDao();
     }
@@ -22,17 +22,22 @@ public class DatabaseModule {
     @Provides
     public RecipeDao provideRecipeDao(AppDatabase database) {
         return database.recipeDao();
+    }*/
+
+    @Provides
+    @Singleton
+    public DatabaseExecutor provideDatabaseExecutor(DaoAccess daoAccess){
+        return new DatabaseExecutor(daoAccess);
+    }
+
+    @Provides
+    public DaoAccess provideDaoAccess(AppDatabase database) {
+        return database;
     }
 
     @Provides
     @Singleton
     public AppDatabase provideDatabase(@ApplicationContext Context context) {
         return AppDatabase.getInstance(context);
-    }
-
-    @Provides
-    @Singleton
-    public DatabaseExecutor provideDatabaseExecutor(){
-        return new DatabaseExecutor();
     }
 }
