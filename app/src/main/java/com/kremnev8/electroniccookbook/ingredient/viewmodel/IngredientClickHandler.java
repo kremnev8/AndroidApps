@@ -1,6 +1,6 @@
-package com.kremnev8.electroniccookbook.viewmodels;
+package com.kremnev8.electroniccookbook.ingredient.viewmodel;
 
-import com.kremnev8.electroniccookbook.model.Ingredient;
+import com.kremnev8.electroniccookbook.ingredient.model.Ingredient;
 
 public interface IngredientClickHandler {
     void onRemoveIngredient(int id);

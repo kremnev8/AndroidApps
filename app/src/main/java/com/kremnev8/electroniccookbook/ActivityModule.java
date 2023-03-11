@@ -1,4 +1,4 @@
-package com.kremnev8.electroniccookbook.modules;
+package com.kremnev8.electroniccookbook;
 
 import android.content.Context;
 

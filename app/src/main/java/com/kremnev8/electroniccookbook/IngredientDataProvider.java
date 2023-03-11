@@ -1,7 +1,7 @@
 package com.kremnev8.electroniccookbook;
 
 import com.github.javafaker.Faker;
-import com.kremnev8.electroniccookbook.model.Ingredient;
+import com.kremnev8.electroniccookbook.ingredient.model.Ingredient;
 
 import java.util.ArrayList;
 import java.util.List;

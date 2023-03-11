@@ -1,4 +1,4 @@
-package com.kremnev8.electroniccookbook.fragments;
+package com.kremnev8.electroniccookbook.recipe.fragments;
 
 import androidx.lifecycle.ViewModelProvider;
 
@@ -13,8 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.kremnev8.electroniccookbook.databinding.FragmentRecipesListBinding;
-import com.kremnev8.electroniccookbook.model.Recipe;
-import com.kremnev8.electroniccookbook.viewmodels.RecipesListViewModel;
+import com.kremnev8.electroniccookbook.recipe.model.Recipe;
+import com.kremnev8.electroniccookbook.recipe.viewmodels.RecipesListViewModel;
 
 import dagger.hilt.android.AndroidEntryPoint;
 

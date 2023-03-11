@@ -1,4 +1,4 @@
-package com.kremnev8.electroniccookbook.model;
+package com.kremnev8.electroniccookbook.ingredient.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -61,7 +61,7 @@ public class Ingredient implements Parcelable {
         this.units = in.readString();
     }
 
-    public static final Parcelable.Creator<Ingredient> CREATOR = new Parcelable.Creator<Ingredient>() {
+    public static final Parcelable.Creator<Ingredient> CREATOR = new Parcelable.Creator<>() {
         @Override
         public Ingredient createFromParcel(Parcel source) {
             return new Ingredient(source);

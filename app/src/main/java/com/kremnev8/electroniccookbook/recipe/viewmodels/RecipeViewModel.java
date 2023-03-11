@@ -1,8 +1,8 @@
-package com.kremnev8.electroniccookbook.itemViewModel;
+package com.kremnev8.electroniccookbook.recipe.viewmodels;
 
 import com.kremnev8.electroniccookbook.R;
 import com.kremnev8.electroniccookbook.adapters.ItemViewModel;
-import com.kremnev8.electroniccookbook.model.Recipe;
+import com.kremnev8.electroniccookbook.recipe.model.Recipe;
 
 public class RecipeViewModel extends ItemViewModel<Recipe> {
     public Recipe recipe;

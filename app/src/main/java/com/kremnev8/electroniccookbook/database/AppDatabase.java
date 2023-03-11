@@ -12,10 +12,14 @@ import androidx.room.migration.AutoMigrationSpec;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.kremnev8.electroniccookbook.IngredientDataProvider;
-import com.kremnev8.electroniccookbook.model.Ingredient;
-import com.kremnev8.electroniccookbook.model.Recipe;
-import com.kremnev8.electroniccookbook.model.RecipeIngredient;
-import com.kremnev8.electroniccookbook.model.RecipeStep;
+import com.kremnev8.electroniccookbook.ingredient.database.IngredientDao;
+import com.kremnev8.electroniccookbook.ingredient.model.Ingredient;
+import com.kremnev8.electroniccookbook.recipe.database.RecipeDao;
+import com.kremnev8.electroniccookbook.recipe.database.RecipeIngredientDao;
+import com.kremnev8.electroniccookbook.recipe.database.RecipeStepDao;
+import com.kremnev8.electroniccookbook.recipe.model.Recipe;
+import com.kremnev8.electroniccookbook.recipe.model.RecipeIngredient;
+import com.kremnev8.electroniccookbook.recipe.model.RecipeStep;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

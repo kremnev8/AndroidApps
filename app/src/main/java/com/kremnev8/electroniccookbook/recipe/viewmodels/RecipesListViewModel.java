@@ -1,10 +1,9 @@
-package com.kremnev8.electroniccookbook.viewmodels;
+package com.kremnev8.electroniccookbook.recipe.viewmodels;
 
 import androidx.lifecycle.SavedStateHandle;
 
 import com.kremnev8.electroniccookbook.database.DatabaseExecutor;
-import com.kremnev8.electroniccookbook.itemViewModel.RecipeViewModel;
-import com.kremnev8.electroniccookbook.model.Recipe;
+import com.kremnev8.electroniccookbook.recipe.model.Recipe;
 
 import javax.inject.Inject;
 

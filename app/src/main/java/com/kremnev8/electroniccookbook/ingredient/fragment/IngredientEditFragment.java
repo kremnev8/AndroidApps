@@ -1,4 +1,4 @@
-package com.kremnev8.electroniccookbook.fragments;
+package com.kremnev8.electroniccookbook.ingredient.fragment;
 
 import android.os.Bundle;
 
@@ -13,8 +13,8 @@ import android.view.ViewGroup;
 import com.kremnev8.electroniccookbook.MainActivity;
 import com.kremnev8.electroniccookbook.R;
 import com.kremnev8.electroniccookbook.databinding.FragmentIngredientEditBinding;
-import com.kremnev8.electroniccookbook.model.Ingredient;
-import com.kremnev8.electroniccookbook.viewmodels.IngredientEditViewModel;
+import com.kremnev8.electroniccookbook.ingredient.model.Ingredient;
+import com.kremnev8.electroniccookbook.ingredient.viewmodel.IngredientEditViewModel;
 
 import dagger.hilt.android.AndroidEntryPoint;
 

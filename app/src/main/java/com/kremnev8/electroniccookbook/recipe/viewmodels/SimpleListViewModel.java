@@ -1,4 +1,4 @@
-package com.kremnev8.electroniccookbook.viewmodels;
+package com.kremnev8.electroniccookbook.recipe.viewmodels;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -21,7 +21,7 @@ public abstract class SimpleListViewModel <T, TVM extends ItemViewModel<T>> exte
         return viewModels;
     }
 
-    SimpleListViewModel(SavedStateHandle handle, DatabaseExecutor databaseExecutor) {
+    public SimpleListViewModel(SavedStateHandle handle, DatabaseExecutor databaseExecutor) {
         this.databaseExecutor = databaseExecutor;
     }
 

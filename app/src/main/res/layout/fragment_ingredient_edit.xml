@@ -6,13 +6,13 @@
     <data>
         <variable
             name="viewModel"
-            type="com.kremnev8.electroniccookbook.viewmodels.IngredientEditViewModel" />
+            type="com.kremnev8.electroniccookbook.ingredient.viewmodel.IngredientEditViewModel" />
     </data>
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    tools:context=".fragments.IngredientEditFragment">
+    tools:context=".ingredient.fragment.IngredientEditFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/iconArea"

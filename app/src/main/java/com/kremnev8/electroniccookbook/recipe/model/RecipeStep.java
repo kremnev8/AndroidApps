@@ -1,4 +1,4 @@
-package com.kremnev8.electroniccookbook.model;
+package com.kremnev8.electroniccookbook.recipe.model;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;

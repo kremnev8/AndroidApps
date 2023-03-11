@@ -1,4 +1,4 @@
-package com.kremnev8.electroniccookbook.database;
+package com.kremnev8.electroniccookbook.ingredient.database;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
@@ -8,7 +8,7 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import com.kremnev8.electroniccookbook.model.Ingredient;
+import com.kremnev8.electroniccookbook.ingredient.model.Ingredient;
 
 import java.util.List;
 

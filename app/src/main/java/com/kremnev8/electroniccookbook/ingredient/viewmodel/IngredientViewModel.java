@@ -1,18 +1,17 @@
-package com.kremnev8.electroniccookbook.itemViewModel;
+package com.kremnev8.electroniccookbook.ingredient.viewmodel;
 
 import android.os.Handler;
 import android.view.View;
 
 import com.kremnev8.electroniccookbook.R;
 import com.kremnev8.electroniccookbook.adapters.ItemViewModel;
-import com.kremnev8.electroniccookbook.model.Ingredient;
-import com.kremnev8.electroniccookbook.viewmodels.IngredientClickHandler;
+import com.kremnev8.electroniccookbook.ingredient.model.Ingredient;
 
 public class IngredientViewModel extends ItemViewModel<Ingredient> {
 
     private final IngredientClickHandler clickHandler;
     public Ingredient ingredient;
-    private Handler handler = new Handler();
+    private final Handler handler = new Handler();
 
 
     public IngredientViewModel(Ingredient ingredient, IngredientClickHandler clickHandler) {
@@ -30,9 +29,7 @@ public class IngredientViewModel extends ItemViewModel<Ingredient> {
     }
 
     public void onEditClicked(View view) {
-        handler.postDelayed(() -> {
-            clickHandler.openIngredientDetails(ingredient);
-        }, 100);
+        handler.postDelayed(() -> clickHandler.openIngredientDetails(ingredient), 100);
     }
 
     @Override

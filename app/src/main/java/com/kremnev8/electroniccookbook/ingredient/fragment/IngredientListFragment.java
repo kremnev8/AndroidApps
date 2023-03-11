@@ -1,7 +1,8 @@
-package com.kremnev8.electroniccookbook.fragments;
+package com.kremnev8.electroniccookbook.ingredient.fragment;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -11,8 +12,8 @@ import android.view.ViewGroup;
 
 import com.kremnev8.electroniccookbook.MainActivity;
 import com.kremnev8.electroniccookbook.databinding.FragmentIngredientListBinding;
-import com.kremnev8.electroniccookbook.model.Ingredient;
-import com.kremnev8.electroniccookbook.viewmodels.IngredientListViewModel;
+import com.kremnev8.electroniccookbook.ingredient.model.Ingredient;
+import com.kremnev8.electroniccookbook.ingredient.viewmodel.IngredientListViewModel;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -28,7 +29,7 @@ public class IngredientListFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentIngredientListBinding.inflate(inflater, container, false);

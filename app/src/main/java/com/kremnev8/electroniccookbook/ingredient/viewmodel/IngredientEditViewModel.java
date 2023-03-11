@@ -1,4 +1,4 @@
-package com.kremnev8.electroniccookbook.viewmodels;
+package com.kremnev8.electroniccookbook.ingredient.viewmodel;
 
 import android.os.Handler;
 import android.view.View;
@@ -11,7 +11,7 @@ import androidx.lifecycle.ViewModel;
 import com.kremnev8.electroniccookbook.database.DatabaseExecutor;
 import com.kremnev8.electroniccookbook.interfaces.IPhotoProvider;
 import com.kremnev8.electroniccookbook.interfaces.IPhotoRequestCallback;
-import com.kremnev8.electroniccookbook.model.Ingredient;
+import com.kremnev8.electroniccookbook.ingredient.model.Ingredient;
 
 import javax.inject.Inject;
 
@@ -46,15 +46,11 @@ public class IngredientEditViewModel extends ViewModel implements IPhotoRequestC
     }
 
     public void selectIconClicked(View view){
-        handler.postDelayed(() -> {
-            photoProvider.requestPhoto(this);
-        }, 100);
+        handler.postDelayed(() -> photoProvider.requestPhoto(this), 100);
     }
 
     public void takePhotoClicked(View view){
-        handler.postDelayed(() -> {
-            photoProvider.takePicture(this);
-        }, 100);
+        handler.postDelayed(() -> photoProvider.takePicture(this), 100);
     }
 
     @Override

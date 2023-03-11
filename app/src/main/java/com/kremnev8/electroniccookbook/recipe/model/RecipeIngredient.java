@@ -1,11 +1,12 @@
-package com.kremnev8.electroniccookbook.model;
+package com.kremnev8.electroniccookbook.recipe.model;
 
 import androidx.room.ColumnInfo;
-import androidx.room.Embedded;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
+
+import com.kremnev8.electroniccookbook.ingredient.model.Ingredient;
 
 @Entity(tableName = "recipeIngredient",
         indices = @Index(value = {"id"}, unique = true),

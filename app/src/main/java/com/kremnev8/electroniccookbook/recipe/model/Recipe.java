@@ -1,4 +1,4 @@
-package com.kremnev8.electroniccookbook.model;
+package com.kremnev8.electroniccookbook.recipe.model;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.ColumnInfo;
@@ -6,7 +6,6 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
-import androidx.room.Relation;
 
 import java.util.List;
 

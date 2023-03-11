@@ -2,13 +2,16 @@ package com.kremnev8.electroniccookbook.database;
 
 import androidx.lifecycle.LiveData;
 
-import com.kremnev8.electroniccookbook.model.Ingredient;
-import com.kremnev8.electroniccookbook.model.Recipe;
-import com.kremnev8.electroniccookbook.model.RecipeIngredient;
-import com.kremnev8.electroniccookbook.model.RecipeStep;
+import com.kremnev8.electroniccookbook.ingredient.database.IngredientDao;
+import com.kremnev8.electroniccookbook.ingredient.model.Ingredient;
+import com.kremnev8.electroniccookbook.recipe.database.RecipeExtendedDao;
+import com.kremnev8.electroniccookbook.recipe.database.RecipeIngredientDao;
+import com.kremnev8.electroniccookbook.recipe.database.RecipeStepDao;
+import com.kremnev8.electroniccookbook.recipe.model.Recipe;
+import com.kremnev8.electroniccookbook.recipe.model.RecipeIngredient;
+import com.kremnev8.electroniccookbook.recipe.model.RecipeStep;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -29,23 +32,17 @@ public class DatabaseExecutor implements IngredientDao, RecipeExtendedDao, Recip
 
     @Override
     public void insert(Ingredient ingredient) {
-        executor.execute(() -> {
-            daoAccess.ingredientDao().insert(ingredient);
-        });
+        executor.execute(() -> daoAccess.ingredientDao().insert(ingredient));
     }
 
     @Override
     public void update(Ingredient ingredient) {
-        executor.execute(() -> {
-            daoAccess.ingredientDao().update(ingredient);
-        });
+        executor.execute(() -> daoAccess.ingredientDao().update(ingredient));
     }
 
     @Override
     public void delete(Ingredient ingredient) {
-        executor.execute(() -> {
-            daoAccess.ingredientDao().delete(ingredient);
-        });
+        executor.execute(() -> daoAccess.ingredientDao().delete(ingredient));
     }
 
     @Override
@@ -84,30 +81,22 @@ public class DatabaseExecutor implements IngredientDao, RecipeExtendedDao, Recip
 
     @Override
     public void insert(Recipe recipe) {
-        executor.execute(() -> {
-            daoAccess.recipeDao().insert(recipe);
-        });
+        executor.execute(() -> daoAccess.recipeDao().insert(recipe));
     }
 
     @Override
     public void update(Recipe recipe) {
-        executor.execute(() -> {
-            daoAccess.recipeDao().update(recipe);
-        });
+        executor.execute(() -> daoAccess.recipeDao().update(recipe));
     }
 
     @Override
     public void deleteById(int id) {
-        executor.execute(() -> {
-            daoAccess.recipeDao().deleteById(id);
-        });
+        executor.execute(() -> daoAccess.recipeDao().deleteById(id));
     }
 
     @Override
     public void delete(Recipe recipe) {
-        executor.execute(() -> {
-            daoAccess.recipeDao().delete(recipe);
-        });
+        executor.execute(() -> daoAccess.recipeDao().delete(recipe));
     }
 
     @Override
@@ -136,9 +125,7 @@ public class DatabaseExecutor implements IngredientDao, RecipeExtendedDao, Recip
 
     @Override
     public void insertAllIngredients(List<RecipeIngredient> ingredients) {
-        executor.execute(() -> {
-            daoAccess.recipeIngredientDao().insertAllIngredients(ingredients);
-        });
+        executor.execute(() -> daoAccess.recipeIngredientDao().insertAllIngredients(ingredients));
     }
 
     @Override
@@ -148,8 +135,6 @@ public class DatabaseExecutor implements IngredientDao, RecipeExtendedDao, Recip
 
     @Override
     public void insertAllSteps(List<RecipeStep> steps) {
-        executor.execute(() -> {
-            daoAccess.recipeStepDao().insertAllSteps(steps);
-        });
+        executor.execute(() -> daoAccess.recipeStepDao().insertAllSteps(steps));
     }
 }
