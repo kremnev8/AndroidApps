@@ -13,24 +13,18 @@
         android:id="@+id/layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".fragments.IngredientsFragment">
-
-        <include
-            android:id="@+id/topBar"
-            layout="@layout/element_top_bar"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        tools:context=".fragments.IngredientListFragment">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/ingredientsList"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            app:itemViewModels="@{viewModel.viewModels}"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/topBar"
-            app:itemViewModels="@{viewModel.getIngredients()}"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/addButton"

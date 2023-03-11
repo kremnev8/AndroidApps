@@ -21,6 +21,8 @@ import com.google.common.base.Optional;
 import com.google.common.collect.Iterables;
 import com.kremnev8.electroniccookbook.contract.TakePictureWithUriReturnContract;
 import com.kremnev8.electroniccookbook.databinding.ActivityMainBinding;
+import com.kremnev8.electroniccookbook.fragments.IngredientListFragment;
+import com.kremnev8.electroniccookbook.fragments.RecipesListFragment;
 import com.kremnev8.electroniccookbook.interfaces.IPhotoProvider;
 import com.kremnev8.electroniccookbook.interfaces.IPhotoRequestCallback;
 
@@ -73,8 +75,36 @@ public class MainActivity extends AppCompatActivity implements IPhotoProvider {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        binding.topBar.menuButton.setOnClickListener(v -> {
+            toggleLeftDrawer();
+        });
+
+        binding.drawerMenu.ingredients.setOnClickListener(v -> {
+            setFragment(IngredientListFragment.class, null);
+            closeMenu();
+        });
+
+        binding.drawerMenu.recipes.setOnClickListener(v -> {
+            setFragment(RecipesListFragment.class, null);
+            closeMenu();
+        });
+
+        binding.drawerLayout.closeDrawer(binding.drawerMenu.view);
+
         fragmentManager = getSupportFragmentManager();
         fragments.add(fragmentManager.findFragmentById(R.id.fragmentContainerView));
+    }
+
+    private void toggleLeftDrawer() {
+        if (binding.drawerLayout.isDrawerOpen(binding.drawerMenu.view)) {
+            closeMenu();
+        } else {
+            binding.drawerLayout.openDrawer(binding.drawerMenu.view);
+        }
+    }
+
+    private void closeMenu() {
+        binding.drawerLayout.closeDrawer(binding.drawerMenu.view);
     }
 
     public <T extends Fragment> void setFragment(Class<T> clazz, @Nullable Bundle args) {

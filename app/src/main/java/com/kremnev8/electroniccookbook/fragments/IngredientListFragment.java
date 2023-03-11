@@ -9,22 +9,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.kremnev8.electroniccookbook.IngredientDataProvider;
 import com.kremnev8.electroniccookbook.MainActivity;
+import com.kremnev8.electroniccookbook.databinding.FragmentIngredientListBinding;
 import com.kremnev8.electroniccookbook.model.Ingredient;
 import com.kremnev8.electroniccookbook.viewmodels.IngredientListViewModel;
-import com.kremnev8.electroniccookbook.databinding.FragmentIngredientsBinding;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
 
 @AndroidEntryPoint
-public class IngredientsFragment extends Fragment {
+public class IngredientListFragment extends Fragment {
 
-    private FragmentIngredientsBinding binding;
+    private FragmentIngredientListBinding binding;
     private IngredientListViewModel ingredientListViewModel;
 
-    public IngredientsFragment() {
+    public IngredientListFragment() {
         // Required empty public constructor
     }
 
@@ -32,7 +31,7 @@ public class IngredientsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        binding = FragmentIngredientsBinding.inflate(inflater, container, false);
+        binding = FragmentIngredientListBinding.inflate(inflater, container, false);
         binding.setLifecycleOwner(this);
 
         ingredientListViewModel = new ViewModelProvider(MainActivity.Instance).get(IngredientListViewModel.class);

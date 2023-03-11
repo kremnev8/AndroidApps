@@ -5,34 +5,34 @@
     android:id="@+id/layout"
     android:layout_width="match_parent"
     android:layout_height="70dp"
-    android:background="@color/white"
-    tools:context=".fragments.IngredientsFragment">
+    android:background="@color/white">
 
 
     <TextView
         android:id="@+id/titleText"
         android:layout_width="0dp"
         android:layout_height="50dp"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
         android:gravity="center|start"
         android:text="@string/hello_blank_fragment"
         android:textSize="20sp"
-        app:layout_constraintEnd_toStartOf="@+id/menuButton"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/menuButton"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
         android:id="@+id/menuButton"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        android:layout_marginEnd="20dp"
         android:background="#FFFFFF"
         android:contentDescription="@string/menu"
         android:scaleType="fitXY"
         android:src="@drawable/row_256"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:tint="#8F8F8F" />
 

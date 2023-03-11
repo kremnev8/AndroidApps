@@ -12,4 +12,5 @@
     <color name="primaryColor">#E48D0B</color>
     <color name="invisible">#00000000</color>
     <color name="trans_gray">#80808080</color>
+    <color name="darkGray">#414141</color>
 </resources>

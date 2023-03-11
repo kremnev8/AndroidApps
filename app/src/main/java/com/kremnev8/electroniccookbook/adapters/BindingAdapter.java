@@ -10,7 +10,6 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.kremnev8.electroniccookbook.MainActivity;
 import com.kremnev8.electroniccookbook.R;
-import com.kremnev8.electroniccookbook.viewmodels.IngredientViewModel;
 
 import java.util.List;
 

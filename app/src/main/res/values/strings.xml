@@ -12,4 +12,8 @@
     <string name="AddButtonLabel">Add</string>
     <string name="amountFieldLabel">Amount</string>
     <string name="takePhotoDesc">Make Photo</string>
+    <string name="recipeIconDesc">Recipe Image</string>
+    <string name="recipesName">Recipes</string>
+    <string name="ingredientsName">Ingredients</string>
+    <string name="settingsName">Settings</string>
 </resources>

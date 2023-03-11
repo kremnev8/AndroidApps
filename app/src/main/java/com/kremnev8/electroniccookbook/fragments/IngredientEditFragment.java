@@ -48,7 +48,7 @@ public class IngredientEditFragment extends Fragment {
         binding.setViewModel(viewModel);
         binding.saveButton.setOnClickListener(v -> {
             viewModel.saveData();
-            MainActivity.Instance.setFragment(IngredientsFragment.class, null);
+            MainActivity.Instance.setFragment(IngredientListFragment.class, null);
         });
 
         binding.nameField.propertyNameText.setText(R.string.nameFieldLabel);
