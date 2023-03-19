@@ -22,7 +22,7 @@ public interface RecipeDao {
     LiveData<Recipe> getRecipe(int id);
 
     @Insert(entity = Recipe.class, onConflict = OnConflictStrategy.REPLACE)
-    void insert(Recipe recipe);
+    long insert(Recipe recipe);
 
     @Update(entity = Recipe.class)
     void update(Recipe recipe);

@@ -4,13 +4,13 @@ import androidx.lifecycle.ViewModel;
 
 import java.io.Closeable;
 
-public abstract class ItemViewModel<ITEM_T> extends ViewModel {
+public abstract class ItemViewModel extends ViewModel {
 
     public ItemViewModel() {
         super((Closeable) null);
     }
 
-    public abstract void setItem(ITEM_T item);
+    public abstract void setItem(Object item);
 
     public abstract int getLayoutId();
 

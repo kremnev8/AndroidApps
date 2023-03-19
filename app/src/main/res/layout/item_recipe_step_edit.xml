@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="itemViewModel"
+            type="com.kremnev8.electroniccookbook.recipe.viewmodels.RecipeEditItemViewModel" />
+    </data>
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:paddingBottom="5dp">
+
+
+    <EditText
+        android:id="@+id/stepName"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:text="@={itemViewModel.step.name}"
+        android:hint="@string/stepNameHint"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:autofillHints="" />
+
+    <FrameLayout
+        android:id="@+id/mediaFrame"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="50dp"
+        app:layout_constraintDimensionRatio="16:9"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/stepName">
+
+
+        <ImageView
+            android:id="@+id/imageMedia"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/stepImageDesc"
+            app:srcCompat="@drawable/empty_placeholder"
+            tools:ignore="ImageContrastCheck"
+            app:switchRoundedImage="@{itemViewModel.step.mediaUri}"/>
+
+        <VideoView
+            android:id="@+id/videoMedia"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:switchRoundedVideo="@{itemViewModel.step.mediaUri}"/>
+    </FrameLayout>
+
+    <EditText
+        android:id="@+id/stepDescription"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:autofillHints=""
+        android:gravity="top|start"
+        android:text="@={itemViewModel.step.description}"
+        android:hint="@string/stepDescriptionHint"
+        android:inputType="textMultiLine"
+        android:lines="4"
+        android:maxLines="10"
+        android:minHeight="100dp"
+        android:minLines="1"
+        android:scrollbars="vertical"
+        android:textColorHint="#757575"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/mediaFrame" />
+
+    <CheckBox
+        android:id="@+id/timerCheckbox"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/enableTimerCheckBox"
+        android:checked="@={itemViewModel.step.timerEnabled}"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/stepDescription" />
+
+    <CheckBox
+        android:id="@+id/optionalCheckbox"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/optionalText"
+        android:checked="@={itemViewModel.step.isOptional}"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/timerCheckbox" />
+
+    <EditText
+        android:id="@+id/timerInput"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:autofillHints=""
+        android:ems="10"
+        android:text="@={`` + itemViewModel.step.timer}"
+        android:hint="@string/TimerInputHint"
+        android:inputType="number"
+        android:textColorHint="#757575"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/timerCheckbox"
+        app:layout_constraintTop_toBottomOf="@+id/stepDescription" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:text="#1"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/stepName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/stepName" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="-1dp"
+        android:background="@color/gray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+    </layout>

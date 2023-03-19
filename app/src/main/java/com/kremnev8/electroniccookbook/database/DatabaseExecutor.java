@@ -80,8 +80,16 @@ public class DatabaseExecutor implements IngredientDao, RecipeExtendedDao, Recip
     }
 
     @Override
-    public void insert(Recipe recipe) {
+    public long insert(Recipe recipe) {
         executor.execute(() -> daoAccess.recipeDao().insert(recipe));
+        return -1;
+    }
+
+    public void insertWithCallback(Recipe recipe, IInsertCallback callback) {
+        executor.execute(() -> {
+            long id = daoAccess.recipeDao().insert(recipe);
+            callback.onComplete(id);
+        });
     }
 
     @Override
@@ -101,20 +109,22 @@ public class DatabaseExecutor implements IngredientDao, RecipeExtendedDao, Recip
 
     @Override
     public void insertWithData(Recipe recipe) {
-        if (recipe.ingredients.getValue() != null) {
+        if (recipe.ingredients != null && recipe.ingredients.getValue() != null) {
             for (var ingredient : recipe.ingredients.getValue()) {
                 ingredient.recipe = recipe.id;
             }
         }
-        if (recipe.steps.getValue() != null) {
+        if (recipe.steps != null && recipe.steps.getValue() != null) {
             for (var step: recipe.steps.getValue()) {
                 step.recipe = recipe.id;
             }
         }
         executor.execute(() -> {
             daoAccess.recipeDao().insert(recipe);
-            daoAccess.recipeStepDao().insertAllSteps(recipe.steps.getValue());
-            daoAccess.recipeIngredientDao().insertAllIngredients(recipe.ingredients.getValue());
+            if (recipe.steps != null)
+                daoAccess.recipeStepDao().insertAllSteps(recipe.steps.getValue());
+            if (recipe.ingredients != null)
+                daoAccess.recipeIngredientDao().insertAllIngredients(recipe.ingredients.getValue());
         });
     }
 
@@ -131,6 +141,11 @@ public class DatabaseExecutor implements IngredientDao, RecipeExtendedDao, Recip
     @Override
     public LiveData<List<RecipeStep>> getRecipeSteps(int id) {
         return daoAccess.recipeStepDao().getRecipeSteps(id);
+    }
+
+    @Override
+    public void insertStep(RecipeStep step) {
+        executor.execute(() ->daoAccess.recipeStepDao().insertStep(step));
     }
 
     @Override

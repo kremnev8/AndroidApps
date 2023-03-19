@@ -7,7 +7,7 @@ import com.kremnev8.electroniccookbook.R;
 import com.kremnev8.electroniccookbook.adapters.ItemViewModel;
 import com.kremnev8.electroniccookbook.ingredient.model.Ingredient;
 
-public class IngredientViewModel extends ItemViewModel<Ingredient> {
+public class IngredientViewModel extends ItemViewModel {
 
     private final IngredientClickHandler clickHandler;
     public Ingredient ingredient;
@@ -20,8 +20,8 @@ public class IngredientViewModel extends ItemViewModel<Ingredient> {
     }
 
     @Override
-    public void setItem(Ingredient item) {
-        this.ingredient = item;
+    public void setItem(Object item) {
+        this.ingredient = (Ingredient) item;
     }
 
     public void onRemoveClicked(View view) {

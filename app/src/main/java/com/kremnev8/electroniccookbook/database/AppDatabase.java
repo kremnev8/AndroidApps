@@ -29,9 +29,10 @@ import java.util.concurrent.Executors;
         Recipe.class,
         RecipeStep.class,
         RecipeIngredient.class},
-        version = 2,
+        version = 3,
         autoMigrations = {
-            @AutoMigration(from = 1, to = 2, spec = AppDatabase.UriRenameMigration.class)
+                @AutoMigration(from = 1, to = 2, spec = AppDatabase.UriRenameMigration.class),
+                @AutoMigration(from = 2, to = 3)
         }
 )
 public abstract class AppDatabase extends RoomDatabase implements DaoAccess {

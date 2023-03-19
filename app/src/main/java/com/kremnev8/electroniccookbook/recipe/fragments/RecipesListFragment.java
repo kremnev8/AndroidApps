@@ -12,7 +12,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.kremnev8.electroniccookbook.MainActivity;
 import com.kremnev8.electroniccookbook.databinding.FragmentRecipesListBinding;
+import com.kremnev8.electroniccookbook.ingredient.fragment.IngredientEditFragment;
+import com.kremnev8.electroniccookbook.ingredient.model.Ingredient;
 import com.kremnev8.electroniccookbook.recipe.model.Recipe;
 import com.kremnev8.electroniccookbook.recipe.viewmodels.RecipesListViewModel;
 
@@ -39,9 +42,12 @@ public class RecipesListFragment extends Fragment {
 
         binding.addButton.setOnClickListener(v -> {
             Recipe recipe = new Recipe();
-            recipe.name = "My New Recipe";
-            recipe.description = "This is the most amazing recipe out there!";
-            recipesListViewModel.databaseExecutor.insert(recipe);
+            recipesListViewModel.databaseExecutor.insertWithCallback(recipe, itemId -> {
+                Bundle args = new Bundle();
+                recipe.id = (int)itemId;
+                args.putParcelable(RecipeEditFragment.TARGET_RECIPE, recipe);
+                MainActivity.Instance.setFragment(RecipeEditFragment.class, args);
+            });
         });
 
         return binding.getRoot();

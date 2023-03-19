@@ -16,4 +16,13 @@
     <string name="recipesName">Recipes</string>
     <string name="ingredientsName">Ingredients</string>
     <string name="settingsName">Settings</string>
+    <string name="TimerInputHint">Enter timer wait time</string>
+    <string name="enableTimerCheckBox">Enable Timer</string>
+    <string name="optionalText">Optional</string>
+    <string name="stepNameHint">Step name</string>
+    <string name="stepImageDesc">Step Image</string>
+    <string name="stepDescriptionHint">Step Description</string>
+    <string name="recipeDescriptionhint">Recipe Description</string>
+    <string name="recipeNameHint">Recipe Name</string>
+    <string name="addStepDesc">Add Step</string>
 </resources>

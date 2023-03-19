@@ -16,5 +16,8 @@ public interface RecipeStepDao {
     LiveData<List<RecipeStep>> getRecipeSteps(int id);
 
     @Insert
+    void insertStep(RecipeStep step);
+
+    @Insert
     void insertAllSteps(List<RecipeStep> steps);
 }

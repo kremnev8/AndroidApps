@@ -11,7 +11,7 @@ import com.kremnev8.electroniccookbook.database.DatabaseExecutor;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class SimpleListViewModel <T, TVM extends ItemViewModel<T>> extends ViewModel {
+public abstract class SimpleListViewModel <T, TVM extends ItemViewModel> extends ViewModel {
 
     public final DatabaseExecutor databaseExecutor;
     protected LiveData<List<T>> rawData;

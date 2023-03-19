@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.kremnev8.electroniccookbook.BR;
 
-class BindableViewHolder<T, VT extends ItemViewModel<T>> extends RecyclerView.ViewHolder {
+class BindableViewHolder<T, VT extends ItemViewModel> extends RecyclerView.ViewHolder {
 
     public ViewDataBinding binding;
 

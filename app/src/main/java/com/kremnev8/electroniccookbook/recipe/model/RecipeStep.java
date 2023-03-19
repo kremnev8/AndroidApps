@@ -22,16 +22,19 @@ public class RecipeStep {
     @ColumnInfo(name = "recipe", index = true)
     public int recipe;
 
-    @ColumnInfo(name = "name")
+    @ColumnInfo(name = "name", defaultValue = "")
     public String name;
 
-    @ColumnInfo(name = "description")
+    @ColumnInfo(name = "description", defaultValue = "")
     public String description;
 
-    @ColumnInfo(name = "mediaUri")
+    @ColumnInfo(name = "mediaUri", defaultValue = "")
     public String mediaUri;
 
-    @ColumnInfo(name = "timerEnabled")
+    @ColumnInfo(name = "isOptional", defaultValue = "false")
+    public boolean isOptional;
+
+    @ColumnInfo(name = "timerEnabled", defaultValue = "false")
     public boolean timerEnabled;
 
     @ColumnInfo(name = "timer")

@@ -1,0 +1,45 @@
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="itemViewModel"
+            type="com.kremnev8.electroniccookbook.recipe.viewmodels.RecipeEndEditItemViewModel" />
+    </data>
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="150dp">
+
+    <View
+        android:id="@+id/background"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginTop="-5dp"
+        android:background="@drawable/empty_placeholder"
+        android:backgroundTint="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/addStepButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="40dp"
+        android:background="@drawable/round_button_selectable"
+        android:backgroundTint="@color/primaryColor"
+        android:backgroundTintMode="multiply"
+        android:clickable="true"
+        android:contentDescription="@string/addStepDesc"
+        android:focusable="true"
+        android:onClick="@{itemViewModel::addStep}"
+        android:padding="0dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/add_icon"
+        android:tintMode="multiply"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/primaryColor" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

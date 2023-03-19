@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class BindableRecyclerViewAdapter<T, VT extends ItemViewModel<T>> extends RecyclerView.Adapter<BindableViewHolder<T, VT>> {
+public class BindableRecyclerViewAdapter<T, VT extends ItemViewModel> extends RecyclerView.Adapter<BindableViewHolder<T, VT>> {
 
     private List<VT> itemViewModels = new ArrayList<>();
     private final HashMap<Integer, Integer> viewTypeToLayoutId = new HashMap<>();
