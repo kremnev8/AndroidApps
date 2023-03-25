@@ -20,6 +20,8 @@ import com.kremnev8.electroniccookbook.recipe.database.RecipeStepDao;
 import com.kremnev8.electroniccookbook.recipe.model.Recipe;
 import com.kremnev8.electroniccookbook.recipe.model.RecipeIngredient;
 import com.kremnev8.electroniccookbook.recipe.model.RecipeStep;
+import com.kremnev8.electroniccookbook.recipeview.database.ViewCacheDao;
+import com.kremnev8.electroniccookbook.recipeview.model.ViewCache;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -28,11 +30,13 @@ import java.util.concurrent.Executors;
         Ingredient.class,
         Recipe.class,
         RecipeStep.class,
-        RecipeIngredient.class},
-        version = 3,
+        RecipeIngredient.class,
+        ViewCache.class},
+        version = 4,
         autoMigrations = {
                 @AutoMigration(from = 1, to = 2, spec = AppDatabase.UriRenameMigration.class),
-                @AutoMigration(from = 2, to = 3)
+                @AutoMigration(from = 2, to = 3),
+                @AutoMigration(from = 3, to = 4)
         }
 )
 public abstract class AppDatabase extends RoomDatabase implements DaoAccess {
@@ -46,6 +50,8 @@ public abstract class AppDatabase extends RoomDatabase implements DaoAccess {
     public abstract RecipeDao recipeDao();
     public abstract RecipeStepDao recipeStepDao();
     public abstract RecipeIngredientDao recipeIngredientDao();
+    public abstract ViewCacheDao viewCacheDao();
+
     public static volatile AppDatabase instance = null;
 
     public static AppDatabase getInstance(Context context) {

@@ -10,12 +10,19 @@ import com.kremnev8.electroniccookbook.recipe.database.RecipeStepDao;
 import com.kremnev8.electroniccookbook.recipe.model.Recipe;
 import com.kremnev8.electroniccookbook.recipe.model.RecipeIngredient;
 import com.kremnev8.electroniccookbook.recipe.model.RecipeStep;
+import com.kremnev8.electroniccookbook.recipeview.database.ViewCacheDao;
+import com.kremnev8.electroniccookbook.recipeview.model.ViewCache;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class DatabaseExecutor implements IngredientDao, RecipeExtendedDao, RecipeStepDao, RecipeIngredientDao {
+public class DatabaseExecutor implements
+        IngredientDao,
+        RecipeExtendedDao,
+        RecipeStepDao,
+        RecipeIngredientDao,
+        ViewCacheDao {
 
     private final ExecutorService executor;
     private final DaoAccess daoAccess;
@@ -94,7 +101,10 @@ public class DatabaseExecutor implements IngredientDao, RecipeExtendedDao, Recip
 
     @Override
     public void update(Recipe recipe) {
-        executor.execute(() -> daoAccess.recipeDao().update(recipe));
+        executor.execute(() -> {
+            daoAccess.recipeDao().update(recipe);
+            daoAccess.viewCacheDao().clearCache(recipe.id);
+        });
     }
 
     @Override
@@ -125,6 +135,8 @@ public class DatabaseExecutor implements IngredientDao, RecipeExtendedDao, Recip
                 daoAccess.recipeStepDao().insertAllSteps(recipe.steps.getValue());
             if (recipe.ingredients != null)
                 daoAccess.recipeIngredientDao().insertAllIngredients(recipe.ingredients.getValue());
+
+            daoAccess.viewCacheDao().clearCache(recipe.id);
         });
     }
 
@@ -145,11 +157,57 @@ public class DatabaseExecutor implements IngredientDao, RecipeExtendedDao, Recip
 
     @Override
     public void insertStep(RecipeStep step) {
-        executor.execute(() ->daoAccess.recipeStepDao().insertStep(step));
+        executor.execute(() ->{
+            daoAccess.recipeStepDao().insertStep(step);
+            daoAccess.viewCacheDao().clearCache(step.recipe);
+        });
     }
 
     @Override
     public void insertAllSteps(List<RecipeStep> steps) {
         executor.execute(() -> daoAccess.recipeStepDao().insertAllSteps(steps));
+    }
+
+    @Override
+    public LiveData<List<ViewCache>> getRecipeCache(int recipeId) {
+        return daoAccess.viewCacheDao().getRecipeCache(recipeId);
+    }
+
+    public void getOrCreateRecipeCache(LiveData<Recipe> recipeData, ICacheCallback callback){
+        assert recipeData.getValue() != null;
+        Recipe recipe = recipeData.getValue();
+
+        LiveData<List<ViewCache>> cache = daoAccess.viewCacheDao().getRecipeCache(recipe.id);
+        if (cache.getValue() != null && cache.getValue().size() > 0) {
+            callback.onResult(cache);
+            return;
+        }
+        executor.execute(() -> {
+            var steps = recipe.steps;
+
+            if (steps != null && steps.getValue() != null){
+                for (var step : steps.getValue()) {
+                    daoAccess.viewCacheDao().insert(new ViewCache(recipe.id, step.id));
+                }
+            }
+            LiveData<List<ViewCache>> cache1 = daoAccess.viewCacheDao().getRecipeCache(recipe.id);
+            callback.onResult(cache1);
+        });
+    }
+
+    @Override
+    public long insert(ViewCache recipe) {
+        executor.execute(() -> daoAccess.viewCacheDao().insert(recipe));
+        return 0;
+    }
+
+    @Override
+    public void update(ViewCache recipe) {
+        executor.execute(() -> daoAccess.viewCacheDao().update(recipe));
+    }
+
+    @Override
+    public void clearCache(int recipeId) {
+        executor.execute(() -> daoAccess.viewCacheDao().clearCache(recipeId));
     }
 }
