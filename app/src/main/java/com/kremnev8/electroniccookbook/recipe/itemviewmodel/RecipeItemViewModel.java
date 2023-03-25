@@ -1,18 +1,18 @@
-package com.kremnev8.electroniccookbook.recipe.viewmodels;
+package com.kremnev8.electroniccookbook.recipe.itemviewmodel;
 
 import android.os.Bundle;
 import android.view.View;
 
 import com.kremnev8.electroniccookbook.MainActivity;
 import com.kremnev8.electroniccookbook.R;
-import com.kremnev8.electroniccookbook.adapters.ItemViewModel;
+import com.kremnev8.electroniccookbook.common.ItemViewModel;
 import com.kremnev8.electroniccookbook.recipe.fragments.RecipeEditFragment;
 import com.kremnev8.electroniccookbook.recipe.model.Recipe;
 
-public class RecipeViewModel extends ItemViewModel {
+public class RecipeItemViewModel extends ItemViewModel {
     public Recipe recipe;
 
-    public RecipeViewModel(Recipe recipe) {
+    public RecipeItemViewModel(Recipe recipe) {
         setItem(recipe);
     }
 

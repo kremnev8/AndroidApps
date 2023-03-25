@@ -1,15 +1,13 @@
-package com.kremnev8.electroniccookbook.recipe.viewmodels;
+package com.kremnev8.electroniccookbook.recipe.itemviewmodel;
 
 import android.view.View;
 
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.kremnev8.electroniccookbook.R;
-import com.kremnev8.electroniccookbook.adapters.ItemViewModel;
-import com.kremnev8.electroniccookbook.interfaces.IPhotoRequestCallback;
+import com.kremnev8.electroniccookbook.common.ItemViewModel;
 import com.kremnev8.electroniccookbook.recipe.model.Recipe;
-import com.kremnev8.electroniccookbook.recipe.model.RecipeStep;
+import com.kremnev8.electroniccookbook.recipe.viewmodels.IRecipePhotoAccess;
 
 public class RecipeMainEditItemViewModel extends ItemViewModel  {
 

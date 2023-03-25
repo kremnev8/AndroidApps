@@ -16,6 +16,7 @@ import com.kremnev8.electroniccookbook.MainActivity;
 import com.kremnev8.electroniccookbook.R;
 import com.kremnev8.electroniccookbook.databinding.FragmentRecipeEditBinding;
 import com.kremnev8.electroniccookbook.ingredient.fragment.IngredientListFragment;
+import com.kremnev8.electroniccookbook.interfaces.IMenu;
 import com.kremnev8.electroniccookbook.recipe.model.Recipe;
 import com.kremnev8.electroniccookbook.recipe.model.RecipeStep;
 import com.kremnev8.electroniccookbook.recipe.viewmodels.RecipeEditViewModel;
@@ -23,7 +24,7 @@ import com.kremnev8.electroniccookbook.recipe.viewmodels.RecipeEditViewModel;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class RecipeEditFragment extends Fragment {
+public class RecipeEditFragment extends Fragment implements IMenu {
 
     public static final String TARGET_RECIPE = "targetRecipe";
 
@@ -55,4 +56,8 @@ public class RecipeEditFragment extends Fragment {
         return binding.getRoot();
     }
 
+    @Override
+    public int getMenuName() {
+        return R.string.EditRecipeMenuName;
+    }
 }

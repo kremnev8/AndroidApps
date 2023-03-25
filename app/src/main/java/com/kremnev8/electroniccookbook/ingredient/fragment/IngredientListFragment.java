@@ -11,15 +11,17 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.kremnev8.electroniccookbook.MainActivity;
+import com.kremnev8.electroniccookbook.R;
 import com.kremnev8.electroniccookbook.databinding.FragmentIngredientListBinding;
 import com.kremnev8.electroniccookbook.ingredient.model.Ingredient;
 import com.kremnev8.electroniccookbook.ingredient.viewmodel.IngredientListViewModel;
+import com.kremnev8.electroniccookbook.interfaces.IMenu;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
 
 @AndroidEntryPoint
-public class IngredientListFragment extends Fragment {
+public class IngredientListFragment extends Fragment implements IMenu {
 
     private FragmentIngredientListBinding binding;
     private IngredientListViewModel ingredientListViewModel;
@@ -45,5 +47,10 @@ public class IngredientListFragment extends Fragment {
         });
 
         return binding.getRoot();
+    }
+
+    @Override
+    public int getMenuName() {
+        return R.string.IngredientsListMenuName;
     }
 }

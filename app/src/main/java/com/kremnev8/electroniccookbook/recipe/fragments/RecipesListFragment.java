@@ -13,16 +13,16 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.kremnev8.electroniccookbook.MainActivity;
+import com.kremnev8.electroniccookbook.R;
 import com.kremnev8.electroniccookbook.databinding.FragmentRecipesListBinding;
-import com.kremnev8.electroniccookbook.ingredient.fragment.IngredientEditFragment;
-import com.kremnev8.electroniccookbook.ingredient.model.Ingredient;
+import com.kremnev8.electroniccookbook.interfaces.IMenu;
 import com.kremnev8.electroniccookbook.recipe.model.Recipe;
 import com.kremnev8.electroniccookbook.recipe.viewmodels.RecipesListViewModel;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class RecipesListFragment extends Fragment {
+public class RecipesListFragment extends Fragment implements IMenu {
 
     private RecipesListViewModel recipesListViewModel;
     private FragmentRecipesListBinding binding;
@@ -53,5 +53,8 @@ public class RecipesListFragment extends Fragment {
         return binding.getRoot();
     }
 
-
+    @Override
+    public int getMenuName() {
+        return R.string.RecipeListMenuName;
+    }
 }

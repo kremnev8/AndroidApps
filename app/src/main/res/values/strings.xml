@@ -25,4 +25,8 @@
     <string name="recipeDescriptionhint">Recipe Description</string>
     <string name="recipeNameHint">Recipe Name</string>
     <string name="addStepDesc">Add Step</string>
+    <string name="EditIngredientMenuName">Edit Ingredient</string>
+    <string name="IngredientsListMenuName">Ingredients</string>
+    <string name="EditRecipeMenuName">Edit Recipe</string>
+    <string name="RecipeListMenuName">Recipes</string>
 </resources>

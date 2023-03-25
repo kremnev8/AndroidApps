@@ -4,7 +4,7 @@ import android.os.Handler;
 import android.view.View;
 
 import com.kremnev8.electroniccookbook.R;
-import com.kremnev8.electroniccookbook.adapters.ItemViewModel;
+import com.kremnev8.electroniccookbook.common.ItemViewModel;
 import com.kremnev8.electroniccookbook.ingredient.model.Ingredient;
 
 public class IngredientViewModel extends ItemViewModel {

@@ -2,7 +2,9 @@ package com.kremnev8.electroniccookbook.recipe.viewmodels;
 
 import androidx.lifecycle.SavedStateHandle;
 
+import com.kremnev8.electroniccookbook.common.SimpleListViewModel;
 import com.kremnev8.electroniccookbook.database.DatabaseExecutor;
+import com.kremnev8.electroniccookbook.recipe.itemviewmodel.RecipeItemViewModel;
 import com.kremnev8.electroniccookbook.recipe.model.Recipe;
 
 import javax.inject.Inject;
@@ -10,7 +12,7 @@ import javax.inject.Inject;
 import dagger.hilt.android.lifecycle.HiltViewModel;
 
 @HiltViewModel
-public class RecipesListViewModel extends SimpleListViewModel<Recipe, RecipeViewModel> {
+public class RecipesListViewModel extends SimpleListViewModel<Recipe, RecipeItemViewModel> {
 
     @Inject
     RecipesListViewModel(SavedStateHandle handle, DatabaseExecutor databaseExecutor) {
@@ -20,8 +22,8 @@ public class RecipesListViewModel extends SimpleListViewModel<Recipe, RecipeView
     }
 
     @Override
-    public RecipeViewModel CreateNewItemViewModel(Recipe item) {
-        return new RecipeViewModel(item);
+    public RecipeItemViewModel CreateNewItemViewModel(Recipe item) {
+        return new RecipeItemViewModel(item);
     }
 
     public String GetFragmentName(){

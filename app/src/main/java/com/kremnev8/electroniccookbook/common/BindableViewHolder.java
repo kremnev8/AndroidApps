@@ -1,6 +1,4 @@
-package com.kremnev8.electroniccookbook.adapters;
-
-import android.content.ClipData;
+package com.kremnev8.electroniccookbook.common;
 
 import androidx.databinding.ViewDataBinding;
 import androidx.recyclerview.widget.RecyclerView;

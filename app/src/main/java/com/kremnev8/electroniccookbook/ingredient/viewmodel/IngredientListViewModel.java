@@ -8,7 +8,7 @@ import com.kremnev8.electroniccookbook.MainActivity;
 import com.kremnev8.electroniccookbook.database.DatabaseExecutor;
 import com.kremnev8.electroniccookbook.ingredient.fragment.IngredientEditFragment;
 import com.kremnev8.electroniccookbook.ingredient.model.Ingredient;
-import com.kremnev8.electroniccookbook.recipe.viewmodels.SimpleListViewModel;
+import com.kremnev8.electroniccookbook.common.SimpleListViewModel;
 
 import javax.inject.Inject;
 

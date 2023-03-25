@@ -1,5 +1,11 @@
 package com.kremnev8.electroniccookbook;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Bundle;
+import android.util.Log;
+
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -11,20 +17,15 @@ import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.os.Bundle;
-import android.util.Log;
-
 import com.google.common.base.Optional;
 import com.google.common.collect.Iterables;
 import com.kremnev8.electroniccookbook.contract.TakePictureWithUriReturnContract;
 import com.kremnev8.electroniccookbook.databinding.ActivityMainBinding;
 import com.kremnev8.electroniccookbook.ingredient.fragment.IngredientListFragment;
-import com.kremnev8.electroniccookbook.recipe.fragments.RecipesListFragment;
+import com.kremnev8.electroniccookbook.interfaces.IMenu;
 import com.kremnev8.electroniccookbook.interfaces.IPhotoProvider;
 import com.kremnev8.electroniccookbook.interfaces.IPhotoRequestCallback;
+import com.kremnev8.electroniccookbook.recipe.fragments.RecipesListFragment;
 
 import java.io.File;
 import java.io.IOException;
@@ -126,6 +127,11 @@ public class MainActivity extends AppCompatActivity implements IPhotoProvider {
                 .addToBackStack("open fragment")
                 .commit();
 
+        if (fragment.get() instanceof IMenu) {
+            IMenu menu = (IMenu) fragment.get();
+
+            binding.topBar.titleText.setText(menu.getMenuName());
+        }
     }
 
     public void requestPhoto(IPhotoRequestCallback callback) {

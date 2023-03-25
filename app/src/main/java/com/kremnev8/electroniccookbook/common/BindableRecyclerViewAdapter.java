@@ -1,11 +1,9 @@
-package com.kremnev8.electroniccookbook.adapters;
+package com.kremnev8.electroniccookbook.common;
 
-import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,8 +16,6 @@ public class BindableRecyclerViewAdapter<T, VT extends ItemViewModel> extends Re
     private List<VT> itemViewModels = new ArrayList<>();
     private final HashMap<Integer, Integer> viewTypeToLayoutId = new HashMap<>();
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    @NonNull
     @Override
     public BindableViewHolder<T, VT> onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 

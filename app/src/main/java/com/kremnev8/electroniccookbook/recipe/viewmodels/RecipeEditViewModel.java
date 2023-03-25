@@ -1,18 +1,19 @@
 package com.kremnev8.electroniccookbook.recipe.viewmodels;
 
 import android.os.Handler;
-import android.view.View;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.ViewModel;
 
-import com.kremnev8.electroniccookbook.adapters.ItemViewModel;
+import com.kremnev8.electroniccookbook.common.ItemViewModel;
 import com.kremnev8.electroniccookbook.database.DatabaseExecutor;
-import com.kremnev8.electroniccookbook.ingredient.model.Ingredient;
 import com.kremnev8.electroniccookbook.interfaces.IPhotoProvider;
 import com.kremnev8.electroniccookbook.interfaces.IPhotoRequestCallback;
+import com.kremnev8.electroniccookbook.recipe.itemviewmodel.RecipeEditItemViewModel;
+import com.kremnev8.electroniccookbook.recipe.itemviewmodel.RecipeEndEditItemViewModel;
+import com.kremnev8.electroniccookbook.recipe.itemviewmodel.RecipeMainEditItemViewModel;
 import com.kremnev8.electroniccookbook.recipe.model.Recipe;
 import com.kremnev8.electroniccookbook.recipe.model.RecipeStep;
 

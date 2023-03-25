@@ -1,4 +1,4 @@
-package com.kremnev8.electroniccookbook.adapters;
+package com.kremnev8.electroniccookbook.common;
 
 import android.net.Uri;
 import android.view.View;

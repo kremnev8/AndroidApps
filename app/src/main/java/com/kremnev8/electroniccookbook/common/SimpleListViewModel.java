@@ -1,11 +1,11 @@
-package com.kremnev8.electroniccookbook.recipe.viewmodels;
+package com.kremnev8.electroniccookbook.common;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.ViewModel;
 
-import com.kremnev8.electroniccookbook.adapters.ItemViewModel;
+import com.kremnev8.electroniccookbook.common.ItemViewModel;
 import com.kremnev8.electroniccookbook.database.DatabaseExecutor;
 
 import java.util.ArrayList;

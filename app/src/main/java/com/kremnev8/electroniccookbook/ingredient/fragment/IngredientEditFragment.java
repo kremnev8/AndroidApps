@@ -15,12 +15,13 @@ import com.kremnev8.electroniccookbook.R;
 import com.kremnev8.electroniccookbook.databinding.FragmentIngredientEditBinding;
 import com.kremnev8.electroniccookbook.ingredient.model.Ingredient;
 import com.kremnev8.electroniccookbook.ingredient.viewmodel.IngredientEditViewModel;
+import com.kremnev8.electroniccookbook.interfaces.IMenu;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
 
 @AndroidEntryPoint
-public class IngredientEditFragment extends Fragment {
+public class IngredientEditFragment extends Fragment implements IMenu {
 
     public static final String InspectIngredient = "targetIngredient";
 
@@ -55,5 +56,9 @@ public class IngredientEditFragment extends Fragment {
         binding.amountField.propertyNameText.setText(R.string.amountFieldLabel);
 
         return binding.getRoot();
+    }
+    @Override
+    public int getMenuName() {
+        return R.string.EditIngredientMenuName;
     }
 }
