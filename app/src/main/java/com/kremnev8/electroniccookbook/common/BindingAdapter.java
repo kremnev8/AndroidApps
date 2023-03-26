@@ -87,4 +87,9 @@ public class BindingAdapter {
                 .into(view);
 
     }
+
+    @androidx.databinding.BindingAdapter("isVisible")
+    public static void loadKindSwitchRoundedImage(View view, boolean value){
+        view.setVisibility(value ? View.VISIBLE : View.GONE);
+    }
 }

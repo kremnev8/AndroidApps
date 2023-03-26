@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel;
 
 import java.io.Closeable;
 
-public abstract class ItemViewModel extends ViewModel {
+public abstract class ItemViewModel extends ObservableViewModel {
 
     public ItemViewModel() {
         super((Closeable) null);

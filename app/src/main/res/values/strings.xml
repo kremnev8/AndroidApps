@@ -29,4 +29,7 @@
     <string name="IngredientsListMenuName">Ingredients</string>
     <string name="EditRecipeMenuName">Edit Recipe</string>
     <string name="RecipeListMenuName">Recipes</string>
+    <string name="timerIconDesc">Timer Icon</string>
+    <string name="startButtonText">Start</string>
+    <string name="resetButtonText">Reset</string>
 </resources>

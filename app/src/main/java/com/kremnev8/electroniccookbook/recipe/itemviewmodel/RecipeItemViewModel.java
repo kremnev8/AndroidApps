@@ -8,6 +8,7 @@ import com.kremnev8.electroniccookbook.R;
 import com.kremnev8.electroniccookbook.common.ItemViewModel;
 import com.kremnev8.electroniccookbook.recipe.fragments.RecipeEditFragment;
 import com.kremnev8.electroniccookbook.recipe.model.Recipe;
+import com.kremnev8.electroniccookbook.recipeview.fragments.RecipeViewFragment;
 
 public class RecipeItemViewModel extends ItemViewModel {
     public Recipe recipe;
@@ -29,6 +30,12 @@ public class RecipeItemViewModel extends ItemViewModel {
     @Override
     public int getViewType() {
         return 1;
+    }
+
+    public void onClick(View view){
+        Bundle args = new Bundle();
+        args.putParcelable(RecipeViewFragment.TARGET_RECIPE, recipe);
+        MainActivity.Instance.setFragment(RecipeViewFragment.class, args);
     }
 
     public boolean onLongTap(View view){

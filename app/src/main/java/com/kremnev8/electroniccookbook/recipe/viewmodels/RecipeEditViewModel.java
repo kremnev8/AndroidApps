@@ -31,7 +31,7 @@ public class RecipeEditViewModel extends ViewModel implements IPhotoRequestCallb
     private final Handler handler = new Handler();
     private final IPhotoProvider photoProvider;
 
-    private MutableLiveData<Recipe> recipe;
+    private final MutableLiveData<Recipe> recipe;
 
     public final DatabaseExecutor databaseExecutor;
     protected LiveData<List<RecipeStep>> rawData;
@@ -106,6 +106,22 @@ public class RecipeEditViewModel extends ViewModel implements IPhotoRequestCallb
         viewModelsList.add(endItem);
 
         viewModels.setValue(viewModelsList);
+        updateOrder(newData);
+    }
+
+    public void updateOrder(List<RecipeStep> newData){
+        boolean allInOrder = true;
+
+        for (int i = 0; i < newData.size(); i++) {
+            if (newData.get(i).stepNumber != i + 1){
+                newData.get(i).stepNumber = i + 1;
+                allInOrder = false;
+            }
+        }
+
+        if (!allInOrder){
+            databaseExecutor.updateAllSteps(newData);
+        }
     }
 
     public void selectIconClicked() {

@@ -22,6 +22,9 @@ public class RecipeStep {
     @ColumnInfo(name = "recipe", index = true)
     public int recipe;
 
+    @ColumnInfo(name = "stepNumber", defaultValue = "0")
+    public int stepNumber;
+
     @ColumnInfo(name = "name", defaultValue = "")
     public String name;
 

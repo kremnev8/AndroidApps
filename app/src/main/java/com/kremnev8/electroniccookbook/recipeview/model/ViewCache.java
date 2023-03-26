@@ -6,17 +6,23 @@ import android.os.Parcelable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import com.kremnev8.electroniccookbook.recipe.model.Recipe;
+import com.kremnev8.electroniccookbook.recipe.model.RecipeStep;
 
 @Entity(tableName = "viewCache",
         indices = @Index(value = {"id"},unique = true),
-        foreignKeys = {@ForeignKey(entity = Recipe.class,
+        foreignKeys = {
+        @ForeignKey(entity = Recipe.class,
                 parentColumns = "id",
                 childColumns = "recipeId",
-                onDelete = ForeignKey.CASCADE)
+                onDelete = ForeignKey.CASCADE),
+        @ForeignKey(entity = RecipeStep.class,
+                parentColumns = "id",
+                childColumns = "stepId")
         })
 public class ViewCache implements Parcelable {
 
@@ -24,10 +30,10 @@ public class ViewCache implements Parcelable {
     @ColumnInfo(name = "id")
     public int id;
 
-    @ColumnInfo(name = "recipeId")
+    @ColumnInfo(name = "recipeId", index = true)
     public int recipeId;
 
-    @ColumnInfo(name = "stepId")
+    @ColumnInfo(name = "stepId", index = true)
     public int stepId;
 
     @ColumnInfo(name = "stepComplete")
@@ -35,6 +41,9 @@ public class ViewCache implements Parcelable {
 
     @ColumnInfo(name = "timerIsRunning")
     public boolean timerIsRunning;
+
+    @Ignore
+    public RecipeStep step;
 
     @Override
     public int describeContents() {
@@ -53,6 +62,7 @@ public class ViewCache implements Parcelable {
     public ViewCache() {
     }
 
+    @Ignore
     public ViewCache(int recipeId, int stepId) {
         this.recipeId = recipeId;
         this.stepId = stepId;
@@ -66,7 +76,7 @@ public class ViewCache implements Parcelable {
         this.timerIsRunning = in.readByte() != 0;
     }
 
-    public static final Parcelable.Creator<ViewCache> CREATOR = new Parcelable.Creator<ViewCache>() {
+    public static final Parcelable.Creator<ViewCache> CREATOR = new Parcelable.Creator<>() {
         @Override
         public ViewCache createFromParcel(Parcel source) {
             return new ViewCache(source);
