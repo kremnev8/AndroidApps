@@ -1,9 +1,15 @@
 package com.kremnev8.electroniccookbook;
 
 import android.Manifest;
+import android.app.ActivityManager;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.util.Log;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -26,6 +32,7 @@ import com.kremnev8.electroniccookbook.interfaces.IMenu;
 import com.kremnev8.electroniccookbook.interfaces.IPhotoProvider;
 import com.kremnev8.electroniccookbook.interfaces.IPhotoRequestCallback;
 import com.kremnev8.electroniccookbook.recipe.fragments.RecipesListFragment;
+import com.kremnev8.electroniccookbook.services.TimersService;
 
 import java.io.File;
 import java.io.IOException;
@@ -134,6 +141,7 @@ public class MainActivity extends AppCompatActivity implements IPhotoProvider {
         }
     }
 
+    //region Photos
     public void requestPhoto(IPhotoRequestCallback callback) {
         lastRequester = callback;
         if (ContextCompat.checkSelfPermission(MainActivity.Instance, Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -198,5 +206,46 @@ public class MainActivity extends AppCompatActivity implements IPhotoProvider {
         tmpFile.createNewFile();
 
         return FileProvider.getUriForFile(getApplicationContext(), BuildConfig.APPLICATION_ID + ".provider", tmpFile);
+    }
+    //endregion
+
+    public TimersService timersService;
+    private final ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            TimersService.TimerBinder binderBridge = (TimersService.TimerBinder) service ;
+            timersService = binderBridge.getService();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            timersService = null;
+        }
+    };
+
+    private boolean isServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.i("INFO", "Main activity is starting");
+        Intent intent = new Intent(this , TimersService.class);
+        if (!isServiceRunning(TimersService.class))
+            startService(intent);
+        bindService(intent , serviceConnection, BIND_IMPORTANT);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        unbindService(serviceConnection);
     }
 }

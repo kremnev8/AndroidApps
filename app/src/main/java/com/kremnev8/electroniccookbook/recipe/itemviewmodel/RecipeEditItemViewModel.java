@@ -1,5 +1,7 @@
 package com.kremnev8.electroniccookbook.recipe.itemviewmodel;
 
+import androidx.databinding.Bindable;
+
 import com.kremnev8.electroniccookbook.R;
 import com.kremnev8.electroniccookbook.common.ItemViewModel;
 import com.kremnev8.electroniccookbook.recipe.model.RecipeStep;
@@ -9,6 +11,19 @@ public class RecipeEditItemViewModel extends ItemViewModel {
 
     public RecipeEditItemViewModel(RecipeStep item){
         setItem(item);
+    }
+
+    @Bindable
+    public String getTimerDuration(){
+        return Long.toString(step.timer);
+    }
+
+    public void setTimerDuration(String value){
+        try {
+            step.timer = Long.parseLong(value);
+            notifyChange();
+        }catch (NumberFormatException ignored){
+        }
     }
 
     @Override

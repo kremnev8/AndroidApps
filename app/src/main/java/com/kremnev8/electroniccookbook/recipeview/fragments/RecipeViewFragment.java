@@ -2,6 +2,7 @@ package com.kremnev8.electroniccookbook.recipeview.fragments;
 
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,6 +16,7 @@ import android.view.ViewGroup;
 import com.kremnev8.electroniccookbook.databinding.FragmentRecipeViewBinding;
 import com.kremnev8.electroniccookbook.recipe.model.Recipe;
 import com.kremnev8.electroniccookbook.recipeview.viewmodels.RecipeViewModel;
+import com.kremnev8.electroniccookbook.services.TimersService;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -42,5 +44,4 @@ public class RecipeViewFragment extends Fragment {
 
         return binding.getRoot();
     }
-
 }

@@ -1,13 +1,16 @@
 package com.kremnev8.electroniccookbook.common;
 
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.VideoView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
@@ -88,8 +91,20 @@ public class BindingAdapter {
 
     }
 
-    @androidx.databinding.BindingAdapter("isVisible")
-    public static void loadKindSwitchRoundedImage(View view, boolean value){
+    @androidx.databinding.BindingAdapter("isVisibleOrGone")
+    public static void isVisible(View view, boolean value){
         view.setVisibility(value ? View.VISIBLE : View.GONE);
+    }
+
+    @androidx.databinding.BindingAdapter("isVisible")
+    public static void isNotHidden(View view, boolean value){
+        view.setVisibility(value ? View.VISIBLE : View.INVISIBLE);
+    }
+
+    @androidx.databinding.BindingAdapter("pausedIcon")
+    public static void loadPlayIcon(Button button, boolean isPaused){
+        int d = isPaused ? R.drawable.ic_pause : R.drawable.ic_play;
+
+        button.setCompoundDrawablesWithIntrinsicBounds(d, 0, 0, 0);
     }
 }

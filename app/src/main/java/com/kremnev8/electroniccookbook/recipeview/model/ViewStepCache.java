@@ -1,5 +1,7 @@
 package com.kremnev8.electroniccookbook.recipeview.model;
 
+import android.util.Pair;
+
 import androidx.room.Embedded;
 import androidx.room.Relation;
 
@@ -11,4 +13,8 @@ public class ViewStepCache {
 
     @Relation(parentColumn = "stepId", entityColumn = "id")
     public RecipeStep step;
+
+    public Pair<Integer, Integer> getFullId(){
+        return Pair.create(step.recipe, step.id);
+    }
 }

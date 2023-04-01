@@ -2,14 +2,14 @@
 <layout>
     <data>
         <variable
-            name="showTimer"
-            type="boolean"/>
+            name="model"
+            type="com.kremnev8.electroniccookbook.recipeview.itemviewmodel.RecipeViewStepItemViewModel"/>
     </data>
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="50dp"
     android:layout_marginTop="5dp"
-    app:isVisible="@{showTimer}"
+    app:isVisibleOrGone="@{model.step.step.timerEnabled}"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
@@ -29,7 +29,7 @@
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:text="TextView"
+        android:text="@{model.timerText}"
         android:gravity="center"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -41,7 +41,8 @@
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:text="@string/startButtonText"
-        android:visibility="visible"
+        app:isVisible="@{!model.running}"
+        android:onClick="@{model::startClicked}"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/timerText"
@@ -57,8 +58,9 @@
         android:insetTop="6dp"
         android:insetRight="6dp"
         android:insetBottom="6dp"
-        app:icon="@drawable/ic_pause"
-        android:visibility="invisible"
+        app:pausedIcon="@{model.paused}"
+        app:isVisible="@{model.running}"
+        android:onClick="@{model::pauseClicked}"
         android:padding="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/timerStartButton"
@@ -71,7 +73,8 @@
         android:layout_height="50dp"
         android:padding="0dp"
         android:text="@string/resetButtonText"
-        android:visibility="invisible"
+        app:isVisible="@{model.running}"
+        android:onClick="@{model::stopClicked}"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/timerStopButton"
         app:layout_constraintTop_toTopOf="parent"
