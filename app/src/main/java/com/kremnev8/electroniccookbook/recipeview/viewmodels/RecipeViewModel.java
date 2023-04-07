@@ -2,7 +2,9 @@ package com.kremnev8.electroniccookbook.recipeview.viewmodels;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.util.Pair;
+import android.util.TimingLogger;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -11,6 +13,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.kremnev8.electroniccookbook.common.ItemViewModel;
 import com.kremnev8.electroniccookbook.database.DatabaseExecutor;
+import com.kremnev8.electroniccookbook.recipe.model.RecipeStep;
 import com.kremnev8.electroniccookbook.services.ITimerCallback;
 import com.kremnev8.electroniccookbook.services.ITimerService;
 import com.kremnev8.electroniccookbook.recipe.model.Recipe;
@@ -37,7 +40,6 @@ public class RecipeViewModel extends ViewModel implements ITimerCallback {
     Handler mainHandler = new Handler(Looper.getMainLooper());
     public final DatabaseExecutor databaseExecutor;
     private final ITimerService timers;
-    private final HashMap<Pair<Integer, Integer>, Integer> itemsDict = new HashMap<>();
 
     protected LiveData<List<ViewStepCache>> stepsData;
     protected MutableLiveData<ArrayList<ItemViewModel>> viewModels = new MutableLiveData<>();
@@ -53,10 +55,10 @@ public class RecipeViewModel extends ViewModel implements ITimerCallback {
         recipe = new MutableLiveData<>();
     }
 
-    public void setData(Recipe recipeIn) {
-        this.recipe = databaseExecutor.getRecipeWithData(recipeIn.id);
+    public void setData(int recipeId) {
+        this.recipe = databaseExecutor.getRecipeWithData(recipeId);
 
-        databaseExecutor.getOrCreateRecipeCache(recipeIn)
+        databaseExecutor.getOrCreateRecipeCache(recipeId)
                 .subscribeOn(Schedulers.computation())
                 .subscribe((result, throwable) -> mainHandler.post(() -> {
                     stepsData = result;
@@ -90,7 +92,6 @@ public class RecipeViewModel extends ViewModel implements ITimerCallback {
         var viewData = new ArrayList<ItemViewModel>(dataValue.size() + 1);
         viewData.add(new RecipeViewMainItemViewModel(recipe));
         for (ViewStepCache item : dataValue) {
-            itemsDict.put(item.getFullId(), viewData.size());
             viewData.add(new RecipeViewStepItemViewModel(item, databaseExecutor, timers));
         }
         return viewData;
@@ -102,7 +103,7 @@ public class RecipeViewModel extends ViewModel implements ITimerCallback {
 
 
         viewModelsList.ensureCapacity(newData.size() + 1);
-        itemsDict.clear();
+
         for (int i = 0; i < newData.size(); i++) {
             ViewStepCache item = newData.get(i);
             if (i + 1 < viewModelsList.size()) {
@@ -110,7 +111,6 @@ public class RecipeViewModel extends ViewModel implements ITimerCallback {
             } else {
                 viewModelsList.add(new RecipeViewStepItemViewModel(item, databaseExecutor, timers));
             }
-            itemsDict.put(item.getFullId(), i + 1);
         }
 
         viewModels.setValue(viewModelsList);
@@ -122,13 +122,19 @@ public class RecipeViewModel extends ViewModel implements ITimerCallback {
         mainHandler.post(() -> timerUpdateInternal(timer));
     }
 
-    @SuppressWarnings("ConstantConditions")
     private void timerUpdateInternal(TimerData timer) {
-        var key = Pair.create(timer.recipeId, timer.stepId);
-        if (itemsDict.containsKey(key)){
-            int index = itemsDict.get(key);
-            var item = (RecipeViewStepItemViewModel)viewModels.getValue().get(index);
-            item.updateTimer(timer);
+        if (viewModels.getValue() == null) return;
+
+        for (ItemViewModel model : viewModels.getValue()) {
+            if (!(model instanceof RecipeViewStepItemViewModel)) continue;
+
+            var item = (RecipeViewStepItemViewModel) model;
+            RecipeStep step = item.step.step;
+            if (step.recipe == timer.recipeId &&
+                    step.id == timer.stepId) {
+                item.updateTimer(timer);
+                break;
+            }
         }
     }
 }

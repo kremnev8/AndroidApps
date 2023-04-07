@@ -8,9 +8,12 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
+import android.view.Window;
+import android.view.WindowManager;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -32,6 +35,8 @@ import com.kremnev8.electroniccookbook.interfaces.IMenu;
 import com.kremnev8.electroniccookbook.interfaces.IPhotoProvider;
 import com.kremnev8.electroniccookbook.interfaces.IPhotoRequestCallback;
 import com.kremnev8.electroniccookbook.recipe.fragments.RecipesListFragment;
+import com.kremnev8.electroniccookbook.recipeview.fragments.RecipeViewFragment;
+import com.kremnev8.electroniccookbook.recipeview.model.ShowRecipeData;
 import com.kremnev8.electroniccookbook.services.TimersService;
 
 import java.io.File;
@@ -46,6 +51,9 @@ public class MainActivity extends AppCompatActivity implements IPhotoProvider {
 
     private static final int FILES_REQUEST_CODE = 1;
     private static final int CAMERA_REQUEST_CODE = 2;
+    public static final String SHOW_RECIPE_EXTRA = "SHOW_RECIPE";
+    public static final String NOTIFICATION_ID_EXTRA = "NotificationId";
+
     public static MainActivity Instance;
 
     private ActivityMainBinding binding;
@@ -231,6 +239,33 @@ public class MainActivity extends AppCompatActivity implements IPhotoProvider {
             }
         }
         return false;
+    }
+
+    public void wakeScreen(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+            this.setTurnScreenOn(true);
+        } else {
+            final Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+        }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
+        if (intent.hasExtra(NOTIFICATION_ID_EXTRA)){
+            int notificationId = intent.getIntExtra(NOTIFICATION_ID_EXTRA, 0);
+            CookBookApplication.mNotificationManager.cancel(notificationId);
+        }
+
+        if (intent.hasExtra(SHOW_RECIPE_EXTRA)){
+            ShowRecipeData data = intent.getParcelableExtra(SHOW_RECIPE_EXTRA);
+            Bundle args = new Bundle();
+            args.putInt(RecipeViewFragment.RECIPE_ID, data.recipeId);
+            args.putInt(RecipeViewFragment.STEP_ID, data.stepId);
+            MainActivity.Instance.setFragment(RecipeViewFragment.class, args);
+        }
     }
 
     @Override

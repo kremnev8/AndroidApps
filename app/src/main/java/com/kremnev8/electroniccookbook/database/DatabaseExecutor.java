@@ -196,21 +196,21 @@ public class DatabaseExecutor implements
         return daoAccess.viewCacheDao().hasCache(recipeId);
     }
 
-    public Single<LiveData<List<ViewStepCache>>> getOrCreateRecipeCache(Recipe recipe) {
-        var cacheRequest = daoAccess.viewCacheDao().hasCache(recipe.id);
+    public Single<LiveData<List<ViewStepCache>>> getOrCreateRecipeCache(int recipeId) {
+        var cacheRequest = daoAccess.viewCacheDao().hasCache(recipeId);
         return cacheRequest.map(hasCache -> {
             if (hasCache) {
-                return daoAccess.viewCacheDao().getRecipeCache(recipe.id);
+                return daoAccess.viewCacheDao().getRecipeCache(recipeId);
             }
 
-            var stepsRequest = daoAccess.recipeStepDao().getRecipeStepsDirect(recipe.id);
+            var stepsRequest = daoAccess.recipeStepDao().getRecipeStepsDirect(recipeId);
             var finalRes = stepsRequest.map(steps -> {
                 if (steps != null) {
                     for (var step : steps) {
-                        daoAccess.viewCacheDao().insert(new ViewCache(recipe.id, step.id));
+                        daoAccess.viewCacheDao().insert(new ViewCache(recipeId, step.id));
                     }
                 }
-                return daoAccess.viewCacheDao().getRecipeCache(recipe.id);
+                return daoAccess.viewCacheDao().getRecipeCache(recipeId);
             });
 
             return finalRes.blockingGet();

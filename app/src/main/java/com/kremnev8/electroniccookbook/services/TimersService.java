@@ -1,18 +1,18 @@
 package com.kremnev8.electroniccookbook.services;
 
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
+import android.media.AudioAttributes;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
-import android.os.PowerManager;
 import android.os.SystemClock;
 import android.util.Log;
 
@@ -23,14 +23,15 @@ import com.kremnev8.electroniccookbook.CookBookApplication;
 import com.kremnev8.electroniccookbook.MainActivity;
 import com.kremnev8.electroniccookbook.R;
 import com.kremnev8.electroniccookbook.recipe.model.RecipeStep;
+import com.kremnev8.electroniccookbook.recipeview.model.ShowRecipeData;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
 
 public class TimersService extends Service implements Runnable, ITimerService {
 
-    private static final String CHANNEL_ID = "TimersServiceChannel";
+    private static final String MAIN_CHANNEL_ID = "TimersServiceChannel";
+    private static final String TIMER_ELAPSED_CHANNEL_ID = "TimerElapsedChannel";
     private final static String TAG = "TimersService";
     private static final String COUNTDOWN_BR = "com.kremnev8.electroniccookbook";
     private static final int NOTIFICATION_ID = 1;
@@ -90,8 +91,7 @@ public class TimersService extends Service implements Runnable, ITimerService {
     }
 
     public void timerFinished(TimerData timer) {
-        Notification notification = createTimerEndNotification(timer);
-        CookBookApplication.mNotificationManager.notify(NotificationID.getID(), notification);
+        notifyUserTimerEnded(timer);
         notify(timer);
     }
 
@@ -110,15 +110,15 @@ public class TimersService extends Service implements Runnable, ITimerService {
     public void onDestroy() {
         timers.free();
         super.onDestroy();
-        Log.i("INFO", "Timers service is destroyed!");
+        Log.i(TAG, "Timers service is destroyed!");
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.i("INFO", "Timers service is created!");
+        Log.i(TAG, "Timers service is created!");
         /* Notification */
         createNotificationChannel();
-        builder = new NotificationCompat.Builder(this, CHANNEL_ID);
+        builder = new NotificationCompat.Builder(this, MAIN_CHANNEL_ID);
         /* NotificationBuilder */
 
         notificationCreated = false;
@@ -154,32 +154,32 @@ public class TimersService extends Service implements Runnable, ITimerService {
         return notification;
     }
 
-    private Notification createTimerEndNotification(TimerData timer){
+    @SuppressLint("UnspecifiedImmutableFlag")
+    private void notifyUserTimerEnded(TimerData timer){
         Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        int notificationId = NotificationID.getID();
+        int uniqueInt = (int) (System.currentTimeMillis() & 0xfffffff);
 
-        //TODO figure out how to wake the phone
-        return new NotificationCompat.Builder(this, CHANNEL_ID)
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra(MainActivity.SHOW_RECIPE_EXTRA, new ShowRecipeData(timer.recipeId, timer.stepId));
+        intent.putExtra(MainActivity.NOTIFICATION_ID_EXTRA, notificationId);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+         PendingIntent notificationIntent = PendingIntent.getActivity(this,
+                 uniqueInt, intent,  PendingIntent.FLAG_UPDATE_CURRENT);
+
+        MainActivity.Instance.wakeScreen();
+        Notification notification = new NotificationCompat.Builder(this, TIMER_ELAPSED_CHANNEL_ID)
                 .setContentTitle("Timer is finished!")
                 .setContentText("Timer " + timer.stepName + " is finished!")
                 .setSmallIcon(R.drawable.ic_timer)
-                .setContentIntent(pendingIntent)
-                .setDefaults(Notification.DEFAULT_VIBRATE)
+                .setContentIntent(notificationIntent)
+                .setDefaults(Notification.DEFAULT_VIBRATE | Notification.DEFAULT_SOUND)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setSound(alarmSound)
                 .build();
-    }
+        notification.flags |= Notification.FLAG_INSISTENT;
 
-    /* when your phone is locked screen wakeup method*/
-    private void wakeUpScreen() {
-        PowerManager pm = (PowerManager) this.getSystemService(Context.POWER_SERVICE);
-        boolean isScreenOn = pm.isInteractive();
-
-        Log.e("screen on......", "" + isScreenOn);
-        if (!isScreenOn) {
-            PowerManager.WakeLock wl = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.ON_AFTER_RELEASE, "CookBook:MyLock");
-            wl.acquire(10000);
-            PowerManager.WakeLock wl_cpu = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "CookBook:MyCpuLock");
-            wl_cpu.acquire(10000);
-        }
+        CookBookApplication.mNotificationManager.notify(notificationId, notification);
     }
 
     private void start() {
@@ -201,7 +201,7 @@ public class TimersService extends Service implements Runnable, ITimerService {
                 Thread.sleep(1000);
             }
         } catch (InterruptedException e) {
-            Log.w("WARNING", e.toString());
+            Log.w(TAG, e.toString());
         }
     }
 
@@ -255,15 +255,30 @@ public class TimersService extends Service implements Runnable, ITimerService {
 
     private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel serviceChannel = new NotificationChannel(
-                    CHANNEL_ID,
+            NotificationChannel mainChannel = new NotificationChannel(
+                    MAIN_CHANNEL_ID,
                     "Cookbook timers",
+                    NotificationManager.IMPORTANCE_DEFAULT
+            );
+            mainChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+
+            Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+            NotificationChannel timerElapsedChannel = new NotificationChannel(
+                    TIMER_ELAPSED_CHANNEL_ID,
+                    "Cookbook alarms",
                     NotificationManager.IMPORTANCE_HIGH
             );
-            serviceChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
-            serviceChannel.enableVibration(true);
+            timerElapsedChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+            timerElapsedChannel.enableVibration(true);
+            AudioAttributes att = new AudioAttributes.Builder()
+                    .setUsage(AudioAttributes.USAGE_ALARM)
+                    .setContentType(AudioAttributes.CONTENT_TYPE_UNKNOWN)
+                    .build();
+            timerElapsedChannel.setSound(alarmSound, att);
+
             NotificationManager manager = getSystemService(NotificationManager.class);
-            manager.createNotificationChannel(serviceChannel);
+            manager.createNotificationChannel(mainChannel);
+            manager.createNotificationChannel(timerElapsedChannel);
         }
     }
 

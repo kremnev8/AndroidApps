@@ -54,7 +54,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="40dp"
             android:backgroundTint="@color/primaryColor"
-            android:text="@string/ConfirmText"
+            android:text="@string/SaveButtonText"
             android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

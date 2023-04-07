@@ -28,7 +28,7 @@ public abstract class Pool<T extends IPoolable> {
     public void init(int newSize) {
         poolRecycle = new int[newSize];
         if (pool != null) {
-            pool = Arrays.copyOf(pool, Math.min(newSize, poolCapacity));
+            pool = Arrays.copyOf(pool, newSize);
         } else {
             pool = new Object[newSize];
         }

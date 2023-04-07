@@ -34,7 +34,7 @@ public class RecipeItemViewModel extends ItemViewModel {
 
     public void onClick(View view){
         Bundle args = new Bundle();
-        args.putParcelable(RecipeViewFragment.TARGET_RECIPE, recipe);
+        args.putInt(RecipeViewFragment.RECIPE_ID, recipe.id);
         MainActivity.Instance.setFragment(RecipeViewFragment.class, args);
     }
 
