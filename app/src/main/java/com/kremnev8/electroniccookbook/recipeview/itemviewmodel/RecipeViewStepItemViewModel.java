@@ -4,6 +4,7 @@ import android.view.View;
 
 import androidx.databinding.Bindable;
 
+import com.google.common.base.Strings;
 import com.kremnev8.electroniccookbook.R;
 import com.kremnev8.electroniccookbook.common.ItemViewModel;
 import com.kremnev8.electroniccookbook.database.DatabaseExecutor;
@@ -34,8 +35,8 @@ public class RecipeViewStepItemViewModel extends ItemViewModel {
         return step.cache.stepComplete;
     }
 
-    public void setComplete(boolean value){
-        step.cache.stepComplete = value;
+    public void toggleComplete(View view){
+        step.cache.stepComplete = !step.cache.stepComplete;
         notifyChange();
         executor.update(step.cache);
     }
@@ -54,6 +55,11 @@ public class RecipeViewStepItemViewModel extends ItemViewModel {
         }else{
             return formatTime(step.step.timer);
         }
+    }
+
+    @Bindable
+    public boolean getHasMedia(){
+        return !Strings.isNullOrEmpty(step.step.mediaUri);
     }
 
     private String formatTime(long timeLeft){
@@ -96,6 +102,11 @@ public class RecipeViewStepItemViewModel extends ItemViewModel {
     @Override
     public void setItem(Object item) {
         step = (ViewStepCache)item;
+    }
+
+    @Override
+    public long getItemId() {
+        return step.step.id;
     }
 
     @Override

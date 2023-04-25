@@ -27,6 +27,7 @@ public class RecipesListFragment extends Fragment implements IMenu {
     private RecipesListViewModel recipesListViewModel;
     private FragmentRecipesListBinding binding;
 
+
     public static RecipesListFragment newInstance() {
         return new RecipesListFragment();
     }
@@ -56,5 +57,20 @@ public class RecipesListFragment extends Fragment implements IMenu {
     @Override
     public int getMenuName() {
         return R.string.RecipeListMenuName;
+    }
+
+    @Override
+    public int getActionText() {
+        return 0;
+    }
+
+    @Override
+    public int getActionImage() {
+        return 0;
+    }
+
+    @Override
+    public void onAction() {
+
     }
 }

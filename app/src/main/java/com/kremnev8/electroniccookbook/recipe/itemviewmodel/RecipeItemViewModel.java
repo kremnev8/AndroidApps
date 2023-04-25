@@ -23,6 +23,11 @@ public class RecipeItemViewModel extends ItemViewModel {
     }
 
     @Override
+    public long getItemId() {
+        return recipe.id;
+    }
+
+    @Override
     public int getLayoutId() {
         return R.layout.item_recipe;
     }

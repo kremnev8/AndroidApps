@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="itemViewModel"
+            type="com.kremnev8.electroniccookbook.recipeview.itemviewmodel.RecipeViewIngredientItemViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:paddingBottom="5dp">
+
+
+        <TextView
+            android:id="@+id/ingredientName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:autofillHints=""
+            android:gravity="center|start"
+            android:hint="@string/stepNameHint"
+            android:minHeight="48dp"
+            android:text="@{itemViewModel.ingredient.ingredientName}"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toStartOf="@+id/amount"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/amount"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:autofillHints=""
+            android:gravity="center|start"
+            android:hint="@string/stepNameHint"
+            android:minHeight="48dp"
+            android:text="@{itemViewModel.ingredient.amount + ` ` + itemViewModel.ingredient.units}"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

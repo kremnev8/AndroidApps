@@ -2,9 +2,6 @@ package com.kremnev8.electroniccookbook.recipeview.viewmodels;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
-import android.util.Pair;
-import android.util.TimingLogger;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -12,19 +9,20 @@ import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.ViewModel;
 
 import com.kremnev8.electroniccookbook.common.ItemViewModel;
+import com.kremnev8.electroniccookbook.common.ItemViewModelHolder;
 import com.kremnev8.electroniccookbook.database.DatabaseExecutor;
+import com.kremnev8.electroniccookbook.recipe.model.RecipeIngredient;
 import com.kremnev8.electroniccookbook.recipe.model.RecipeStep;
+import com.kremnev8.electroniccookbook.recipeview.itemviewmodel.RecipeViewIngredientItemViewModel;
+import com.kremnev8.electroniccookbook.recipeview.model.RecipeFullIngredient;
 import com.kremnev8.electroniccookbook.services.ITimerCallback;
 import com.kremnev8.electroniccookbook.services.ITimerService;
 import com.kremnev8.electroniccookbook.recipe.model.Recipe;
-import com.kremnev8.electroniccookbook.recipeview.itemviewmodel.RecipeViewMainItemViewModel;
 import com.kremnev8.electroniccookbook.recipeview.itemviewmodel.RecipeViewStepItemViewModel;
 import com.kremnev8.electroniccookbook.recipeview.model.ViewStepCache;
 import com.kremnev8.electroniccookbook.services.TimerData;
 
 import java.util.ArrayList;
-import java.util.Dictionary;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -41,11 +39,15 @@ public class RecipeViewModel extends ViewModel implements ITimerCallback {
     public final DatabaseExecutor databaseExecutor;
     private final ITimerService timers;
 
-    protected LiveData<List<ViewStepCache>> stepsData;
-    protected MutableLiveData<ArrayList<ItemViewModel>> viewModels = new MutableLiveData<>();
+    protected ItemViewModelHolder<ViewStepCache> stepsModelsHolder;
+    protected ItemViewModelHolder<RecipeIngredient> ingredientsModelsHolder;
 
-    public LiveData<ArrayList<ItemViewModel>> getViewModels() {
-        return viewModels;
+    public LiveData<ArrayList<ItemViewModel>> getSteps() {
+        return stepsModelsHolder.getViewModels();
+    }
+
+    public LiveData<ArrayList<ItemViewModel>> getIngredients() {
+        return ingredientsModelsHolder.getViewModels();
     }
 
     @Inject
@@ -53,69 +55,27 @@ public class RecipeViewModel extends ViewModel implements ITimerCallback {
         this.databaseExecutor = databaseExecutor;
         this.timers = timers;
         recipe = new MutableLiveData<>();
+        stepsModelsHolder = new ItemViewModelHolder<>(item -> new RecipeViewStepItemViewModel(item, databaseExecutor, timers));
+        ingredientsModelsHolder = new ItemViewModelHolder<>(RecipeViewIngredientItemViewModel::new);
     }
 
     public void setData(int recipeId) {
         this.recipe = databaseExecutor.getRecipeWithData(recipeId);
+        ingredientsModelsHolder.init(databaseExecutor.getRecipeIngredients(recipeId));
 
         databaseExecutor.getOrCreateRecipeCache(recipeId)
                 .subscribeOn(Schedulers.computation())
-                .subscribe((result, throwable) -> mainHandler.post(() -> {
-                    stepsData = result;
-                    init();
-                }));
+                .subscribe((result, throwable) -> mainHandler.post(() -> stepsModelsHolder.init(result)));
         timers.listen(this);
     }
 
     @Override
     protected void onCleared() {
         super.onCleared();
-        if (stepsData != null)
-            stepsData.removeObserver(this::updateViewData);
+        stepsModelsHolder.onCleared();
+        ingredientsModelsHolder.onCleared();
         timers.stopListening(this);
     }
-
-    protected void init() {
-        stepsData.observeForever(this::updateViewData);
-        var viewModels = createViewData(stepsData);
-        this.viewModels.postValue(viewModels);
-    }
-
-    public ArrayList<ItemViewModel> createViewData(LiveData<List<ViewStepCache>> data) {
-        var dataValue = data.getValue();
-        if (dataValue == null) {
-            ArrayList<ItemViewModel> itemViewModels = new ArrayList<>(1);
-            itemViewModels.add(new RecipeViewMainItemViewModel(recipe));
-            return itemViewModels;
-        }
-
-        var viewData = new ArrayList<ItemViewModel>(dataValue.size() + 1);
-        viewData.add(new RecipeViewMainItemViewModel(recipe));
-        for (ViewStepCache item : dataValue) {
-            viewData.add(new RecipeViewStepItemViewModel(item, databaseExecutor, timers));
-        }
-        return viewData;
-    }
-
-    public void updateViewData(List<ViewStepCache> newData) {
-        var viewModelsList = viewModels.getValue();
-        assert viewModelsList != null;
-
-
-        viewModelsList.ensureCapacity(newData.size() + 1);
-
-        for (int i = 0; i < newData.size(); i++) {
-            ViewStepCache item = newData.get(i);
-            if (i + 1 < viewModelsList.size()) {
-                viewModelsList.get(i + 1).setItem(item);
-            } else {
-                viewModelsList.add(new RecipeViewStepItemViewModel(item, databaseExecutor, timers));
-            }
-        }
-
-        viewModels.setValue(viewModelsList);
-    }
-
 
     @Override
     public void timerUpdated(TimerData timer) {
@@ -123,12 +83,11 @@ public class RecipeViewModel extends ViewModel implements ITimerCallback {
     }
 
     private void timerUpdateInternal(TimerData timer) {
+        LiveData<ArrayList<ItemViewModel>> viewModels = stepsModelsHolder.getViewModels();
         if (viewModels.getValue() == null) return;
 
         for (ItemViewModel model : viewModels.getValue()) {
-            if (!(model instanceof RecipeViewStepItemViewModel)) continue;
-
-            var item = (RecipeViewStepItemViewModel) model;
+            RecipeViewStepItemViewModel item = (RecipeViewStepItemViewModel)model;
             RecipeStep step = item.step.step;
             if (step.recipe == timer.recipeId &&
                     step.id == timer.stepId) {

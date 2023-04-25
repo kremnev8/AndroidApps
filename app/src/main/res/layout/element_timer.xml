@@ -9,7 +9,7 @@
     android:layout_width="match_parent"
     android:layout_height="50dp"
     android:layout_marginTop="5dp"
-    app:isVisibleOrGone="@{model.step.step.timerEnabled}"
+    app:isVisibleOrGone="@{model.step.step.timer > 0}"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 

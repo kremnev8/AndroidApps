@@ -2,16 +2,21 @@ package com.kremnev8.electroniccookbook;
 
 import android.Manifest;
 import android.app.ActivityManager;
+import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -60,6 +65,8 @@ public class MainActivity extends AppCompatActivity implements IPhotoProvider {
     private FragmentManager fragmentManager;
     private final List<Fragment> fragments = new ArrayList<>();
     private IPhotoRequestCallback lastRequester;
+    private AlertDialog photoDialog;
+    Handler mainHandler = new Handler(Looper.getMainLooper());
 
     ActivityResultLauncher<String> mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(),
             uri -> {
@@ -87,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements IPhotoProvider {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Instance = this;
+        photoDialog = createPictureDialog();
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -122,6 +130,11 @@ public class MainActivity extends AppCompatActivity implements IPhotoProvider {
     }
 
     public <T extends Fragment> void setFragment(Class<T> clazz, @Nullable Bundle args) {
+        if (Looper.myLooper() != Looper.getMainLooper()){
+            mainHandler.post(() -> Instance.setFragment(clazz, args));
+            return;
+        }
+
         Optional<Fragment> fragment = Iterables.tryFind(fragments, frag -> frag.getClass().isInstance(clazz));
         if (!fragment.isPresent()) {
             fragmentManager.beginTransaction()
@@ -129,9 +142,14 @@ public class MainActivity extends AppCompatActivity implements IPhotoProvider {
                     .addToBackStack("open fragment")
                     .commit();
 
+            fragmentManager.executePendingTransactions();
+
             Fragment newFragment = fragmentManager.findFragmentById(R.id.fragmentContainerView);
             Log.i("INFO", "Created fragment: " + newFragment.getClass().getName());
             fragments.add(newFragment);
+            if (newFragment instanceof IMenu) {
+                setIMenu((IMenu)newFragment);
+            }
             return;
         }
 
@@ -143,15 +161,27 @@ public class MainActivity extends AppCompatActivity implements IPhotoProvider {
                 .commit();
 
         if (fragment.get() instanceof IMenu) {
-            IMenu menu = (IMenu) fragment.get();
-
-            binding.topBar.titleText.setText(menu.getMenuName());
+            setIMenu((IMenu)fragment.get());
         }
+    }
+
+    public void setIMenu(IMenu menu){
+        binding.topBar.titleText.setText(menu.getMenuName());
+        int text = menu.getActionText();
+        int icon = menu.getActionImage();
+        binding.topBar.actionButton.setVisibility(text != 0 ? View.VISIBLE : View.INVISIBLE);
+        binding.topBar.imageMenuButton.setVisibility(icon != 0 ? View.VISIBLE : View.INVISIBLE);
+        binding.topBar.actionButton.setOnClickListener(v -> menu.onAction());
+        binding.topBar.imageMenuButton.setOnClickListener(v -> menu.onAction());
     }
 
     //region Photos
     public void requestPhoto(IPhotoRequestCallback callback) {
         lastRequester = callback;
+        photoDialog.show();
+    }
+
+    private void tryPickPhoto(){
         if (ContextCompat.checkSelfPermission(MainActivity.Instance, Manifest.permission.READ_EXTERNAL_STORAGE)
                 == PackageManager.PERMISSION_GRANTED) {
             mGetContent.launch("image/*");
@@ -160,15 +190,26 @@ public class MainActivity extends AppCompatActivity implements IPhotoProvider {
         }
     }
 
-    public void takePicture(IPhotoRequestCallback callback) {
-        lastRequester = callback;
+    public void tryTakePhoto() {
         if (ContextCompat.checkSelfPermission(MainActivity.Instance, Manifest.permission.CAMERA)
                 == PackageManager.PERMISSION_GRANTED) {
             tryTakePicture();
         }else {
             requestCameraPermission();
         }
+    }
 
+    private AlertDialog createPictureDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.AddPhotoDialogTitle)
+                .setItems(R.array.AddPhotoDialogOptions, (dialog, index) -> {
+                    if (index == 0)
+                        tryTakePhoto();
+                    else if (index == 1)
+                        tryPickPhoto();
+                    dialog.dismiss();
+                });
+        return builder.create();
     }
 
     private void tryTakePicture() {
