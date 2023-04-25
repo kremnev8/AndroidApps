@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
+        android:onClick="@{itemViewModel::itemClicked}"
         android:paddingBottom="5dp">
 
 
@@ -26,7 +27,8 @@
             android:gravity="center|start"
             android:hint="@string/stepNameHint"
             android:minHeight="48dp"
-            android:text="@{itemViewModel.ingredient.ingredientName}"
+            android:text="@{itemViewModel.ingredient.ingredient.ingredientName}"
+            app:strikethrough="@{itemViewModel.used}"
             android:textSize="20sp"
             app:layout_constraintEnd_toStartOf="@+id/amount"
             app:layout_constraintStart_toStartOf="parent"
@@ -42,7 +44,7 @@
             android:gravity="center|start"
             android:hint="@string/stepNameHint"
             android:minHeight="48dp"
-            android:text="@{itemViewModel.ingredient.amount + ` ` + itemViewModel.ingredient.units}"
+            android:text="@{itemViewModel.ingredient.ingredient.amountString}"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

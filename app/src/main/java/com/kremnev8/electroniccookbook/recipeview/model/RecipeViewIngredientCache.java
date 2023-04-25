@@ -11,7 +11,7 @@ public class RecipeViewIngredientCache {
     @Embedded
     public RecipeIngredientCache cache;
 
-    @Relation(parentColumn = "stepId", entityColumn = "id")
+    @Relation(parentColumn = "ingredientId", entityColumn = "id")
     public RecipeIngredient ingredient;
 
     public Pair<Integer, Integer> getFullId() {

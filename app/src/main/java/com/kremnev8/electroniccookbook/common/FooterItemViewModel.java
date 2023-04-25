@@ -1,4 +1,4 @@
-package com.kremnev8.electroniccookbook.recipe.itemviewmodel;
+package com.kremnev8.electroniccookbook.common;
 
 import android.view.View;
 

@@ -150,7 +150,7 @@ public class TimersService extends Service implements Runnable, ITimerService {
             builder.setContentText(newMessage);
 
         Notification notification = builder.build();
-        CookBookApplication.mNotificationManager.notify(NOTIFICATION_ID, notification);
+        CookBookApplication.NotificationManager.notify(NOTIFICATION_ID, notification);
         return notification;
     }
 
@@ -179,7 +179,7 @@ public class TimersService extends Service implements Runnable, ITimerService {
                 .build();
         notification.flags |= Notification.FLAG_INSISTENT;
 
-        CookBookApplication.mNotificationManager.notify(notificationId, notification);
+        CookBookApplication.NotificationManager.notify(notificationId, notification);
     }
 
     private void start() {

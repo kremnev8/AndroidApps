@@ -37,6 +37,9 @@ public class RecipeIngredientCache {
     @ColumnInfo(name = "ingredientUsed")
     public boolean ingredientUsed;
 
+    public RecipeIngredientCache() {
+    }
+
     @Ignore
     public RecipeIngredientCache(int recipeId, int ingredientId) {
         this.recipeId = recipeId;

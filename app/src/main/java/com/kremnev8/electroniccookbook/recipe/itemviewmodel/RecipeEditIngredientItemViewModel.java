@@ -10,12 +10,12 @@ import com.kremnev8.electroniccookbook.recipe.model.RecipeIngredient;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-public class RecipeIngredientItemViewModel extends ItemViewModel {
+public class RecipeEditIngredientItemViewModel extends ItemViewModel {
 
     public RecipeIngredient ingredient;
     private String amountString;
 
-    public RecipeIngredientItemViewModel(RecipeIngredient ingredient) {
+    public RecipeEditIngredientItemViewModel(RecipeIngredient ingredient) {
         setItem(ingredient);
     }
 

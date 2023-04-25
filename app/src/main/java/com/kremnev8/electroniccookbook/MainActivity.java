@@ -5,7 +5,6 @@ import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
@@ -114,7 +113,11 @@ public class MainActivity extends AppCompatActivity implements IPhotoProvider {
         binding.drawerLayout.closeDrawer(binding.drawerMenu.view);
 
         fragmentManager = getSupportFragmentManager();
-        fragments.add(fragmentManager.findFragmentById(R.id.fragmentContainerView));
+        Fragment currentFragment = fragmentManager.findFragmentById(R.id.fragmentContainerView);
+        fragments.add(currentFragment);
+        if (currentFragment instanceof IMenu) {
+            setIMenu((IMenu)currentFragment);
+        }
     }
 
     private void toggleLeftDrawer() {
@@ -297,7 +300,7 @@ public class MainActivity extends AppCompatActivity implements IPhotoProvider {
 
         if (intent.hasExtra(NOTIFICATION_ID_EXTRA)){
             int notificationId = intent.getIntExtra(NOTIFICATION_ID_EXTRA, 0);
-            CookBookApplication.mNotificationManager.cancel(notificationId);
+            CookBookApplication.NotificationManager.cancel(notificationId);
         }
 
         if (intent.hasExtra(SHOW_RECIPE_EXTRA)){

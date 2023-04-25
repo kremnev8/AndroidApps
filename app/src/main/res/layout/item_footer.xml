@@ -6,7 +6,7 @@
 
         <variable
             name="itemViewModel"
-            type="com.kremnev8.electroniccookbook.recipe.itemviewmodel.FooterItemViewModel" />
+            type="com.kremnev8.electroniccookbook.common.FooterItemViewModel" />
     </data>
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"

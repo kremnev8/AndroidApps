@@ -14,9 +14,9 @@ import com.kremnev8.electroniccookbook.common.ItemViewModelHolder;
 import com.kremnev8.electroniccookbook.database.DatabaseExecutor;
 import com.kremnev8.electroniccookbook.interfaces.IPhotoProvider;
 import com.kremnev8.electroniccookbook.interfaces.IPhotoRequestCallback;
-import com.kremnev8.electroniccookbook.recipe.itemviewmodel.FooterItemViewModel;
+import com.kremnev8.electroniccookbook.common.FooterItemViewModel;
+import com.kremnev8.electroniccookbook.recipe.itemviewmodel.RecipeEditIngredientItemViewModel;
 import com.kremnev8.electroniccookbook.recipe.itemviewmodel.RecipeEditItemViewModel;
-import com.kremnev8.electroniccookbook.recipe.itemviewmodel.RecipeIngredientItemViewModel;
 import com.kremnev8.electroniccookbook.recipe.model.Recipe;
 import com.kremnev8.electroniccookbook.recipe.model.RecipeIngredient;
 import com.kremnev8.electroniccookbook.recipe.model.RecipeStep;
@@ -62,7 +62,7 @@ public class RecipeEditViewModel extends ViewModel implements IPhotoRequestCallb
         stepsHolder = new ItemViewModelHolder<>(item -> new RecipeEditItemViewModel(item, photoProvider));
         stepsHolder.setFooter(new FooterItemViewModel(R.string.addStepDesc, this::addStep));
 
-        ingredientsHolder = new ItemViewModelHolder<>(RecipeIngredientItemViewModel::new);
+        ingredientsHolder = new ItemViewModelHolder<>(RecipeEditIngredientItemViewModel::new);
         ingredientsHolder.setFooter(new FooterItemViewModel(R.string.AddIngredientText, this::addIngredient));
     }
 

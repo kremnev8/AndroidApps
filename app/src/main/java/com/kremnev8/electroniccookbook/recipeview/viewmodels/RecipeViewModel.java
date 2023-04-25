@@ -14,6 +14,7 @@ import com.kremnev8.electroniccookbook.database.DatabaseExecutor;
 import com.kremnev8.electroniccookbook.recipe.model.RecipeIngredient;
 import com.kremnev8.electroniccookbook.recipe.model.RecipeStep;
 import com.kremnev8.electroniccookbook.recipeview.itemviewmodel.RecipeViewIngredientItemViewModel;
+import com.kremnev8.electroniccookbook.recipeview.model.RecipeViewIngredientCache;
 import com.kremnev8.electroniccookbook.services.ITimerCallback;
 import com.kremnev8.electroniccookbook.services.ITimerService;
 import com.kremnev8.electroniccookbook.recipe.model.Recipe;
@@ -38,7 +39,7 @@ public class RecipeViewModel extends ViewModel implements ITimerCallback {
     private final ITimerService timers;
 
     protected ItemViewModelHolder<RecipeViewStepCache> stepsModelsHolder;
-    protected ItemViewModelHolder<RecipeIngredient> ingredientsModelsHolder;
+    protected ItemViewModelHolder<RecipeViewIngredientCache> ingredientsModelsHolder;
 
     public LiveData<ArrayList<ItemViewModel>> getSteps() {
         return stepsModelsHolder.getViewModels();
@@ -54,16 +55,19 @@ public class RecipeViewModel extends ViewModel implements ITimerCallback {
         this.timers = timers;
         recipe = new MutableLiveData<>();
         stepsModelsHolder = new ItemViewModelHolder<>(item -> new RecipeViewStepItemViewModel(item, databaseExecutor, timers));
-        ingredientsModelsHolder = new ItemViewModelHolder<>(RecipeViewIngredientItemViewModel::new);
+        ingredientsModelsHolder = new ItemViewModelHolder<>(item -> new RecipeViewIngredientItemViewModel(item, databaseExecutor));
     }
 
     public void setData(int recipeId) {
         this.recipe = databaseExecutor.getRecipeWithData(recipeId);
-        ingredientsModelsHolder.init(databaseExecutor.getRecipeIngredients(recipeId));
 
         databaseExecutor.getOrCreateRecipeCache(recipeId)
                 .subscribeOn(Schedulers.computation())
                 .subscribe((result, throwable) -> mainHandler.post(() -> stepsModelsHolder.init(result)));
+
+        databaseExecutor.getOrCreateIngredientCache(recipeId)
+                .subscribeOn(Schedulers.computation())
+                .subscribe((result, throwable) -> mainHandler.post(() -> ingredientsModelsHolder.init(result)));
         timers.listen(this);
     }
 

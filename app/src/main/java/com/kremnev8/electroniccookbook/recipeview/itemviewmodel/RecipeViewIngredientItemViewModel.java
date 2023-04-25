@@ -1,16 +1,35 @@
 package com.kremnev8.electroniccookbook.recipeview.itemviewmodel;
 
+import android.view.View;
+
+import androidx.databinding.Bindable;
+
 import com.kremnev8.electroniccookbook.R;
 import com.kremnev8.electroniccookbook.common.ItemViewModel;
-import com.kremnev8.electroniccookbook.recipe.model.RecipeIngredient;
+import com.kremnev8.electroniccookbook.database.DatabaseExecutor;
+import com.kremnev8.electroniccookbook.recipeview.model.RecipeViewIngredientCache;
 
 public class RecipeViewIngredientItemViewModel extends ItemViewModel {
 
-    public RecipeIngredient ingredient;
+    public RecipeViewIngredientCache ingredient;
+    private final DatabaseExecutor executor;
 
-    public RecipeViewIngredientItemViewModel(RecipeIngredient ingredient) {
+    public RecipeViewIngredientItemViewModel(RecipeViewIngredientCache ingredient, DatabaseExecutor executor) {
         this.ingredient = ingredient;
+        this.executor = executor;
     }
+
+    @Bindable
+    public boolean getUsed(){
+        return ingredient.cache.ingredientUsed;
+    }
+
+    public void itemClicked(View view){
+        ingredient.cache.ingredientUsed = !ingredient.cache.ingredientUsed;
+        notifyChange();
+        executor.update(ingredient.cache);
+    }
+
 
     @Override
     public void setItem(Object item) {
@@ -18,7 +37,7 @@ public class RecipeViewIngredientItemViewModel extends ItemViewModel {
 
     @Override
     public long getItemId() {
-        return ingredient.id;
+        return ingredient.ingredient.id;
     }
 
     @Override

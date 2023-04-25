@@ -76,7 +76,7 @@
         android:hint="@string/TimerInputHint"
         android:imeOptions="actionDone"
         android:inputType="number"
-        android:text="@={itemViewModel.setHours}"
+        android:text="@={itemViewModel.hours}"
         android:textColorHint="#757575"
         app:layout_constraintStart_toEndOf="@+id/textView"
         app:layout_constraintTop_toBottomOf="@+id/stepName" />

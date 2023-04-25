@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.kremnev8.electroniccookbook.CookBookApplication;
 import com.kremnev8.electroniccookbook.MainActivity;
 import com.kremnev8.electroniccookbook.R;
 import com.kremnev8.electroniccookbook.databinding.FragmentRecipeViewBinding;
@@ -26,7 +27,9 @@ import com.kremnev8.electroniccookbook.recipeview.viewmodels.RecipeViewModel;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class RecipeViewFragment extends Fragment implements TabLayoutMediator.TabConfigurationStrategy, IMenu {
+public class RecipeViewFragment
+        extends Fragment
+        implements TabLayoutMediator.TabConfigurationStrategy, IMenu, TabLayout.OnTabSelectedListener {
 
     public static final String RECIPE_ID = "RecipeId";
     public static final String STEP_ID = "StepId";
@@ -56,6 +59,7 @@ public class RecipeViewFragment extends Fragment implements TabLayoutMediator.Ta
         adapter = new RecipeViewStateAdapter(this);
         binding.pager.setAdapter(adapter);
         new TabLayoutMediator(binding.tabLayout, binding.pager, this).attach();
+        binding.tabLayout.addOnTabSelectedListener(this);
 
         binding.setViewModel(viewModel);
 
@@ -103,5 +107,18 @@ public class RecipeViewFragment extends Fragment implements TabLayoutMediator.Ta
         Bundle args = new Bundle();
         args.putParcelable(RecipeEditFragment.TARGET_RECIPE, viewModel.recipe.getValue());
         MainActivity.Instance.setFragment(RecipeEditFragment.class, args);
+    }
+
+    @Override
+    public void onTabSelected(TabLayout.Tab tab) {
+        CookBookApplication.InputMethodManager.hideSoftInputFromWindow(binding.getRoot().getWindowToken(), 0);
+    }
+
+    @Override
+    public void onTabUnselected(TabLayout.Tab tab) {
+    }
+
+    @Override
+    public void onTabReselected(TabLayout.Tab tab) {
     }
 }

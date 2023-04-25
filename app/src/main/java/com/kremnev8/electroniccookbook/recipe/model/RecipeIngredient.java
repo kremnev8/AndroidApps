@@ -8,6 +8,8 @@ import androidx.room.PrimaryKey;
 
 import com.kremnev8.electroniccookbook.ingredient.model.Ingredient;
 
+import java.text.DecimalFormat;
+
 @Entity(tableName = "recipeIngredient",
         indices = @Index(value = {"id"}, unique = true),
         foreignKeys = {
@@ -43,12 +45,16 @@ public class RecipeIngredient {
 
 
     public String getAmountString(){
+        DecimalFormat df = new DecimalFormat("0");
+        df.setMaximumFractionDigits(3);
+        String amountFormatted = df.format(amount);
+
         if (amount != 0 && units != null && units.length() > 0)
-            return amount + " " + units;
+            return amountFormatted + " " + units;
         else if (amount == 0 && units != null && units.length() > 0)
             return units;
         else if (amount != 0)
-            return Float.toString(amount);
+            return amountFormatted;
         else
             return "";
     }
