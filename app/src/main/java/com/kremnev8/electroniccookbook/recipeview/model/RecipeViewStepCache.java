@@ -7,9 +7,9 @@ import androidx.room.Relation;
 
 import com.kremnev8.electroniccookbook.recipe.model.RecipeStep;
 
-public class ViewStepCache {
+public class RecipeViewStepCache {
     @Embedded
-    public ViewCache cache;
+    public RecipeStepCache cache;
 
     @Relation(parentColumn = "stepId", entityColumn = "id")
     public RecipeStep step;

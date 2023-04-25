@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 public class RecipeIngredientItemViewModel extends ItemViewModel {
 
     public RecipeIngredient ingredient;
+    private String amountString;
 
     public RecipeIngredientItemViewModel(RecipeIngredient ingredient) {
         setItem(ingredient);
@@ -20,26 +21,32 @@ public class RecipeIngredientItemViewModel extends ItemViewModel {
 
     @Bindable
     public String getAmountString(){
-        return ingredient.amount + " " + ingredient.units;
+        return amountString;
     }
 
     public void setAmountString(String value){
+        amountString = value;
         String[] parts = value.split(" ");
         if (parts.length == 1){
-            ingredient.amount = 1;
+            ingredient.amount = 0;
             ingredient.units = value;
-            notifyChange();
         }else if (parts.length > 1){
             Float amount = Floats.tryParse(parts[0]);
-            ingredient.amount = amount != null ? amount : 1;
-            ingredient.units = Arrays.stream(parts).skip(1).collect(Collectors.joining(""));
-            notifyChange();
+            if (amount == null){
+                ingredient.amount = 0;
+                ingredient.units = value;
+            }else {
+                ingredient.amount = amount;
+                ingredient.units = Arrays.stream(parts).skip(1).collect(Collectors.joining(""));
+            }
         }
+        notifyChange();
     }
 
     @Override
     public void setItem(Object item) {
         ingredient = (RecipeIngredient)item;
+        amountString = ingredient.getAmountString();
     }
 
     @Override

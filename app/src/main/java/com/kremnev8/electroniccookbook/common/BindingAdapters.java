@@ -1,7 +1,6 @@
 package com.kremnev8.electroniccookbook.common;
 
 import android.graphics.Paint;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.view.View;
 import android.widget.Button;
@@ -10,10 +9,8 @@ import android.widget.TextView;
 import android.widget.VideoView;
 
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.SimpleItemAnimator;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
@@ -23,7 +20,7 @@ import com.kremnev8.electroniccookbook.R;
 import java.net.URLConnection;
 import java.util.List;
 
-public class BindingAdapter {
+public class BindingAdapters {
 
     private static final RequestOptions requestOptions;
 
@@ -71,6 +68,16 @@ public class BindingAdapter {
     public static boolean isImageFile(String path) {
         String mimeType = URLConnection.guessContentTypeFromName(path);
         return mimeType != null && mimeType.startsWith("image");
+    }
+
+    @androidx.databinding.BindingAdapter("plainImage")
+    public static void loadPlainImage(ImageView view, String imageUrl) {
+        Glide
+                .with(MainActivity.Instance)
+                .load(imageUrl)
+                .placeholder(R.drawable.rect)
+                .centerCrop()
+                .into(view);
     }
 
     @androidx.databinding.BindingAdapter("roundedImage")

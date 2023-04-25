@@ -104,14 +104,14 @@ public class RecipeEditViewModel extends ViewModel implements IPhotoRequestCallb
         Recipe recipeValue = recipe.getValue();
         assert recipeValue != null;
         recipeValue.yield += 1;
-        recipe.postValue(recipeValue);
+        recipe.setValue(recipeValue);
     }
 
     public void onDecreaseYieldClicked(View view){
         Recipe recipeValue = recipe.getValue();
         assert recipeValue != null;
         recipeValue.yield -= 1;
-        recipe.postValue(recipeValue);
+        recipe.setValue(recipeValue);
     }
 
     @Override
@@ -120,7 +120,7 @@ public class RecipeEditViewModel extends ViewModel implements IPhotoRequestCallb
         assert recipeValue != null;
 
         recipeValue.imageUri = imageUri;
-        recipe.postValue(recipeValue);
+        recipe.setValue(recipeValue);
     }
 
     public void saveData() {
@@ -133,12 +133,14 @@ public class RecipeEditViewModel extends ViewModel implements IPhotoRequestCallb
     }
 
     public void addStep() {
+        saveData();
         RecipeStep step = new RecipeStep();
         step.recipe = Objects.requireNonNull(recipe.getValue()).id;
         databaseExecutor.insertStep(step);
     }
 
     public void addIngredient() {
+        saveData();
         RecipeIngredient ingredient = new RecipeIngredient();
         ingredient.recipe = Objects.requireNonNull(recipe.getValue()).id;
         databaseExecutor.insertIngredient(ingredient);

@@ -8,34 +8,33 @@ import androidx.room.Query;
 import androidx.room.Transaction;
 import androidx.room.Update;
 
-import com.kremnev8.electroniccookbook.recipeview.model.ViewCache;
-import com.kremnev8.electroniccookbook.recipeview.model.ViewStepCache;
+import com.kremnev8.electroniccookbook.recipeview.model.RecipeStepCache;
+import com.kremnev8.electroniccookbook.recipeview.model.RecipeViewStepCache;
 
 import java.util.List;
 
 import io.reactivex.rxjava3.core.Single;
 
 @Dao
-public interface ViewCacheDao {
+public interface RecipeStepCacheDao {
 
-    //@Query("SELECT * FROM viewCache WHERE recipeId == :recipeId")
     @Transaction
     @Query( "SELECT c.* " +
-            "FROM viewCache AS c " +
+            "FROM recipeStepCache AS c " +
             "JOIN recipeStep AS p ON p.recipe = c.recipeId AND p.id = c.stepId " +
             "WHERE c.recipeId = :recipeId " +
             "ORDER BY p.stepNumber")
-    LiveData<List<ViewStepCache>> getRecipeCache(int recipeId);
+    LiveData<List<RecipeViewStepCache>> getRecipeCache(int recipeId);
 
-    @Query("SELECT (SELECT COUNT(*) FROM viewCache WHERE recipeId = :recipeId) > 0")
-    Single<Boolean> hasCache(int recipeId);
+    @Query("SELECT (SELECT COUNT(*) FROM recipeStepCache WHERE recipeId = :recipeId) > 0")
+    Single<Boolean> hasRecipeCache(int recipeId);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    long insert(ViewCache recipe);
+    long insert(RecipeStepCache recipe);
 
     @Update
-    void update(ViewCache recipe);
+    void update(RecipeStepCache recipe);
 
-    @Query("DELETE FROM viewCache WHERE recipeId = :recipeId")
-    void clearCache(int recipeId);
+    @Query("DELETE FROM recipeStepCache WHERE recipeId = :recipeId")
+    void clearRecipeCache(int recipeId);
 }

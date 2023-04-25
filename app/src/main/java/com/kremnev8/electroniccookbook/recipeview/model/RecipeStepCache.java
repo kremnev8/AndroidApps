@@ -13,7 +13,7 @@ import androidx.room.PrimaryKey;
 import com.kremnev8.electroniccookbook.recipe.model.Recipe;
 import com.kremnev8.electroniccookbook.recipe.model.RecipeStep;
 
-@Entity(tableName = "viewCache",
+@Entity(tableName = "recipeStepCache",
         indices = @Index(value = {"id"},unique = true),
         foreignKeys = {
         @ForeignKey(entity = Recipe.class,
@@ -24,7 +24,7 @@ import com.kremnev8.electroniccookbook.recipe.model.RecipeStep;
                 parentColumns = "id",
                 childColumns = "stepId")
         })
-public class ViewCache implements Parcelable {
+public class RecipeStepCache implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
@@ -39,9 +39,6 @@ public class ViewCache implements Parcelable {
     @ColumnInfo(name = "stepComplete")
     public boolean stepComplete;
 
-    @Ignore
-    public RecipeStep step;
-
     @Override
     public int describeContents() {
         return 0;
@@ -55,31 +52,31 @@ public class ViewCache implements Parcelable {
         dest.writeByte(this.stepComplete ? (byte) 1 : (byte) 0);
     }
 
-    public ViewCache() {
+    public RecipeStepCache() {
     }
 
     @Ignore
-    public ViewCache(int recipeId, int stepId) {
+    public RecipeStepCache(int recipeId, int stepId) {
         this.recipeId = recipeId;
         this.stepId = stepId;
     }
 
-    protected ViewCache(Parcel in) {
+    protected RecipeStepCache(Parcel in) {
         this.id = in.readInt();
         this.recipeId = in.readInt();
         this.stepId = in.readInt();
         this.stepComplete = in.readByte() != 0;
     }
 
-    public static final Parcelable.Creator<ViewCache> CREATOR = new Parcelable.Creator<>() {
+    public static final Parcelable.Creator<RecipeStepCache> CREATOR = new Parcelable.Creator<>() {
         @Override
-        public ViewCache createFromParcel(Parcel source) {
-            return new ViewCache(source);
+        public RecipeStepCache createFromParcel(Parcel source) {
+            return new RecipeStepCache(source);
         }
 
         @Override
-        public ViewCache[] newArray(int size) {
-            return new ViewCache[size];
+        public RecipeStepCache[] newArray(int size) {
+            return new RecipeStepCache[size];
         }
     };
 }

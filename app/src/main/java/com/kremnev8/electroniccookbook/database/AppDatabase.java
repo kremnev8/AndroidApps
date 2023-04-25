@@ -7,6 +7,7 @@ import androidx.room.AutoMigration;
 import androidx.room.Database;
 import androidx.room.DeleteColumn;
 import androidx.room.RenameColumn;
+import androidx.room.RenameTable;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.migration.AutoMigrationSpec;
@@ -24,8 +25,10 @@ import com.kremnev8.electroniccookbook.recipe.database.RecipeStepDao;
 import com.kremnev8.electroniccookbook.recipe.model.Recipe;
 import com.kremnev8.electroniccookbook.recipe.model.RecipeIngredient;
 import com.kremnev8.electroniccookbook.recipe.model.RecipeStep;
-import com.kremnev8.electroniccookbook.recipeview.database.ViewCacheDao;
-import com.kremnev8.electroniccookbook.recipeview.model.ViewCache;
+import com.kremnev8.electroniccookbook.recipeview.database.RecipeIngredientCacheDao;
+import com.kremnev8.electroniccookbook.recipeview.database.RecipeStepCacheDao;
+import com.kremnev8.electroniccookbook.recipeview.model.RecipeIngredientCache;
+import com.kremnev8.electroniccookbook.recipeview.model.RecipeStepCache;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -36,20 +39,26 @@ import java.util.concurrent.Executors;
         RecipeStep.class,
         RecipeIngredient.class,
         Profile.class,
-        ViewCache.class,
+        RecipeStepCache.class,
+        RecipeIngredientCache.class,
         TimerCache.class},
-        version = 7,
+        version = 8,
         autoMigrations = {
                 @AutoMigration(from = 1, to = 2, spec = AppDatabase.UriRenameMigration.class),
                 @AutoMigration(from = 2, to = 3),
                 @AutoMigration(from = 3, to = 4),
                 @AutoMigration(from = 4, to = 5, spec = AppDatabase.RefactorMigration.class),
                 @AutoMigration(from = 5, to = 6, spec = AppDatabase.IngredientNameMigration.class),
+                @AutoMigration(from = 7, to = 8, spec = AppDatabase.AddIngredientCacheMigration.class),
         }
 )
 public abstract class AppDatabase extends RoomDatabase implements DaoAccess {
 
     private static final String DATABASE_NAME = "app_database.db";
+
+    @RenameTable(fromTableName = "viewCache", toTableName = "recipeStepCache")
+    public static class AddIngredientCacheMigration implements AutoMigrationSpec {
+    }
 
     public static final Migration MIGRATION_6_7 = new Migration(6, 7) {
         @Override
@@ -100,14 +109,11 @@ public abstract class AppDatabase extends RoomDatabase implements DaoAccess {
     }
 
     public abstract IngredientDao ingredientDao();
-
     public abstract RecipeDao recipeDao();
-
     public abstract RecipeStepDao recipeStepDao();
-
     public abstract RecipeIngredientDao recipeIngredientDao();
-
-    public abstract ViewCacheDao viewCacheDao();
+    public abstract RecipeStepCacheDao viewCacheDao();
+    public abstract RecipeIngredientCacheDao recipeIngredientCacheDao();
 
     public static volatile AppDatabase instance = null;
 

@@ -13,14 +13,28 @@ import com.kremnev8.electroniccookbook.recipe.model.RecipeStep;
 public class RecipeEditItemViewModel extends ItemViewModel implements IPhotoRequestCallback {
 
     public RecipeStep step;
+    private int hours;
     private int minutes;
-    private int seconds;
 
     private final IPhotoProvider photoProvider;
 
     public RecipeEditItemViewModel(RecipeStep item, IPhotoProvider photoProvider){
         setItem(item);
         this.photoProvider = photoProvider;
+    }
+
+    @Bindable
+    public String getHours(){
+        return Integer.toString(hours);
+    }
+
+    public void setHours(String value){
+        try {
+            hours = Integer.parseInt(value);
+            step.timer = hours * 60L + minutes;
+            notifyChange();
+        }catch (NumberFormatException ignored){
+        }
     }
 
     @Bindable
@@ -31,21 +45,7 @@ public class RecipeEditItemViewModel extends ItemViewModel implements IPhotoRequ
     public void setMinutes(String value){
         try {
             minutes = Integer.parseInt(value);
-            step.timer = minutes * 60L + seconds;
-            notifyChange();
-        }catch (NumberFormatException ignored){
-        }
-    }
-
-    @Bindable
-    public String getSeconds(){
-        return Integer.toString(seconds);
-    }
-
-    public void setSeconds(String value){
-        try {
-            seconds = Integer.parseInt(value);
-            step.timer = minutes * 60L + seconds;
+            step.timer = hours * 60L + minutes;
             notifyChange();
         }catch (NumberFormatException ignored){
         }
@@ -54,8 +54,8 @@ public class RecipeEditItemViewModel extends ItemViewModel implements IPhotoRequ
     @Override
     public void setItem(Object item) {
         step = (RecipeStep) item;
-        minutes = Math.round(step.timer / 60f);
-        seconds = (int)(step.timer % 60);
+        hours = Math.round(step.timer / 60f);
+        minutes = (int)(step.timer % 60);
     }
 
     public void takePhotoButtonClicked(View view){

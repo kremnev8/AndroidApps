@@ -14,16 +14,14 @@ import com.kremnev8.electroniccookbook.database.DatabaseExecutor;
 import com.kremnev8.electroniccookbook.recipe.model.RecipeIngredient;
 import com.kremnev8.electroniccookbook.recipe.model.RecipeStep;
 import com.kremnev8.electroniccookbook.recipeview.itemviewmodel.RecipeViewIngredientItemViewModel;
-import com.kremnev8.electroniccookbook.recipeview.model.RecipeFullIngredient;
 import com.kremnev8.electroniccookbook.services.ITimerCallback;
 import com.kremnev8.electroniccookbook.services.ITimerService;
 import com.kremnev8.electroniccookbook.recipe.model.Recipe;
 import com.kremnev8.electroniccookbook.recipeview.itemviewmodel.RecipeViewStepItemViewModel;
-import com.kremnev8.electroniccookbook.recipeview.model.ViewStepCache;
+import com.kremnev8.electroniccookbook.recipeview.model.RecipeViewStepCache;
 import com.kremnev8.electroniccookbook.services.TimerData;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -39,7 +37,7 @@ public class RecipeViewModel extends ViewModel implements ITimerCallback {
     public final DatabaseExecutor databaseExecutor;
     private final ITimerService timers;
 
-    protected ItemViewModelHolder<ViewStepCache> stepsModelsHolder;
+    protected ItemViewModelHolder<RecipeViewStepCache> stepsModelsHolder;
     protected ItemViewModelHolder<RecipeIngredient> ingredientsModelsHolder;
 
     public LiveData<ArrayList<ItemViewModel>> getSteps() {

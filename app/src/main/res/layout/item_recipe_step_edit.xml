@@ -76,7 +76,7 @@
         android:hint="@string/TimerInputHint"
         android:imeOptions="actionDone"
         android:inputType="number"
-        android:text="@={itemViewModel.minutes}"
+        android:text="@={itemViewModel.setHours}"
         android:textColorHint="#757575"
         app:layout_constraintStart_toEndOf="@+id/textView"
         app:layout_constraintTop_toBottomOf="@+id/stepName" />
@@ -93,7 +93,7 @@
         android:hint="@string/TimerInputHint"
         android:imeOptions="actionDone"
         android:inputType="number"
-        android:text="@={itemViewModel.seconds}"
+        android:text="@={itemViewModel.minutes}"
         android:textColorHint="#757575"
         app:layout_constraintStart_toEndOf="@+id/textView3"
         app:layout_constraintTop_toBottomOf="@+id/stepName" />

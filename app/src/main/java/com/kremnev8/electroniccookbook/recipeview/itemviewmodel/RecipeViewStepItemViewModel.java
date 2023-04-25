@@ -8,15 +8,15 @@ import com.google.common.base.Strings;
 import com.kremnev8.electroniccookbook.R;
 import com.kremnev8.electroniccookbook.common.ItemViewModel;
 import com.kremnev8.electroniccookbook.database.DatabaseExecutor;
+import com.kremnev8.electroniccookbook.recipeview.model.RecipeViewStepCache;
 import com.kremnev8.electroniccookbook.services.ITimerService;
-import com.kremnev8.electroniccookbook.recipeview.model.ViewStepCache;
 import com.kremnev8.electroniccookbook.services.TimerData;
 
 import java.util.Locale;
 
 public class RecipeViewStepItemViewModel extends ItemViewModel {
 
-    public ViewStepCache step;
+    public RecipeViewStepCache step;
     private final DatabaseExecutor executor;
     private final ITimerService timers;
 
@@ -24,7 +24,7 @@ public class RecipeViewStepItemViewModel extends ItemViewModel {
     private boolean isRunning;
     private boolean isPaused;
 
-    public RecipeViewStepItemViewModel(ViewStepCache step, DatabaseExecutor executor, ITimerService timers) {
+    public RecipeViewStepItemViewModel(RecipeViewStepCache step, DatabaseExecutor executor, ITimerService timers) {
         this.step = step;
         this.executor = executor;
         this.timers = timers;
@@ -101,7 +101,7 @@ public class RecipeViewStepItemViewModel extends ItemViewModel {
 
     @Override
     public void setItem(Object item) {
-        step = (ViewStepCache)item;
+        step = (RecipeViewStepCache)item;
     }
 
     @Override

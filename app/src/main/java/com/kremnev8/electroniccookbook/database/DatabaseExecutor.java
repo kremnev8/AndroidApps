@@ -1,11 +1,7 @@
 package com.kremnev8.electroniccookbook.database;
 
-import android.util.Log;
-
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
 
-import com.google.common.util.concurrent.ListenableFuture;
 import com.kremnev8.electroniccookbook.ingredient.database.IngredientDao;
 import com.kremnev8.electroniccookbook.ingredient.model.Ingredient;
 import com.kremnev8.electroniccookbook.recipe.database.RecipeExtendedDao;
@@ -14,24 +10,26 @@ import com.kremnev8.electroniccookbook.recipe.database.RecipeStepDao;
 import com.kremnev8.electroniccookbook.recipe.model.Recipe;
 import com.kremnev8.electroniccookbook.recipe.model.RecipeIngredient;
 import com.kremnev8.electroniccookbook.recipe.model.RecipeStep;
-import com.kremnev8.electroniccookbook.recipeview.database.ViewCacheDao;
-import com.kremnev8.electroniccookbook.recipeview.model.RecipeFullIngredient;
-import com.kremnev8.electroniccookbook.recipeview.model.ViewCache;
-import com.kremnev8.electroniccookbook.recipeview.model.ViewStepCache;
+import com.kremnev8.electroniccookbook.recipeview.database.RecipeIngredientCacheDao;
+import com.kremnev8.electroniccookbook.recipeview.database.RecipeStepCacheDao;
+import com.kremnev8.electroniccookbook.recipeview.model.RecipeIngredientCache;
+import com.kremnev8.electroniccookbook.recipeview.model.RecipeStepCache;
+import com.kremnev8.electroniccookbook.recipeview.model.RecipeViewIngredientCache;
+import com.kremnev8.electroniccookbook.recipeview.model.RecipeViewStepCache;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import io.reactivex.rxjava3.core.Single;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class DatabaseExecutor implements
         IngredientDao,
         RecipeExtendedDao,
         RecipeStepDao,
         RecipeIngredientDao,
-        ViewCacheDao {
+        RecipeStepCacheDao,
+        RecipeIngredientCacheDao {
 
     private final ExecutorService executor;
     private final DaoAccess daoAccess;
@@ -112,7 +110,7 @@ public class DatabaseExecutor implements
     public void update(Recipe recipe) {
         executor.execute(() -> {
             daoAccess.recipeDao().update(recipe);
-            daoAccess.viewCacheDao().clearCache(recipe.id);
+            daoAccess.viewCacheDao().clearRecipeCache(recipe.id);
         });
     }
 
@@ -145,13 +143,18 @@ public class DatabaseExecutor implements
             if (recipe.ingredients != null)
                 daoAccess.recipeIngredientDao().insertAllIngredients(recipe.ingredients.getValue());
 
-            daoAccess.viewCacheDao().clearCache(recipe.id);
+            daoAccess.viewCacheDao().clearRecipeCache(recipe.id);
         });
     }
 
     @Override
     public LiveData<List<RecipeIngredient>> getRecipeIngredients(int id) {
         return daoAccess.recipeIngredientDao().getRecipeIngredients(id);
+    }
+
+    @Override
+    public Single<List<RecipeIngredient>> getRecipeIngredientsDirect(int id) {
+        return daoAccess.recipeIngredientDao().getRecipeIngredientsDirect(id);
     }
 
     @Override
@@ -178,7 +181,7 @@ public class DatabaseExecutor implements
     public void insertStep(RecipeStep step) {
         executor.execute(() -> {
             daoAccess.recipeStepDao().insertStep(step);
-            daoAccess.viewCacheDao().clearCache(step.recipe);
+            daoAccess.viewCacheDao().clearRecipeCache(step.recipe);
         });
     }
 
@@ -193,17 +196,17 @@ public class DatabaseExecutor implements
     }
 
     @Override
-    public LiveData<List<ViewStepCache>> getRecipeCache(int recipeId) {
+    public LiveData<List<RecipeViewStepCache>> getRecipeCache(int recipeId) {
         return daoAccess.viewCacheDao().getRecipeCache(recipeId);
     }
 
     @Override
-    public Single<Boolean> hasCache(int recipeId) {
-        return daoAccess.viewCacheDao().hasCache(recipeId);
+    public Single<Boolean> hasRecipeCache(int recipeId) {
+        return daoAccess.viewCacheDao().hasRecipeCache(recipeId);
     }
 
-    public Single<LiveData<List<ViewStepCache>>> getOrCreateRecipeCache(int recipeId) {
-        var cacheRequest = daoAccess.viewCacheDao().hasCache(recipeId);
+    public Single<LiveData<List<RecipeViewStepCache>>> getOrCreateRecipeCache(int recipeId) {
+        var cacheRequest = daoAccess.viewCacheDao().hasRecipeCache(recipeId);
         return cacheRequest.map(hasCache -> {
             if (hasCache) {
                 return daoAccess.viewCacheDao().getRecipeCache(recipeId);
@@ -213,7 +216,7 @@ public class DatabaseExecutor implements
             var finalRes = stepsRequest.map(steps -> {
                 if (steps != null) {
                     for (var step : steps) {
-                        daoAccess.viewCacheDao().insert(new ViewCache(recipeId, step.id));
+                        daoAccess.viewCacheDao().insert(new RecipeStepCache(recipeId, step.id));
                     }
                 }
                 return daoAccess.viewCacheDao().getRecipeCache(recipeId);
@@ -224,18 +227,65 @@ public class DatabaseExecutor implements
     }
 
     @Override
-    public long insert(ViewCache recipe) {
+    public long insert(RecipeStepCache recipe) {
         executor.execute(() -> daoAccess.viewCacheDao().insert(recipe));
         return 0;
     }
 
     @Override
-    public void update(ViewCache recipe) {
+    public void update(RecipeStepCache recipe) {
         executor.execute(() -> daoAccess.viewCacheDao().update(recipe));
     }
 
     @Override
-    public void clearCache(int recipeId) {
-        executor.execute(() -> daoAccess.viewCacheDao().clearCache(recipeId));
+    public void clearRecipeCache(int recipeId) {
+        executor.execute(() -> daoAccess.viewCacheDao().clearRecipeCache(recipeId));
+    }
+
+    @Override
+    public LiveData<List<RecipeViewIngredientCache>> getIngredientCache(int recipeId) {
+        return daoAccess.recipeIngredientCacheDao().getIngredientCache(recipeId);
+    }
+
+    @Override
+    public Single<Boolean> hasIngredientCache(int recipeId) {
+        return daoAccess.recipeIngredientCacheDao().hasIngredientCache(recipeId);
+    }
+
+    @Override
+    public long insert(RecipeIngredientCache recipe) {
+        executor.execute(() -> daoAccess.recipeIngredientCacheDao().insert(recipe));
+        return 0;
+    }
+
+    @Override
+    public void update(RecipeIngredientCache recipe) {
+        executor.execute(() -> daoAccess.recipeIngredientCacheDao().update(recipe));
+    }
+
+    @Override
+    public void clearIngredientCache(int recipeId) {
+        executor.execute(() -> daoAccess.recipeIngredientCacheDao().clearIngredientCache(recipeId));
+    }
+
+    public Single<LiveData<List<RecipeViewIngredientCache>>> getOrCreateIngredientCache(int recipeId) {
+        var cacheRequest = daoAccess.recipeIngredientCacheDao().hasIngredientCache(recipeId);
+        return cacheRequest.map(hasCache -> {
+            if (hasCache) {
+                return daoAccess.recipeIngredientCacheDao().getIngredientCache(recipeId);
+            }
+
+            var stepsRequest = daoAccess.recipeIngredientDao().getRecipeIngredientsDirect(recipeId);
+            var finalRes = stepsRequest.map(ingredients -> {
+                if (ingredients != null) {
+                    for (var ingredient : ingredients) {
+                        daoAccess.recipeIngredientCacheDao().insert(new RecipeIngredientCache(recipeId, ingredient.id));
+                    }
+                }
+                return daoAccess.recipeIngredientCacheDao().getIngredientCache(recipeId);
+            });
+
+            return finalRes.blockingGet();
+        });
     }
 }

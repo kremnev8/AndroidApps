@@ -32,7 +32,6 @@ public class RecipeIngredient {
     @ColumnInfo(name = "ingredientName")
     public String ingredientName;
 
-    //TODO nullable or another fix for violating foreign key constraint
     @ColumnInfo(name = "ingredient", index = true)
     public Integer ingredient;
 
@@ -43,4 +42,14 @@ public class RecipeIngredient {
     public String units;
 
 
+    public String getAmountString(){
+        if (amount != 0 && units != null && units.length() > 0)
+            return amount + " " + units;
+        else if (amount == 0 && units != null && units.length() > 0)
+            return units;
+        else if (amount != 0)
+            return Float.toString(amount);
+        else
+            return "";
+    }
 }

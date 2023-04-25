@@ -19,10 +19,10 @@ public class TimerData implements IPoolable {
     public int stepId;
     public String stepName;
 
-    private static TimerData empty = new TimerData();
+    private static final TimerData empty = new TimerData();
 
     public void set(RecipeStep step){
-        this.mMillisInFuture = step.timer * 1000;
+        this.mMillisInFuture = step.timer * 1000 * 60;
 
         recipeId = step.recipe;
         stepId =  step.id;
