@@ -10,6 +10,8 @@ import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
+import com.kremnev8.electroniccookbook.recipeview.model.RecipeFullIngredient;
+
 import java.util.List;
 
 @Entity(tableName = "recipe",indices = @Index(value = {"id"},unique = true))
@@ -24,6 +26,12 @@ public class Recipe implements Parcelable {
 
     @ColumnInfo(name = "description")
     public String description;
+
+    @ColumnInfo(name = "nutritionInfo")
+    public String nutritionInfo;
+
+    @ColumnInfo(name = "yield", defaultValue = "1")
+    public int yield;
 
     @ColumnInfo(name = "imageUri")
     public String imageUri;

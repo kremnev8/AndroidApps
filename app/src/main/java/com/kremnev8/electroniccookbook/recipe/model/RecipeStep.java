@@ -25,20 +25,11 @@ public class RecipeStep {
     @ColumnInfo(name = "stepNumber", defaultValue = "0")
     public int stepNumber;
 
-    @ColumnInfo(name = "name", defaultValue = "")
-    public String name;
-
-    @ColumnInfo(name = "description", defaultValue = "")
-    public String description;
+    @ColumnInfo(name = "text", defaultValue = "")
+    public String text;
 
     @ColumnInfo(name = "mediaUri", defaultValue = "")
     public String mediaUri;
-
-    @ColumnInfo(name = "isOptional", defaultValue = "false")
-    public boolean isOptional;
-
-    @ColumnInfo(name = "timerEnabled", defaultValue = "false")
-    public boolean timerEnabled;
 
     @ColumnInfo(name = "timer")
     public long timer;

@@ -29,11 +29,18 @@ public class RecipeIngredient {
     @ColumnInfo(name = "recipe", index = true)
     public int recipe;
 
-    @ColumnInfo(name = "ingredient", index = true)
-    public int ingredient;
+    @ColumnInfo(name = "ingredientName")
+    public String ingredientName;
 
-    @ColumnInfo(name = "neededAmount")
-    public int neededAmount;
+    //TODO nullable or another fix for violating foreign key constraint
+    @ColumnInfo(name = "ingredient", index = true)
+    public Integer ingredient;
+
+    @ColumnInfo(name = "amount")
+    public float amount;
+
+    @ColumnInfo(name = "units")
+    public String units;
 
 
 }

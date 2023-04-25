@@ -9,7 +9,10 @@ import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "ingredients",indices = @Index(value = {"id"},unique = true))
+@Entity(tableName = "ingredients",indices = {
+        @Index(value = {"id"},unique = true),
+        @Index(value = {"name"},unique = true)
+})
 public class Ingredient implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)

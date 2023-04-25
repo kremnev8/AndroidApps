@@ -15,6 +15,7 @@ import com.kremnev8.electroniccookbook.recipe.model.Recipe;
 import com.kremnev8.electroniccookbook.recipe.model.RecipeIngredient;
 import com.kremnev8.electroniccookbook.recipe.model.RecipeStep;
 import com.kremnev8.electroniccookbook.recipeview.database.ViewCacheDao;
+import com.kremnev8.electroniccookbook.recipeview.model.RecipeFullIngredient;
 import com.kremnev8.electroniccookbook.recipeview.model.ViewCache;
 import com.kremnev8.electroniccookbook.recipeview.model.ViewStepCache;
 
@@ -156,6 +157,11 @@ public class DatabaseExecutor implements
     @Override
     public void insertAllIngredients(List<RecipeIngredient> ingredients) {
         executor.execute(() -> daoAccess.recipeIngredientDao().insertAllIngredients(ingredients));
+    }
+
+    @Override
+    public void insertIngredient(RecipeIngredient ingredient) {
+        executor.execute(() -> daoAccess.recipeIngredientDao().insertIngredient(ingredient));
     }
 
     @Override

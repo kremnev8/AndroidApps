@@ -5,15 +5,19 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.room.AutoMigration;
 import androidx.room.Database;
+import androidx.room.DeleteColumn;
 import androidx.room.RenameColumn;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.migration.AutoMigrationSpec;
+import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.kremnev8.electroniccookbook.IngredientDataProvider;
 import com.kremnev8.electroniccookbook.ingredient.database.IngredientDao;
 import com.kremnev8.electroniccookbook.ingredient.model.Ingredient;
+import com.kremnev8.electroniccookbook.model.Profile;
+import com.kremnev8.electroniccookbook.model.TimerCache;
 import com.kremnev8.electroniccookbook.recipe.database.RecipeDao;
 import com.kremnev8.electroniccookbook.recipe.database.RecipeIngredientDao;
 import com.kremnev8.electroniccookbook.recipe.database.RecipeStepDao;
@@ -31,25 +35,78 @@ import java.util.concurrent.Executors;
         Recipe.class,
         RecipeStep.class,
         RecipeIngredient.class,
-        ViewCache.class},
-        version = 4,
+        Profile.class,
+        ViewCache.class,
+        TimerCache.class},
+        version = 7,
         autoMigrations = {
                 @AutoMigration(from = 1, to = 2, spec = AppDatabase.UriRenameMigration.class),
                 @AutoMigration(from = 2, to = 3),
-                @AutoMigration(from = 3, to = 4)
+                @AutoMigration(from = 3, to = 4),
+                @AutoMigration(from = 4, to = 5, spec = AppDatabase.RefactorMigration.class),
+                @AutoMigration(from = 5, to = 6, spec = AppDatabase.IngredientNameMigration.class),
         }
 )
 public abstract class AppDatabase extends RoomDatabase implements DaoAccess {
 
     private static final String DATABASE_NAME = "app_database.db";
 
-    @RenameColumn(tableName = "ingredients",fromColumnName = "iconUrl", toColumnName = "iconUri")
-    static class UriRenameMigration implements AutoMigrationSpec { }
+    public static final Migration MIGRATION_6_7 = new Migration(6, 7) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("BEGIN TRANSACTION;");
+
+            database.execSQL("CREATE TABLE IF NOT EXISTS `recipeIngredientNew` (" +
+                    "`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+                    "`recipe` INTEGER NOT NULL, " +
+                    "`ingredientName` TEXT, " +
+                    "`ingredient` INTEGER, " +
+                    "`amount` REAL NOT NULL, " +
+                    "`units` TEXT, " +
+                    "FOREIGN KEY(`recipe`) REFERENCES `recipe`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , " +
+                    "FOREIGN KEY(`ingredient`) REFERENCES `ingredients`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )");
+
+            database.execSQL("INSERT INTO recipeIngredientNew(id,recipe,ingredientName,ingredient,amount,units) SELECT id,recipe,ingredientName,ingredient,amount,units FROM recipeIngredient;");
+
+            database.execSQL("DROP TABLE recipeIngredient;");
+
+            database.execSQL("ALTER TABLE 'recipeIngredientNew' RENAME TO 'recipeIngredient';");
+
+            database.execSQL("DROP INDEX IF EXISTS index_recipeIngredient_ingredientName;");
+            database.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS `index_ingredients_name` ON `ingredients` (`name`)");
+
+            database.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS `index_recipeIngredient_id` ON `recipeIngredient` (`id`)");
+            database.execSQL("CREATE INDEX IF NOT EXISTS `index_recipeIngredient_recipe` ON `recipeIngredient` (`recipe`)");
+            database.execSQL("CREATE INDEX IF NOT EXISTS `index_recipeIngredient_ingredient` ON `recipeIngredient` (`ingredient`)");
+
+            database.execSQL("COMMIT;");
+        }
+    };
+
+    @DeleteColumn(tableName = "recipeStep", columnName = "timerEnabled")
+    public static class IngredientNameMigration implements AutoMigrationSpec {
+    }
+
+    @RenameColumn(tableName = "recipeStep", fromColumnName = "description", toColumnName = "text")
+    @RenameColumn(tableName = "recipeIngredient", fromColumnName = "neededAmount", toColumnName = "amount")
+    @DeleteColumn(tableName = "recipeStep", columnName = "isOptional")
+    @DeleteColumn(tableName = "recipeStep", columnName = "name")
+    @DeleteColumn(tableName = "viewCache", columnName = "timerIsRunning")
+    public static class RefactorMigration implements AutoMigrationSpec {
+    }
+
+    @RenameColumn(tableName = "ingredients", fromColumnName = "iconUrl", toColumnName = "iconUri")
+    public static class UriRenameMigration implements AutoMigrationSpec {
+    }
 
     public abstract IngredientDao ingredientDao();
+
     public abstract RecipeDao recipeDao();
+
     public abstract RecipeStepDao recipeStepDao();
+
     public abstract RecipeIngredientDao recipeIngredientDao();
+
     public abstract ViewCacheDao viewCacheDao();
 
     public static volatile AppDatabase instance = null;
@@ -59,7 +116,6 @@ public abstract class AppDatabase extends RoomDatabase implements DaoAccess {
             synchronized (AppDatabase.class) {
                 if (instance == null) {
                     instance = Room.databaseBuilder(context, AppDatabase.class, DATABASE_NAME)
-                            .fallbackToDestructiveMigration()
                             .addCallback(callback)
                             .build();
                 }
@@ -80,7 +136,7 @@ public abstract class AppDatabase extends RoomDatabase implements DaoAccess {
                 IngredientDao ingredientDao = instance.ingredientDao();
                 IngredientDataProvider dataProvider = new IngredientDataProvider();
 
-                for (Ingredient ingredient: dataProvider.getIngredientData()) {
+                for (Ingredient ingredient : dataProvider.getIngredientData()) {
                     ingredientDao.insert(ingredient);
                 }
             });

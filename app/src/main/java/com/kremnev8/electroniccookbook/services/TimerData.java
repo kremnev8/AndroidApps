@@ -26,7 +26,7 @@ public class TimerData implements IPoolable {
 
         recipeId = step.recipe;
         stepId =  step.id;
-        stepName = step.name;
+        stepName = step.text;
     }
 
     public void cancel() {

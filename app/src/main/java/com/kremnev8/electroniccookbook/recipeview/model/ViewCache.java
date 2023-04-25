@@ -39,9 +39,6 @@ public class ViewCache implements Parcelable {
     @ColumnInfo(name = "stepComplete")
     public boolean stepComplete;
 
-    @ColumnInfo(name = "timerIsRunning")
-    public boolean timerIsRunning;
-
     @Ignore
     public RecipeStep step;
 
@@ -56,7 +53,6 @@ public class ViewCache implements Parcelable {
         dest.writeInt(this.recipeId);
         dest.writeInt(this.stepId);
         dest.writeByte(this.stepComplete ? (byte) 1 : (byte) 0);
-        dest.writeByte(this.timerIsRunning ? (byte) 1 : (byte) 0);
     }
 
     public ViewCache() {
@@ -73,7 +69,6 @@ public class ViewCache implements Parcelable {
         this.recipeId = in.readInt();
         this.stepId = in.readInt();
         this.stepComplete = in.readByte() != 0;
-        this.timerIsRunning = in.readByte() != 0;
     }
 
     public static final Parcelable.Creator<ViewCache> CREATOR = new Parcelable.Creator<>() {
