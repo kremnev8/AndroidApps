@@ -19,5 +19,6 @@ public class CookBookApplication extends Application {
 
         NotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         InputMethodManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        
     }
 }

@@ -66,6 +66,10 @@ public class ItemViewModelHolder<T> {
             }
         }
 
+        if (viewModelsList.size() > newData.size()) {
+            viewModelsList.subList(newData.size(), viewModelsList.size()).clear();
+        }
+
         if (footerItemViewModel != null) {
             viewModelsList.add(footerItemViewModel);
         }

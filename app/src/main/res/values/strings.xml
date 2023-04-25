@@ -52,6 +52,7 @@
     <string name="NutritionLabel">Nutrition</string>
     <string name="ButtonPlusContentDesc">Button Plus</string>
     <string name="ButtonMinusContentDesc">Button Minus</string>
+    <string name="DeleteMenuText">Delete</string>
     <string-array name="AddPhotoDialogOptions">
         <item>Take Photo</item>
         <item>Pick Photo</item>

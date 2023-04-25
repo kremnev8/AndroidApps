@@ -5,12 +5,15 @@ import android.view.View;
 import androidx.databinding.Bindable;
 
 import com.kremnev8.electroniccookbook.R;
+import com.kremnev8.electroniccookbook.common.IHasContextMenu;
 import com.kremnev8.electroniccookbook.common.ItemViewModel;
 import com.kremnev8.electroniccookbook.interfaces.IPhotoProvider;
 import com.kremnev8.electroniccookbook.interfaces.IPhotoRequestCallback;
 import com.kremnev8.electroniccookbook.recipe.model.RecipeStep;
 
-public class RecipeEditItemViewModel extends ItemViewModel implements IPhotoRequestCallback {
+public class RecipeEditStepItemViewModel
+        extends ItemViewModel
+        implements IPhotoRequestCallback, IHasContextMenu {
 
     public RecipeStep step;
     private int hours;
@@ -18,7 +21,7 @@ public class RecipeEditItemViewModel extends ItemViewModel implements IPhotoRequ
 
     private final IPhotoProvider photoProvider;
 
-    public RecipeEditItemViewModel(RecipeStep item, IPhotoProvider photoProvider){
+    public RecipeEditStepItemViewModel(RecipeStep item, IPhotoProvider photoProvider){
         setItem(item);
         this.photoProvider = photoProvider;
     }
@@ -81,5 +84,10 @@ public class RecipeEditItemViewModel extends ItemViewModel implements IPhotoRequ
     @Override
     public int getViewType() {
         return 1;
+    }
+
+    @Override
+    public int getMenuResId() {
+        return R.menu.delete_menu;
     }
 }

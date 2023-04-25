@@ -4,13 +4,16 @@ import androidx.databinding.Bindable;
 
 import com.google.common.primitives.Floats;
 import com.kremnev8.electroniccookbook.R;
+import com.kremnev8.electroniccookbook.common.IHasContextMenu;
 import com.kremnev8.electroniccookbook.common.ItemViewModel;
 import com.kremnev8.electroniccookbook.recipe.model.RecipeIngredient;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-public class RecipeEditIngredientItemViewModel extends ItemViewModel {
+public class RecipeEditIngredientItemViewModel
+        extends ItemViewModel
+        implements IHasContextMenu {
 
     public RecipeIngredient ingredient;
     private String amountString;
@@ -62,5 +65,10 @@ public class RecipeEditIngredientItemViewModel extends ItemViewModel {
     @Override
     public int getViewType() {
         return 1;
+    }
+
+    @Override
+    public int getMenuResId() {
+        return R.menu.delete_menu;
     }
 }

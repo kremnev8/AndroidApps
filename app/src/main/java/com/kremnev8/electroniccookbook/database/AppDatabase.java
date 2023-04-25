@@ -112,7 +112,7 @@ public abstract class AppDatabase extends RoomDatabase implements DaoAccess {
     public abstract RecipeDao recipeDao();
     public abstract RecipeStepDao recipeStepDao();
     public abstract RecipeIngredientDao recipeIngredientDao();
-    public abstract RecipeStepCacheDao viewCacheDao();
+    public abstract RecipeStepCacheDao recipeStepCacheDao();
     public abstract RecipeIngredientCacheDao recipeIngredientCacheDao();
 
     public static volatile AppDatabase instance = null;

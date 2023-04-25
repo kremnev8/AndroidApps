@@ -110,7 +110,7 @@ public class DatabaseExecutor implements
     public void update(Recipe recipe) {
         executor.execute(() -> {
             daoAccess.recipeDao().update(recipe);
-            daoAccess.viewCacheDao().clearRecipeCache(recipe.id);
+            daoAccess.recipeStepCacheDao().clearRecipeCache(recipe.id);
         });
     }
 
@@ -143,7 +143,7 @@ public class DatabaseExecutor implements
             if (recipe.ingredients != null)
                 daoAccess.recipeIngredientDao().insertAllIngredients(recipe.ingredients.getValue());
 
-            daoAccess.viewCacheDao().clearRecipeCache(recipe.id);
+            daoAccess.recipeStepCacheDao().clearRecipeCache(recipe.id);
         });
     }
 
@@ -168,6 +168,14 @@ public class DatabaseExecutor implements
     }
 
     @Override
+    public void deleteIngredient(RecipeIngredient ingredient) {
+        executor.execute(() -> {
+            daoAccess.recipeIngredientDao().deleteIngredient(ingredient);
+            daoAccess.recipeIngredientCacheDao().clearIngredientCache(ingredient.recipe);
+        });
+    }
+
+    @Override
     public LiveData<List<RecipeStep>> getRecipeSteps(int id) {
         return daoAccess.recipeStepDao().getRecipeSteps(id);
     }
@@ -181,7 +189,7 @@ public class DatabaseExecutor implements
     public void insertStep(RecipeStep step) {
         executor.execute(() -> {
             daoAccess.recipeStepDao().insertStep(step);
-            daoAccess.viewCacheDao().clearRecipeCache(step.recipe);
+            daoAccess.recipeStepCacheDao().clearRecipeCache(step.recipe);
         });
     }
 
@@ -196,30 +204,38 @@ public class DatabaseExecutor implements
     }
 
     @Override
+    public void deleteStep(RecipeStep step) {
+        executor.execute(() -> {
+            daoAccess.recipeStepDao().deleteStep(step);
+            daoAccess.recipeStepCacheDao().clearRecipeCache(step.recipe);
+        });
+    }
+
+    @Override
     public LiveData<List<RecipeViewStepCache>> getRecipeCache(int recipeId) {
-        return daoAccess.viewCacheDao().getRecipeCache(recipeId);
+        return daoAccess.recipeStepCacheDao().getRecipeCache(recipeId);
     }
 
     @Override
     public Single<Boolean> hasRecipeCache(int recipeId) {
-        return daoAccess.viewCacheDao().hasRecipeCache(recipeId);
+        return daoAccess.recipeStepCacheDao().hasRecipeCache(recipeId);
     }
 
     public Single<LiveData<List<RecipeViewStepCache>>> getOrCreateRecipeCache(int recipeId) {
-        var cacheRequest = daoAccess.viewCacheDao().hasRecipeCache(recipeId);
+        var cacheRequest = daoAccess.recipeStepCacheDao().hasRecipeCache(recipeId);
         return cacheRequest.map(hasCache -> {
             if (hasCache) {
-                return daoAccess.viewCacheDao().getRecipeCache(recipeId);
+                return daoAccess.recipeStepCacheDao().getRecipeCache(recipeId);
             }
 
             var stepsRequest = daoAccess.recipeStepDao().getRecipeStepsDirect(recipeId);
             var finalRes = stepsRequest.map(steps -> {
                 if (steps != null) {
                     for (var step : steps) {
-                        daoAccess.viewCacheDao().insert(new RecipeStepCache(recipeId, step.id));
+                        daoAccess.recipeStepCacheDao().insert(new RecipeStepCache(recipeId, step.id));
                     }
                 }
-                return daoAccess.viewCacheDao().getRecipeCache(recipeId);
+                return daoAccess.recipeStepCacheDao().getRecipeCache(recipeId);
             });
 
             return finalRes.blockingGet();
@@ -228,18 +244,18 @@ public class DatabaseExecutor implements
 
     @Override
     public long insert(RecipeStepCache recipe) {
-        executor.execute(() -> daoAccess.viewCacheDao().insert(recipe));
+        executor.execute(() -> daoAccess.recipeStepCacheDao().insert(recipe));
         return 0;
     }
 
     @Override
     public void update(RecipeStepCache recipe) {
-        executor.execute(() -> daoAccess.viewCacheDao().update(recipe));
+        executor.execute(() -> daoAccess.recipeStepCacheDao().update(recipe));
     }
 
     @Override
     public void clearRecipeCache(int recipeId) {
-        executor.execute(() -> daoAccess.viewCacheDao().clearRecipeCache(recipeId));
+        executor.execute(() -> daoAccess.recipeStepCacheDao().clearRecipeCache(recipeId));
     }
 
     @Override

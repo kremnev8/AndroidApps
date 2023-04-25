@@ -16,7 +16,7 @@ import com.kremnev8.electroniccookbook.interfaces.IPhotoProvider;
 import com.kremnev8.electroniccookbook.interfaces.IPhotoRequestCallback;
 import com.kremnev8.electroniccookbook.common.FooterItemViewModel;
 import com.kremnev8.electroniccookbook.recipe.itemviewmodel.RecipeEditIngredientItemViewModel;
-import com.kremnev8.electroniccookbook.recipe.itemviewmodel.RecipeEditItemViewModel;
+import com.kremnev8.electroniccookbook.recipe.itemviewmodel.RecipeEditStepItemViewModel;
 import com.kremnev8.electroniccookbook.recipe.model.Recipe;
 import com.kremnev8.electroniccookbook.recipe.model.RecipeIngredient;
 import com.kremnev8.electroniccookbook.recipe.model.RecipeStep;
@@ -59,7 +59,7 @@ public class RecipeEditViewModel extends ViewModel implements IPhotoRequestCallb
         this.databaseExecutor = databaseExecutor;
 
         recipe = new MutableLiveData<>();
-        stepsHolder = new ItemViewModelHolder<>(item -> new RecipeEditItemViewModel(item, photoProvider));
+        stepsHolder = new ItemViewModelHolder<>(item -> new RecipeEditStepItemViewModel(item, photoProvider));
         stepsHolder.setFooter(new FooterItemViewModel(R.string.addStepDesc, this::addStep));
 
         ingredientsHolder = new ItemViewModelHolder<>(RecipeEditIngredientItemViewModel::new);
@@ -130,6 +130,26 @@ public class RecipeEditViewModel extends ViewModel implements IPhotoRequestCallb
         recipeValue.steps = stepsHolder.getData();
         recipeValue.ingredients = ingredientsHolder.getData();
         databaseExecutor.insertWithData(recipeValue);
+    }
+
+    public void removeStep(int index){
+        List<RecipeStep> list = stepsHolder.getData().getValue();
+        assert list != null;
+
+        if (index >= 0 && index < list.size()){
+            saveData();
+            databaseExecutor.deleteStep(list.get(index));
+        }
+    }
+
+    public void removeIngredient(int index){
+        List<RecipeIngredient> list = ingredientsHolder.getData().getValue();
+        assert list != null;
+
+        if (index >= 0 && index < list.size()){
+            saveData();
+            databaseExecutor.deleteIngredient(list.get(index));
+        }
     }
 
     public void addStep() {

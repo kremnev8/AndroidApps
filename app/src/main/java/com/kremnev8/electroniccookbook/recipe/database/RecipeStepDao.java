@@ -2,6 +2,7 @@ package com.kremnev8.electroniccookbook.recipe.database;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
@@ -29,4 +30,7 @@ public interface RecipeStepDao {
 
     @Update
     void updateAllSteps(List<RecipeStep> steps);
+
+    @Delete
+    void deleteStep(RecipeStep step);
 }
