@@ -24,6 +24,11 @@ public class IngredientViewModel extends ItemViewModel {
         this.ingredient = (Ingredient) item;
     }
 
+    @Override
+    public long getItemId() {
+        return ingredient.id;
+    }
+
     public void onRemoveClicked(View view) {
         clickHandler.onRemoveIngredient(ingredient.id);
     }

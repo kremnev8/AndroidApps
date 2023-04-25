@@ -15,7 +15,7 @@ import javax.inject.Inject;
 import dagger.hilt.android.lifecycle.HiltViewModel;
 
 @HiltViewModel
-public class IngredientListViewModel extends SimpleListViewModel<Ingredient, IngredientViewModel> implements IngredientClickHandler {
+public class IngredientListViewModel extends SimpleListViewModel<Ingredient> implements IngredientClickHandler {
 
     @Inject
     IngredientListViewModel(SavedStateHandle handle, DatabaseExecutor databaseExecutor) {
@@ -24,8 +24,7 @@ public class IngredientListViewModel extends SimpleListViewModel<Ingredient, Ing
         init();
     }
 
-    @Override
-    public IngredientViewModel CreateNewItemViewModel(Ingredient item) {
+    public IngredientViewModel CreateInstance(Ingredient item) {
         return new IngredientViewModel(item, this);
     }
 

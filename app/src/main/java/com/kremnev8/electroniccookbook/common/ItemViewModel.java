@@ -12,6 +12,8 @@ public abstract class ItemViewModel extends ObservableViewModel {
 
     public abstract void setItem(Object item);
 
+    public abstract long getItemId();
+
     public abstract int getLayoutId();
 
     public abstract int getViewType();

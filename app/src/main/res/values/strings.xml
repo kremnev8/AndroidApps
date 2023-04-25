@@ -16,7 +16,7 @@
     <string name="recipesName">Recipes</string>
     <string name="ingredientsName">Ingredients</string>
     <string name="settingsName">Settings</string>
-    <string name="TimerInputHint">Enter timer wait time</string>
+    <string name="TimerInputHint">00</string>
     <string name="enableTimerCheckBox">Enable Timer</string>
     <string name="optionalText">Optional</string>
     <string name="stepNameHint">Step name</string>
@@ -33,4 +33,27 @@
     <string name="startButtonText">Start</string>
     <string name="resetButtonText">Reset</string>
     <string name="ConfirmActionText">Confirm</string>
+    <string name="editLabel">Edit</string>
+    <string name="AboutTabLabel">About</string>
+    <string name="IngredientsTabLabel">Ingredients</string>
+    <string name="StepsTabLabel">Steps</string>
+    <string name="TimerInputSeparator">:</string>
+    <string name="TimerInputLabelText">Timer</string>
+    <string name="AddPhotoButtonLabel">Add Photo</string>
+    <string name="RecipeIconContentDesc">RecipeIcon</string>
+    <string name="IngredientInputHint">Ingredient</string>
+    <string name="AmountInputHint">Amount</string>
+    <string name="menu_action_button_desc">Menu Action Button</string>
+    <string name="SaveActionButtonText">Save</string>
+    <string name="AddPhotoDialogTitle">Add Photo</string>
+    <string name="AddIngredientText">Add Ingredient</string>
+    <string name="DescriptionLabel">Description</string>
+    <string name="YieldLabel">Yield</string>
+    <string name="NutritionLabel">Nutrition</string>
+    <string name="ButtonPlusContentDesc">Button Plus</string>
+    <string name="ButtonMinusContentDesc">Button Minus</string>
+    <string-array name="AddPhotoDialogOptions">
+        <item>Take Photo</item>
+        <item>Pick Photo</item>
+    </string-array>
 </resources>

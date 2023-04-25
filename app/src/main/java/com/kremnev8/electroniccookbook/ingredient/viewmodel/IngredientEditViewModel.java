@@ -45,12 +45,8 @@ public class IngredientEditViewModel extends ViewModel implements IPhotoRequestC
         databaseExecutor.insert(model.getValue());
     }
 
-    public void selectIconClicked(View view){
+    public void addPhotoClicked(View view){
         handler.postDelayed(() -> photoProvider.requestPhoto(this), 100);
-    }
-
-    public void takePhotoClicked(View view){
-        handler.postDelayed(() -> photoProvider.takePicture(this), 100);
     }
 
     @Override

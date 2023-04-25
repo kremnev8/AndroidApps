@@ -9,8 +9,12 @@
     <color name="white">#FFFFFFFF</color>
     <color name="background">#EDEDED</color>
     <color name="gray">#808080</color>
-    <color name="primaryColor">#E48D0B</color>
+    <color name="primaryColor">#E6A80A</color>
+    <color name="primaryColorVariant">#E3A402</color>
     <color name="invisible">#00000000</color>
     <color name="trans_gray">#80808080</color>
     <color name="darkGray">#414141</color>
+    <color name="ItemFirst">#F8F7F7</color>
+    <color name="ItemSecond">#EFEFEF</color>
+    <color name="InputFieldBackground">#DADADA</color>
 </resources>

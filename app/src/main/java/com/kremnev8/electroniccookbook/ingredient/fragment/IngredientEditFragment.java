@@ -47,10 +47,6 @@ public class IngredientEditFragment extends Fragment implements IMenu {
         }
 
         binding.setViewModel(viewModel);
-        binding.saveButton.setOnClickListener(v -> {
-            viewModel.saveData();
-            MainActivity.Instance.setFragment(IngredientListFragment.class, null);
-        });
 
         binding.nameField.propertyNameText.setText(R.string.nameFieldLabel);
         binding.amountField.propertyNameText.setText(R.string.amountFieldLabel);
@@ -60,5 +56,21 @@ public class IngredientEditFragment extends Fragment implements IMenu {
     @Override
     public int getMenuName() {
         return R.string.EditIngredientMenuName;
+    }
+
+    @Override
+    public int getActionText() {
+        return R.string.SaveButtonText;
+    }
+
+    @Override
+    public int getActionImage() {
+        return 0;
+    }
+
+    @Override
+    public void onAction() {
+        viewModel.saveData();
+        MainActivity.Instance.setFragment(IngredientListFragment.class, null);
     }
 }

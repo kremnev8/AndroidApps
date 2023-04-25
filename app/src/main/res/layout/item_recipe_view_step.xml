@@ -13,24 +13,26 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        android:paddingBottom="5dp">
+        android:paddingBottom="10dp">
 
 
         <TextView
             android:id="@+id/stepName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:minHeight="48dp"
-            android:layout_marginStart="5dp"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="20dp"
             android:autofillHints=""
-            android:gravity="center|start"
+            android:gravity="start|top"
             android:hint="@string/stepNameHint"
-            android:text="@={itemViewModel.step.step.name}"
-            android:textSize="24sp"
+            android:minHeight="48dp"
+            android:text="@={itemViewModel.step.step.text}"
+            android:onClick="@{itemViewModel::toggleComplete}"
+            app:strikethrough="@{itemViewModel.complete}"
+            android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/checkBox2"
+            app:layout_constraintStart_toEndOf="@+id/textView2"
             app:layout_constraintTop_toTopOf="parent" />
 
         <FrameLayout
@@ -40,11 +42,12 @@
             android:layout_marginStart="50dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="50dp"
+            app:isVisibleOrGone="@{itemViewModel.hasMedia}"
             app:layout_constraintDimensionRatio="16:9"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/stepName">
+            app:layout_constraintTop_toBottomOf="@+id/timer">
 
 
             <ImageView
@@ -65,43 +68,26 @@
         </FrameLayout>
 
         <include
-            layout="@layout/element_timer"
             android:id="@+id/timer"
+            layout="@layout/element_timer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            app:model="@{itemViewModel}"
             app:layout_constraintEnd_toEndOf="@+id/mediaFrame"
             app:layout_constraintStart_toStartOf="@+id/mediaFrame"
-            app:layout_constraintTop_toBottomOf="@+id/mediaFrame" />
-
-        <TextView
-            android:id="@+id/stepDescription"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="20dp"
-            android:gravity="top|start"
-            android:minHeight="50dp"
-            android:scrollbars="vertical"
-            android:text="@={itemViewModel.step.step.description}"
-            android:textColorHint="#757575"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/timer" />
+            app:layout_constraintTop_toBottomOf="@+id/stepName"
+            app:model="@{itemViewModel}" />
 
         <TextView
             android:id="@+id/textView2"
-            android:layout_width="wrap_content"
+            android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
             android:text="@{`#` + itemViewModel.step.step.stepNumber}"
             android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="@+id/stepName"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/stepName" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <View
             android:layout_width="match_parent"
@@ -111,19 +97,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="parent" />
-
-        <CheckBox
-            android:id="@+id/checkBox2"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginStart="40dp"
-            android:layout_marginTop="10dp"
-            android:checked="@={itemViewModel.complete}"
-            android:button="@drawable/checkbox_selector"
-            android:buttonTint="@color/white"
-            android:buttonTintMode="multiply"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

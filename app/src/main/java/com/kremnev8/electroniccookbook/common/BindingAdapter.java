@@ -1,13 +1,16 @@
 package com.kremnev8.electroniccookbook.common;
 
+import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.VideoView;
 
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SimpleItemAnimator;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestBuilder;
@@ -37,7 +40,7 @@ public class BindingAdapter {
     @SuppressWarnings("unchecked")
     public static <T, VT extends ItemViewModel> BindableRecyclerViewAdapter<T, VT> getOrCreateAdapter(RecyclerView recyclerView) {
         if (recyclerView.getAdapter() != null && recyclerView.getAdapter() instanceof BindableRecyclerViewAdapter) {
-           return (BindableRecyclerViewAdapter<T, VT>)recyclerView.getAdapter();
+            return (BindableRecyclerViewAdapter<T, VT>) recyclerView.getAdapter();
         } else {
             BindableRecyclerViewAdapter<T, VT> bindableRecyclerAdapter = new BindableRecyclerViewAdapter<>();
             recyclerView.setAdapter(bindableRecyclerAdapter);
@@ -46,20 +49,20 @@ public class BindingAdapter {
     }
 
     @androidx.databinding.BindingAdapter("switchRoundedImage")
-    public static void loadKindSwitchRoundedImage(ImageView view, String imageUrl){
-        if (imageUrl != null && isImageFile(imageUrl)){
+    public static void loadKindSwitchRoundedImage(ImageView view, String imageUrl) {
+        if (imageUrl != null && isImageFile(imageUrl)) {
             loadRoundedImage(view, imageUrl);
             view.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             view.setVisibility(View.INVISIBLE);
         }
     }
 
     @androidx.databinding.BindingAdapter("switchRoundedVideo")
-    public static void loadKindSwitchRoundedVideo(VideoView view, String videoUri){
-        if (videoUri == null || isImageFile(videoUri)){
+    public static void loadKindSwitchRoundedVideo(VideoView view, String videoUri) {
+        if (videoUri == null || isImageFile(videoUri)) {
             view.setVisibility(View.INVISIBLE);
-        }else{
+        } else {
             view.setVideoURI(Uri.parse(videoUri));
             view.setVisibility(View.VISIBLE);
         }
@@ -92,19 +95,33 @@ public class BindingAdapter {
     }
 
     @androidx.databinding.BindingAdapter("isVisibleOrGone")
-    public static void isVisible(View view, boolean value){
+    public static void isVisible(View view, boolean value) {
         view.setVisibility(value ? View.VISIBLE : View.GONE);
     }
 
     @androidx.databinding.BindingAdapter("isVisible")
-    public static void isNotHidden(View view, boolean value){
+    public static void isNotHidden(View view, boolean value) {
         view.setVisibility(value ? View.VISIBLE : View.INVISIBLE);
     }
 
     @androidx.databinding.BindingAdapter("pausedIcon")
-    public static void loadPlayIcon(Button button, boolean isPaused){
+    public static void loadPlayIcon(Button button, boolean isPaused) {
         int d = isPaused ? R.drawable.ic_pause : R.drawable.ic_play;
 
         button.setCompoundDrawablesWithIntrinsicBounds(d, 0, 0, 0);
+    }
+
+    @androidx.databinding.BindingAdapter("strikethrough")
+    public static void strikethrough(TextView view, boolean show) {
+        view.setPaintFlags(
+                show
+                        ? view.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG
+                        : view.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG
+        );
+    }
+
+    @androidx.databinding.BindingAdapter("textId")
+    public static void textFromId(TextView view, int resId){
+        view.setText(resId);
     }
 }

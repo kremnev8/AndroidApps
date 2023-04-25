@@ -53,4 +53,18 @@ public class IngredientListFragment extends Fragment implements IMenu {
     public int getMenuName() {
         return R.string.IngredientsListMenuName;
     }
+
+    @Override
+    public int getActionText() {
+        return 0;
+    }
+
+    @Override
+    public int getActionImage() {
+        return 0;
+    }
+
+    @Override
+    public void onAction() {
+    }
 }

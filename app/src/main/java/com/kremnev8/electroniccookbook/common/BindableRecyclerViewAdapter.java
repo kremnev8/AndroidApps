@@ -16,6 +16,11 @@ public class BindableRecyclerViewAdapter<T, VT extends ItemViewModel> extends Re
     private List<VT> itemViewModels = new ArrayList<>();
     private final HashMap<Integer, Integer> viewTypeToLayoutId = new HashMap<>();
 
+    public BindableRecyclerViewAdapter() {
+        setHasStableIds(true);
+    }
+
+    @NonNull
     @Override
     public BindableViewHolder<T, VT> onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
@@ -31,6 +36,14 @@ public class BindableRecyclerViewAdapter<T, VT extends ItemViewModel> extends Re
     @Override
     public void onBindViewHolder(@NonNull BindableViewHolder<T, VT> holder, int position) {
         holder.bind(itemViewModels.get(position));
+        RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) holder.binding.getRoot().getLayoutParams();
+        int bottom = position == itemViewModels.size() - 1 ? 200 : 0;
+        layoutParams.setMargins(layoutParams.leftMargin,layoutParams.topMargin,layoutParams.rightMargin, bottom);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return itemViewModels.get(position).getItemId();
     }
 
     @Override

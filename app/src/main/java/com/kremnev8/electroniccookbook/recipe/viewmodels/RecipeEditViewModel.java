@@ -1,20 +1,24 @@
 package com.kremnev8.electroniccookbook.recipe.viewmodels;
 
 import android.os.Handler;
+import android.view.View;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.ViewModel;
 
+import com.kremnev8.electroniccookbook.R;
 import com.kremnev8.electroniccookbook.common.ItemViewModel;
+import com.kremnev8.electroniccookbook.common.ItemViewModelHolder;
 import com.kremnev8.electroniccookbook.database.DatabaseExecutor;
 import com.kremnev8.electroniccookbook.interfaces.IPhotoProvider;
 import com.kremnev8.electroniccookbook.interfaces.IPhotoRequestCallback;
+import com.kremnev8.electroniccookbook.recipe.itemviewmodel.FooterItemViewModel;
 import com.kremnev8.electroniccookbook.recipe.itemviewmodel.RecipeEditItemViewModel;
-import com.kremnev8.electroniccookbook.recipe.itemviewmodel.RecipeEndEditItemViewModel;
-import com.kremnev8.electroniccookbook.recipe.itemviewmodel.RecipeMainEditItemViewModel;
+import com.kremnev8.electroniccookbook.recipe.itemviewmodel.RecipeIngredientItemViewModel;
 import com.kremnev8.electroniccookbook.recipe.model.Recipe;
+import com.kremnev8.electroniccookbook.recipe.model.RecipeIngredient;
 import com.kremnev8.electroniccookbook.recipe.model.RecipeStep;
 
 import java.util.ArrayList;
@@ -26,7 +30,7 @@ import javax.inject.Inject;
 import dagger.hilt.android.lifecycle.HiltViewModel;
 
 @HiltViewModel
-public class RecipeEditViewModel extends ViewModel implements IPhotoRequestCallback, IRecipePhotoAccess, IAddStepCallback {
+public class RecipeEditViewModel extends ViewModel implements IPhotoRequestCallback {
 
     private final Handler handler = new Handler();
     private final IPhotoProvider photoProvider;
@@ -34,12 +38,17 @@ public class RecipeEditViewModel extends ViewModel implements IPhotoRequestCallb
     private final MutableLiveData<Recipe> recipe;
 
     public final DatabaseExecutor databaseExecutor;
-    protected LiveData<List<RecipeStep>> rawData;
-    protected MutableLiveData<ArrayList<ItemViewModel>> viewModels = new MutableLiveData<>();
+    protected ItemViewModelHolder<RecipeStep> stepsHolder;
+    protected ItemViewModelHolder<RecipeIngredient> ingredientsHolder;
 
-    public LiveData<ArrayList<ItemViewModel>> getViewModels(){
-        return viewModels;
+    public LiveData<ArrayList<ItemViewModel>> getSteps(){
+        return stepsHolder.getViewModels();
     }
+
+    public LiveData<ArrayList<ItemViewModel>> getIngredients(){
+        return ingredientsHolder.getViewModels();
+    }
+
     public LiveData<Recipe> getRecipe(){
         return recipe;
     }
@@ -50,63 +59,26 @@ public class RecipeEditViewModel extends ViewModel implements IPhotoRequestCallb
         this.databaseExecutor = databaseExecutor;
 
         recipe = new MutableLiveData<>();
+        stepsHolder = new ItemViewModelHolder<>(item -> new RecipeEditItemViewModel(item, photoProvider));
+        stepsHolder.setFooter(new FooterItemViewModel(R.string.addStepDesc, this::addStep));
 
+        ingredientsHolder = new ItemViewModelHolder<>(RecipeIngredientItemViewModel::new);
+        ingredientsHolder.setFooter(new FooterItemViewModel(R.string.AddIngredientText, this::addIngredient));
     }
 
     public void setData(Recipe recipe) {
         this.recipe.setValue(recipe);
-        rawData = databaseExecutor.getRecipeSteps(recipe.id);
-        init();
+        stepsHolder.init(databaseExecutor.getRecipeSteps(recipe.id));
+        stepsHolder.getData().observeForever(this::updateOrder);
+        ingredientsHolder.init(databaseExecutor.getRecipeIngredients(recipe.id));
     }
 
     @Override
     protected void onCleared() {
         super.onCleared();
-        rawData.removeObserver(this::updateViewData);
-    }
-
-    protected void init() {
-        rawData.observeForever(this::updateViewData);
-        var viewModels = createViewData(rawData);
-        this.viewModels.postValue(viewModels);
-    }
-
-    public ArrayList<ItemViewModel> createViewData(LiveData<List<RecipeStep>> data) {
-        var dataValue = data.getValue();
-        if (dataValue == null) {
-            ArrayList<ItemViewModel> itemViewModels = new ArrayList<>(2);
-            itemViewModels.add(new RecipeMainEditItemViewModel(recipe, this));
-            itemViewModels.add(new RecipeEndEditItemViewModel(this));
-            return itemViewModels;
-        }
-
-        var viewData = new ArrayList<ItemViewModel>(dataValue.size() + 2);
-        viewData.add(new RecipeMainEditItemViewModel(recipe, this));
-        for (RecipeStep item : dataValue) {
-            viewData.add(new RecipeEditItemViewModel(item));
-        }
-        viewData.add(new RecipeEndEditItemViewModel(this));
-        return viewData;
-    }
-
-    public void updateViewData(List<RecipeStep> newData) {
-        var viewModelsList = viewModels.getValue();
-        assert viewModelsList != null;
-
-        ItemViewModel endItem = viewModelsList.remove(viewModelsList.size() - 1);
-
-        viewModelsList.ensureCapacity(newData.size() + 2);
-        for (int i = 0; i < newData.size(); i++) {
-            if (i + 1 < viewModelsList.size()) {
-                viewModelsList.get(i + 1).setItem(newData.get(i));
-            } else {
-                viewModelsList.add(new RecipeEditItemViewModel(newData.get(i)));
-            }
-        }
-        viewModelsList.add(endItem);
-
-        viewModels.setValue(viewModelsList);
-        updateOrder(newData);
+        stepsHolder.getData().removeObserver(this::updateOrder);
+        stepsHolder.onCleared();
+        ingredientsHolder.onCleared();
     }
 
     public void updateOrder(List<RecipeStep> newData){
@@ -124,12 +96,22 @@ public class RecipeEditViewModel extends ViewModel implements IPhotoRequestCallb
         }
     }
 
-    public void selectIconClicked() {
+    public void takePhotoButtonClicked(View view){
         handler.postDelayed(() -> photoProvider.requestPhoto(this), 100);
     }
 
-    public void takePhotoClicked() {
-        handler.postDelayed(() -> photoProvider.takePicture(this), 100);
+    public void onIncreaseYieldClicked(View view){
+        Recipe recipeValue = recipe.getValue();
+        assert recipeValue != null;
+        recipeValue.yield += 1;
+        recipe.postValue(recipeValue);
+    }
+
+    public void onDecreaseYieldClicked(View view){
+        Recipe recipeValue = recipe.getValue();
+        assert recipeValue != null;
+        recipeValue.yield -= 1;
+        recipe.postValue(recipeValue);
     }
 
     @Override
@@ -145,14 +127,20 @@ public class RecipeEditViewModel extends ViewModel implements IPhotoRequestCallb
         Recipe recipeValue = recipe.getValue();
         assert recipeValue != null;
 
-        recipeValue.steps = rawData;
+        recipeValue.steps = stepsHolder.getData();
+        recipeValue.ingredients = ingredientsHolder.getData();
         databaseExecutor.insertWithData(recipeValue);
     }
 
-    @Override
     public void addStep() {
         RecipeStep step = new RecipeStep();
         step.recipe = Objects.requireNonNull(recipe.getValue()).id;
         databaseExecutor.insertStep(step);
+    }
+
+    public void addIngredient() {
+        RecipeIngredient ingredient = new RecipeIngredient();
+        ingredient.recipe = Objects.requireNonNull(recipe.getValue()).id;
+        databaseExecutor.insertIngredient(ingredient);
     }
 }
