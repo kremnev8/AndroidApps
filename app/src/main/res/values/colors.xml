@@ -17,4 +17,6 @@
     <color name="ItemFirst">#F8F7F7</color>
     <color name="ItemSecond">#EFEFEF</color>
     <color name="InputFieldBackground">#DADADA</color>
+    <color name="SelectedGray">#D9D9D9</color>
+    <color name="Placeholder">#DCDCDC</color>
 </resources>

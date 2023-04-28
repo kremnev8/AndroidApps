@@ -53,6 +53,9 @@
     <string name="ButtonPlusContentDesc">Button Plus</string>
     <string name="ButtonMinusContentDesc">Button Minus</string>
     <string name="DeleteMenuText">Delete</string>
+    <string name="EditMenuText">Edit</string>
+    <string name="ChangeProfileText">Change Profile</string>
+    <string name="ProfileImageContentDesc">Profile Image</string>
     <string-array name="AddPhotoDialogOptions">
         <item>Take Photo</item>
         <item>Pick Photo</item>
