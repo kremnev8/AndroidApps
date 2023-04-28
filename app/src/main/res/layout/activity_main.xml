@@ -33,9 +33,22 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <include layout="@layout/navigation_drawer_menu"
+    <LinearLayout
+        android:id="@+id/drawerMenuView"
         android:layout_width="300dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:id="@+id/drawerMenu"/>
+        android:background="@android:color/background_light"
+        android:fitsSystemWindows="true"
+        android:baselineAligned="false">
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/drawerMenu"
+            android:name="com.kremnev8.electroniccookbook.components.tabs.fragment.NavigationDrawerFragment"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            tools:layout="@layout/fragment_navigation_drawer" />
+
+    </LinearLayout>
 </androidx.drawerlayout.widget.DrawerLayout>

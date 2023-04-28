@@ -32,14 +32,14 @@ import androidx.fragment.app.FragmentManager;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.Iterables;
-import com.kremnev8.electroniccookbook.components.ingredient.list.fragment.IngredientListFragment;
-import com.kremnev8.electroniccookbook.components.recipe.list.fragment.RecipesListFragment;
 import com.kremnev8.electroniccookbook.components.recipe.model.ShowRecipeData;
 import com.kremnev8.electroniccookbook.components.recipe.view.fragment.RecipeViewFragment;
 import com.kremnev8.electroniccookbook.components.timers.TimersService;
 import com.kremnev8.electroniccookbook.contract.TakePictureWithUriReturnContract;
 import com.kremnev8.electroniccookbook.databinding.ActivityMainBinding;
+import com.kremnev8.electroniccookbook.interfaces.IFragmentController;
 import com.kremnev8.electroniccookbook.interfaces.IMenu;
+import com.kremnev8.electroniccookbook.interfaces.IDrawerController;
 import com.kremnev8.electroniccookbook.interfaces.IPhotoProvider;
 import com.kremnev8.electroniccookbook.interfaces.IPhotoRequestCallback;
 
@@ -51,7 +51,9 @@ import java.util.List;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class MainActivity extends AppCompatActivity implements IPhotoProvider {
+public class MainActivity
+        extends AppCompatActivity
+        implements IPhotoProvider, IDrawerController, IFragmentController {
 
     private static final int FILES_REQUEST_CODE = 1;
     private static final int CAMERA_REQUEST_CODE = 2;
@@ -98,19 +100,9 @@ public class MainActivity extends AppCompatActivity implements IPhotoProvider {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        binding.topBar.menuButton.setOnClickListener(v -> toggleLeftDrawer());
+        binding.topBar.menuButton.setOnClickListener(v -> toggleDrawer(DrawerKind.NAVIGATION));
 
-        binding.drawerMenu.ingredients.setOnClickListener(v -> {
-            setFragment(IngredientListFragment.class, null);
-            closeMenu();
-        });
-
-        binding.drawerMenu.recipes.setOnClickListener(v -> {
-            setFragment(RecipesListFragment.class, null);
-            closeMenu();
-        });
-
-        binding.drawerLayout.closeDrawer(binding.drawerMenu.view);
+        binding.drawerLayout.closeDrawer(binding.drawerMenuView);
 
         fragmentManager = getSupportFragmentManager();
         Fragment currentFragment = fragmentManager.findFragmentById(R.id.fragmentContainerView);
@@ -120,16 +112,32 @@ public class MainActivity extends AppCompatActivity implements IPhotoProvider {
         }
     }
 
-    private void toggleLeftDrawer() {
-        if (binding.drawerLayout.isDrawerOpen(binding.drawerMenu.view)) {
-            closeMenu();
+    public View getDrawerView(DrawerKind kind){
+        switch (kind){
+            case NAVIGATION:
+                return binding.drawerMenuView;
+            case FILTERS:
+                return null;
+        }
+        return null;
+    }
+
+    public void toggleDrawer(DrawerKind kind) {
+        View drawer = getDrawerView(kind);
+        if (drawer == null) return;
+
+        if (binding.drawerLayout.isDrawerOpen(drawer)) {
+            binding.drawerLayout.closeDrawer(drawer);
         } else {
-            binding.drawerLayout.openDrawer(binding.drawerMenu.view);
+            binding.drawerLayout.openDrawer(drawer);
         }
     }
 
-    private void closeMenu() {
-        binding.drawerLayout.closeDrawer(binding.drawerMenu.view);
+    public void closeDrawer(DrawerKind kind) {
+        View drawer = getDrawerView(kind);
+        if (drawer == null) return;
+
+        binding.drawerLayout.closeDrawer(drawer);
     }
 
     public <T extends Fragment> void setFragment(Class<T> clazz, @Nullable Bundle args) {

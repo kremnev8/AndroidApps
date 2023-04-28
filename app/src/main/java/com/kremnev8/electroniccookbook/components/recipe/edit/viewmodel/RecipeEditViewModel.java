@@ -3,6 +3,7 @@ package com.kremnev8.electroniccookbook.components.recipe.edit.viewmodel;
 import android.os.Handler;
 import android.view.View;
 
+import androidx.databinding.Bindable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.SavedStateHandle;
@@ -10,6 +11,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.kremnev8.electroniccookbook.R;
 import com.kremnev8.electroniccookbook.common.FooterItemViewModel;
+import com.kremnev8.electroniccookbook.common.ObservableViewModel;
 import com.kremnev8.electroniccookbook.common.recycler.ItemViewModel;
 import com.kremnev8.electroniccookbook.common.recycler.ItemViewModelHolder;
 import com.kremnev8.electroniccookbook.components.recipe.edit.itemviewmodel.RecipeEditIngredientItemViewModel;
@@ -30,7 +32,7 @@ import javax.inject.Inject;
 import dagger.hilt.android.lifecycle.HiltViewModel;
 
 @HiltViewModel
-public class RecipeEditViewModel extends ViewModel implements IPhotoRequestCallback {
+public class RecipeEditViewModel extends ObservableViewModel implements IPhotoRequestCallback {
 
     private final Handler handler = new Handler();
     private final IPhotoProvider photoProvider;
@@ -100,18 +102,28 @@ public class RecipeEditViewModel extends ViewModel implements IPhotoRequestCallb
         handler.postDelayed(() -> photoProvider.requestPhoto(this), 100);
     }
 
-    public void onIncreaseYieldClicked(View view){
+    @Bindable
+    public int getYield(){
         Recipe recipeValue = recipe.getValue();
         assert recipeValue != null;
-        recipeValue.yield += 1;
-        recipe.setValue(recipeValue);
+
+        return recipeValue.yield;
+    }
+
+    public void setYield(int yield){
+        Recipe recipeValue = recipe.getValue();
+        assert recipeValue != null;
+
+        recipeValue.yield = Math.max(0, yield);
+        notifyChange();
+    }
+
+    public void onIncreaseYieldClicked(View view){
+        setYield(getYield() + 1);
     }
 
     public void onDecreaseYieldClicked(View view){
-        Recipe recipeValue = recipe.getValue();
-        assert recipeValue != null;
-        recipeValue.yield -= 1;
-        recipe.setValue(recipeValue);
+        setYield(getYield() - 1);
     }
 
     @Override

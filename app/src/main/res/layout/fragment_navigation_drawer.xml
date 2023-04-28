@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.kremnev8.electroniccookbook.components.tabs.viewmodel.NavigationDrawerViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/SelectedGray"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@color/gray" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp">
+
+
+            <ImageView
+                android:id="@+id/profileImage"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_marginStart="20dp"
+                android:contentDescription="@string/ProfileImageContentDesc"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:profileImage="@{viewModel.profile.profileImageUrl}"
+                tools:ignore="ImageContrastCheck" />
+
+            <TextView
+                android:id="@+id/profileNameText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:text="@{viewModel.profile.name}"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/ChangeProfileText"
+                app:layout_constraintStart_toEndOf="@+id/profileImage"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <TextView
+                android:id="@+id/ChangeProfileText"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginEnd="20dp"
+                android:gravity="center"
+                android:text="@string/ChangeProfileText"
+                android:textColor="#455A64"
+                android:textSize="16sp"
+                android:onClick="@{viewModel::changeProfileClicked}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <Button
+            android:id="@+id/ingredientsButton"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:drawableEnd="@drawable/ic_ingredients"
+            android:gravity="center|start"
+            android:insetLeft="20dp"
+            android:insetRight="20dp"
+            android:text="@string/ingredientsName"
+            android:onClick="@{viewModel::ingredientsButtonClicked}"
+            android:textColor="@color/black" />
+
+        <Button
+            android:id="@+id/recipesButton"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:drawableEnd="@drawable/ic_book"
+            android:gravity="center|start"
+            android:insetLeft="20dp"
+            android:insetRight="20dp"
+            android:text="@string/RecipeListMenuName"
+            android:onClick="@{viewModel::recipesButtonClicked}"
+            android:textColor="@color/black" />
+
+        <Button
+            android:id="@+id/settingsButton"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:drawableEnd="@drawable/ic_settigns"
+            android:gravity="center|start"
+            android:insetLeft="20dp"
+            android:insetRight="20dp"
+            android:text="@string/settingsName"
+            android:onClick="@{viewModel::settingsButtonClicked}"
+            android:textColor="@color/black" />
+
+    </LinearLayout>
+</layout>

@@ -157,14 +157,14 @@
                     android:id="@+id/yieldEdit"
                     android:layout_width="150dp"
                     android:layout_height="48dp"
-                    android:layout_marginStart="10dp"
+                    android:layout_marginStart="8dp"
+                    android:autofillHints="yield"
                     android:imeOptions="actionDone"
-                    android:inputType="text"
-                    android:text="@={`` + viewModel.recipe.yield}"
+                    android:inputType="number"
+                    android:text="@={`` + viewModel.yield}"
                     android:textColorHint="#78909C"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/yieldLabel"
-                    android:autofillHints="yield" />
+                    app:layout_constraintTop_toBottomOf="@+id/yieldLabel" />
 
                 <ImageButton
                     android:id="@+id/plusButton"

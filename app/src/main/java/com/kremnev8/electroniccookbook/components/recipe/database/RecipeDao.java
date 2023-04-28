@@ -28,7 +28,7 @@ public interface RecipeDao {
     void update(Recipe recipe);
 
     @Query("DELETE FROM recipe WHERE id = :id")
-    void deleteById(int id);
+    void deleteRecipeById(int id);
 
     @Delete(entity = Recipe.class)
     void delete(Recipe recipe);

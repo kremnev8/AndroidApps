@@ -32,7 +32,7 @@ public class IngredientListViewModel extends SimpleListViewModel<Ingredient> imp
 
     @Override
     public void onRemoveIngredient(int id) {
-        databaseExecutor.deleteById(id);
+        databaseExecutor.deleteIngredientById(id);
     }
 
     @Override

@@ -25,7 +25,7 @@ public interface IngredientDao {
     void update(Ingredient ingredient);
 
     @Query("DELETE FROM ingredients WHERE id = :id")
-    void deleteById(int id);
+    void deleteIngredientById(int id);
 
     @Delete
     void delete(Ingredient ingredient);

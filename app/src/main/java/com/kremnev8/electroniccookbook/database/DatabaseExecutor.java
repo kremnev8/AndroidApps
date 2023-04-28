@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData;
 
 import com.kremnev8.electroniccookbook.components.ingredient.database.IngredientDao;
 import com.kremnev8.electroniccookbook.components.ingredient.model.Ingredient;
+import com.kremnev8.electroniccookbook.components.profile.database.ProfileDao;
+import com.kremnev8.electroniccookbook.components.profile.model.Profile;
 import com.kremnev8.electroniccookbook.components.recipe.database.RecipeExtendedDao;
 import com.kremnev8.electroniccookbook.components.recipe.database.RecipeIngredientCacheDao;
 import com.kremnev8.electroniccookbook.components.recipe.database.RecipeIngredientDao;
@@ -21,6 +23,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
 
 public class DatabaseExecutor implements
@@ -29,7 +32,8 @@ public class DatabaseExecutor implements
         RecipeStepDao,
         RecipeIngredientDao,
         RecipeStepCacheDao,
-        RecipeIngredientCacheDao {
+        RecipeIngredientCacheDao,
+        ProfileDao {
 
     private final ExecutorService executor;
     private final DaoAccess daoAccess;
@@ -52,6 +56,11 @@ public class DatabaseExecutor implements
     @Override
     public void update(Ingredient ingredient) {
         executor.execute(() -> daoAccess.ingredientDao().update(ingredient));
+    }
+
+    @Override
+    public void deleteIngredientById(int id) {
+        executor.execute(() -> daoAccess.ingredientDao().deleteIngredientById(id));
     }
 
     @Override
@@ -115,8 +124,34 @@ public class DatabaseExecutor implements
     }
 
     @Override
-    public void deleteById(int id) {
-        executor.execute(() -> daoAccess.recipeDao().deleteById(id));
+    public LiveData<List<Profile>> getProfiles() {
+        return daoAccess.profileDao().getProfiles();
+    }
+
+    @Override
+    public Flowable<Profile> getProfile(int id) {
+        return daoAccess.profileDao().getProfile(id);
+    }
+
+    @Override
+    public boolean hasProfile(int id) {
+        return daoAccess.profileDao().hasProfile(id);
+    }
+
+    @Override
+    public long insertOrUpdate(Profile profile) {
+        executor.execute(() -> daoAccess.profileDao().insertOrUpdate(profile));
+        return 0;
+    }
+
+    @Override
+    public void deleteProfileById(int id) {
+        executor.execute(() -> daoAccess.profileDao().deleteProfileById(id));
+    }
+
+    @Override
+    public void deleteRecipeById(int id) {
+        executor.execute(() -> daoAccess.recipeDao().deleteRecipeById(id));
     }
 
     @Override

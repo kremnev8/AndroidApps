@@ -103,6 +103,17 @@ public class BindingAdapters {
 
     }
 
+    @androidx.databinding.BindingAdapter("profileImage")
+    public static void loadProfileImage(ImageView view, String imageUrl) {
+        Glide
+                .with(MainActivity.Instance)
+                .load(imageUrl)
+                .placeholder(R.drawable.ic_profile)
+                .circleCrop()
+                .into(view);
+
+    }
+
     @androidx.databinding.BindingAdapter("isVisibleOrGone")
     public static void isVisible(View view, boolean value) {
         view.setVisibility(value ? View.VISIBLE : View.GONE);

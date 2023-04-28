@@ -1,6 +1,7 @@
 package com.kremnev8.electroniccookbook.database;
 
 import com.kremnev8.electroniccookbook.components.ingredient.database.IngredientDao;
+import com.kremnev8.electroniccookbook.components.profile.database.ProfileDao;
 import com.kremnev8.electroniccookbook.components.recipe.database.RecipeDao;
 import com.kremnev8.electroniccookbook.components.recipe.database.RecipeIngredientCacheDao;
 import com.kremnev8.electroniccookbook.components.recipe.database.RecipeIngredientDao;
@@ -14,4 +15,5 @@ interface DaoAccess {
     RecipeIngredientDao recipeIngredientDao();
     RecipeStepCacheDao recipeStepCacheDao();
     RecipeIngredientCacheDao recipeIngredientCacheDao();
+    ProfileDao profileDao();
 }
