@@ -1,7 +1,7 @@
 package com.kremnev8.electroniccookbook;
 
+import com.kremnev8.electroniccookbook.components.timers.ITimerService;
 import com.kremnev8.electroniccookbook.interfaces.IPhotoProvider;
-import com.kremnev8.electroniccookbook.services.ITimerService;
 
 import dagger.Module;
 import dagger.Provides;

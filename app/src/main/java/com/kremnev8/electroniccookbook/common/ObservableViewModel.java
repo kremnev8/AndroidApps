@@ -1,14 +1,11 @@
 package com.kremnev8.electroniccookbook.common;
 
-import android.view.View;
-
 import androidx.annotation.NonNull;
 import androidx.databinding.Observable;
 import androidx.databinding.PropertyChangeRegistry;
 import androidx.lifecycle.ViewModel;
 
 import java.io.Closeable;
-import java.util.Arrays;
 
 public abstract class ObservableViewModel extends ViewModel implements Observable {
 

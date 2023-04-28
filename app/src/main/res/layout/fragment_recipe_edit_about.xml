@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="com.kremnev8.electroniccookbook.recipe.viewmodels.RecipeEditViewModel" />
+            type="com.kremnev8.electroniccookbook.components.recipe.edit.viewmodel.RecipeEditViewModel" />
     </data>
 
     <ScrollView

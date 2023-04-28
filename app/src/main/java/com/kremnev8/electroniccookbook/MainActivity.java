@@ -32,16 +32,16 @@ import androidx.fragment.app.FragmentManager;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.Iterables;
+import com.kremnev8.electroniccookbook.components.ingredient.list.fragment.IngredientListFragment;
+import com.kremnev8.electroniccookbook.components.recipe.list.fragment.RecipesListFragment;
+import com.kremnev8.electroniccookbook.components.recipe.model.ShowRecipeData;
+import com.kremnev8.electroniccookbook.components.recipe.view.fragment.RecipeViewFragment;
+import com.kremnev8.electroniccookbook.components.timers.TimersService;
 import com.kremnev8.electroniccookbook.contract.TakePictureWithUriReturnContract;
 import com.kremnev8.electroniccookbook.databinding.ActivityMainBinding;
-import com.kremnev8.electroniccookbook.ingredient.fragment.IngredientListFragment;
 import com.kremnev8.electroniccookbook.interfaces.IMenu;
 import com.kremnev8.electroniccookbook.interfaces.IPhotoProvider;
 import com.kremnev8.electroniccookbook.interfaces.IPhotoRequestCallback;
-import com.kremnev8.electroniccookbook.recipe.fragments.RecipesListFragment;
-import com.kremnev8.electroniccookbook.recipeview.fragments.RecipeViewFragment;
-import com.kremnev8.electroniccookbook.recipeview.model.ShowRecipeData;
-import com.kremnev8.electroniccookbook.services.TimersService;
 
 import java.io.File;
 import java.io.IOException;
@@ -148,7 +148,6 @@ public class MainActivity extends AppCompatActivity implements IPhotoProvider {
             fragmentManager.executePendingTransactions();
 
             Fragment newFragment = fragmentManager.findFragmentById(R.id.fragmentContainerView);
-            Log.i("INFO", "Created fragment: " + newFragment.getClass().getName());
             fragments.add(newFragment);
             if (newFragment instanceof IMenu) {
                 setIMenu((IMenu)newFragment);

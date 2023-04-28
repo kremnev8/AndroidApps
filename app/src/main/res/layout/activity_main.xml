@@ -21,7 +21,7 @@
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragmentContainerView"
-            android:name="com.kremnev8.electroniccookbook.ingredient.fragment.IngredientListFragment"
+            android:name="com.kremnev8.electroniccookbook.components.ingredient.list.fragment.IngredientListFragment"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"

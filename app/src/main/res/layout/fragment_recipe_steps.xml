@@ -7,14 +7,14 @@
 
         <variable
             name="viewModel"
-            type="com.kremnev8.electroniccookbook.recipeview.viewmodels.RecipeViewModel" />
+            type="com.kremnev8.electroniccookbook.components.recipe.view.viewmodel.RecipeViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/background"
-        tools:context=".recipe.fragments.RecipeEditFragment">
+        tools:context=".components.recipe.edit.fragment.RecipeEditFragment">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/stepsList"

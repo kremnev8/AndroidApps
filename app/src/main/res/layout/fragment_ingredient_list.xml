@@ -6,14 +6,14 @@
     <data>
         <variable
             name="viewModel"
-            type="com.kremnev8.electroniccookbook.ingredient.viewmodel.IngredientListViewModel" />
+            type="com.kremnev8.electroniccookbook.components.ingredient.list.viewmodel.IngredientListViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ingredient.fragment.IngredientListFragment">
+        tools:context=".components.ingredient.list.fragment.IngredientListFragment">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/ingredientsList"

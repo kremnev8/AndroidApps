@@ -6,7 +6,7 @@
     <data>
         <variable
             name="itemViewModel"
-            type="com.kremnev8.electroniccookbook.recipeview.itemviewmodel.RecipeViewStepItemViewModel" />
+            type="com.kremnev8.electroniccookbook.components.recipe.view.itemviewmodel.RecipeViewStepItemViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -88,15 +88,6 @@
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="-1dp"
-            android:background="@color/gray"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,20 +2,20 @@ package com.kremnev8.electroniccookbook.database;
 
 import androidx.lifecycle.LiveData;
 
-import com.kremnev8.electroniccookbook.ingredient.database.IngredientDao;
-import com.kremnev8.electroniccookbook.ingredient.model.Ingredient;
-import com.kremnev8.electroniccookbook.recipe.database.RecipeExtendedDao;
-import com.kremnev8.electroniccookbook.recipe.database.RecipeIngredientDao;
-import com.kremnev8.electroniccookbook.recipe.database.RecipeStepDao;
-import com.kremnev8.electroniccookbook.recipe.model.Recipe;
-import com.kremnev8.electroniccookbook.recipe.model.RecipeIngredient;
-import com.kremnev8.electroniccookbook.recipe.model.RecipeStep;
-import com.kremnev8.electroniccookbook.recipeview.database.RecipeIngredientCacheDao;
-import com.kremnev8.electroniccookbook.recipeview.database.RecipeStepCacheDao;
-import com.kremnev8.electroniccookbook.recipeview.model.RecipeIngredientCache;
-import com.kremnev8.electroniccookbook.recipeview.model.RecipeStepCache;
-import com.kremnev8.electroniccookbook.recipeview.model.RecipeViewIngredientCache;
-import com.kremnev8.electroniccookbook.recipeview.model.RecipeViewStepCache;
+import com.kremnev8.electroniccookbook.components.ingredient.database.IngredientDao;
+import com.kremnev8.electroniccookbook.components.ingredient.model.Ingredient;
+import com.kremnev8.electroniccookbook.components.recipe.database.RecipeExtendedDao;
+import com.kremnev8.electroniccookbook.components.recipe.database.RecipeIngredientCacheDao;
+import com.kremnev8.electroniccookbook.components.recipe.database.RecipeIngredientDao;
+import com.kremnev8.electroniccookbook.components.recipe.database.RecipeStepCacheDao;
+import com.kremnev8.electroniccookbook.components.recipe.database.RecipeStepDao;
+import com.kremnev8.electroniccookbook.components.recipe.model.Recipe;
+import com.kremnev8.electroniccookbook.components.recipe.model.RecipeIngredient;
+import com.kremnev8.electroniccookbook.components.recipe.model.RecipeIngredientCache;
+import com.kremnev8.electroniccookbook.components.recipe.model.RecipeStep;
+import com.kremnev8.electroniccookbook.components.recipe.model.RecipeStepCache;
+import com.kremnev8.electroniccookbook.components.recipe.model.RecipeViewIngredientCache;
+import com.kremnev8.electroniccookbook.components.recipe.model.RecipeViewStepCache;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;

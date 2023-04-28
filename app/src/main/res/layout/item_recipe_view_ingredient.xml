@@ -5,7 +5,7 @@
     <data>
         <variable
             name="itemViewModel"
-            type="com.kremnev8.electroniccookbook.recipeview.itemviewmodel.RecipeViewIngredientItemViewModel" />
+            type="com.kremnev8.electroniccookbook.components.recipe.view.itemviewmodel.RecipeViewIngredientItemViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

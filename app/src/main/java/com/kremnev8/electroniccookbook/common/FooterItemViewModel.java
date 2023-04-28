@@ -3,7 +3,7 @@ package com.kremnev8.electroniccookbook.common;
 import android.view.View;
 
 import com.kremnev8.electroniccookbook.R;
-import com.kremnev8.electroniccookbook.common.ItemViewModel;
+import com.kremnev8.electroniccookbook.common.recycler.ItemViewModel;
 
 public class FooterItemViewModel extends ItemViewModel {
 

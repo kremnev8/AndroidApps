@@ -3,7 +3,7 @@
     <data>
         <variable
             name="model"
-            type="com.kremnev8.electroniccookbook.recipeview.itemviewmodel.RecipeViewStepItemViewModel"/>
+            type="com.kremnev8.electroniccookbook.components.recipe.view.itemviewmodel.RecipeViewStepItemViewModel"/>
     </data>
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"

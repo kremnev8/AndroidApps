@@ -24,7 +24,7 @@
         android:theme="@style/Theme.ElectronicCookBook"
         tools:targetApi="31">
         <service
-            android:name=".services.TimersService"
+            android:name=".components.timers.TimersService"
             android:enabled="true"
             android:exported="false"/>
         <activity
