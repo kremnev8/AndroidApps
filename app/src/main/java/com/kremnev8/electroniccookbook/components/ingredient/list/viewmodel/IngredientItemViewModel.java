@@ -4,19 +4,19 @@ import android.os.Handler;
 import android.view.View;
 
 import com.kremnev8.electroniccookbook.R;
+import com.kremnev8.electroniccookbook.common.recycler.IHasContextMenu;
 import com.kremnev8.electroniccookbook.common.recycler.ItemViewModel;
 import com.kremnev8.electroniccookbook.components.ingredient.model.Ingredient;
 import com.kremnev8.electroniccookbook.interfaces.IngredientClickHandler;
 
-public class IngredientViewModel extends ItemViewModel {
+public class IngredientItemViewModel
+        extends ItemViewModel
+        implements IHasContextMenu {
 
-    private final IngredientClickHandler clickHandler;
     public Ingredient ingredient;
-    private final Handler handler = new Handler();
 
 
-    public IngredientViewModel(Ingredient ingredient, IngredientClickHandler clickHandler) {
-        this.clickHandler = clickHandler;
+    public IngredientItemViewModel(Ingredient ingredient) {
         setItem(ingredient);
     }
 
@@ -30,14 +30,6 @@ public class IngredientViewModel extends ItemViewModel {
         return ingredient.id;
     }
 
-    public void onRemoveClicked(View view) {
-        clickHandler.onRemoveIngredient(ingredient.id);
-    }
-
-    public void onEditClicked(View view) {
-        handler.postDelayed(() -> clickHandler.openIngredientDetails(ingredient), 100);
-    }
-
     @Override
     public int getLayoutId() {
         return R.layout.item_ingredient;
@@ -46,5 +38,10 @@ public class IngredientViewModel extends ItemViewModel {
     @Override
     public int getViewType() {
         return 1;
+    }
+
+    @Override
+    public int getMenuResId() {
+        return R.menu.edit_menu;
     }
 }

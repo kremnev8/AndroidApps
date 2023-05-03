@@ -18,33 +18,19 @@
         android:id="@+id/iconArea"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/background"
+        android:background="@color/ItemFirst"
+        android:paddingBottom="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/background"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginBottom="15dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/round_rect_shape"
-            tools:ignore="ContentDescription" />
-
-        <ImageView
             android:id="@+id/imageView"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_width="180dp"
+            android:layout_height="180dp"
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
             android:contentDescription="@string/ingredient_icon_desc"
-            app:layout_constraintDimensionRatio="1:1"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:roundedImage="@{viewModel.model.iconUri}" />
@@ -53,12 +39,11 @@
             android:id="@+id/button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="-25dp"
+            android:layout_marginStart="10dp"
             android:onClick="@{viewModel::addPhotoClicked}"
             android:text="@string/AddPhotoButtonLabel"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView" />
+            app:layout_constraintBottom_toBottomOf="@+id/imageView"
+            app:layout_constraintStart_toEndOf="@+id/imageView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -67,35 +52,23 @@
         layout="@layout/element_string_field"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/iconArea"
-        app:value="@={viewModel.model.name}" />
+        app:value="@={viewModel.model.name}"
+        app:background="@color/ItemSecond" />
 
     <include
         android:id="@+id/amountField"
-        layout="@layout/element_number_field"
+        layout="@layout/element_string_field"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        app:background="@color/ItemFirst"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/nameField"
-        app:value="@={viewModel.model.amount}" />
-
-    <Button
-        android:id="@+id/saveButton"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="40dp"
-        android:backgroundTint="@color/primaryColor"
-        android:text="@string/SaveButtonText"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:value="@={viewModel.amount}" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

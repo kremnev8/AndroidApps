@@ -6,6 +6,7 @@ import com.google.common.primitives.Floats;
 import com.kremnev8.electroniccookbook.R;
 import com.kremnev8.electroniccookbook.common.recycler.IHasContextMenu;
 import com.kremnev8.electroniccookbook.common.recycler.ItemViewModel;
+import com.kremnev8.electroniccookbook.components.ingredient.model.Ingredient;
 import com.kremnev8.electroniccookbook.components.recipe.model.RecipeIngredient;
 
 import java.util.Arrays;
@@ -29,20 +30,8 @@ public class RecipeEditIngredientItemViewModel
 
     public void setAmountString(String value){
         amountString = value;
-        String[] parts = value.split(" ");
-        if (parts.length == 1){
-            ingredient.amount = 0;
-            ingredient.units = value;
-        }else if (parts.length > 1){
-            Float amount = Floats.tryParse(parts[0]);
-            if (amount == null){
-                ingredient.amount = 0;
-                ingredient.units = value;
-            }else {
-                ingredient.amount = amount;
-                ingredient.units = Arrays.stream(parts).skip(1).collect(Collectors.joining(""));
-            }
-        }
+        ingredient.setAmount(Ingredient.ParseAmountString(value));
+
         notifyChange();
     }
 

@@ -16,7 +16,7 @@ import javax.inject.Inject;
 import dagger.hilt.android.lifecycle.HiltViewModel;
 
 @HiltViewModel
-public class IngredientListViewModel extends SimpleListViewModel<Ingredient> implements IngredientClickHandler {
+public class IngredientListViewModel extends SimpleListViewModel<Ingredient> {
 
     @Inject
     IngredientListViewModel(SavedStateHandle handle, DatabaseExecutor databaseExecutor) {
@@ -25,26 +25,29 @@ public class IngredientListViewModel extends SimpleListViewModel<Ingredient> imp
         init();
     }
 
-    public IngredientViewModel CreateInstance(Ingredient item) {
-        return new IngredientViewModel(item, this);
+    public IngredientItemViewModel CreateInstance(Ingredient item) {
+        return new IngredientItemViewModel(item);
     }
 
+    public void editItem(int position) {
+        var list = rawData.getValue();
+        assert list != null;
 
-    @Override
-    public void onRemoveIngredient(int id) {
-        databaseExecutor.deleteIngredientById(id);
+        if (position >= 0 && position < list.size()) {
+            Bundle args = new Bundle();
+            args.putParcelable(IngredientEditFragment.InspectIngredient, list.get(position));
+
+            MainActivity.Instance.setFragment(IngredientEditFragment.class, args);
+        }
     }
 
-    @Override
-    public void openIngredientDetails(Ingredient ingredient) {
-        Bundle args = new Bundle();
-        args.putParcelable(IngredientEditFragment.InspectIngredient, ingredient);
+    public void deleteItem(int position) {
+        var list = rawData.getValue();
+        assert list != null;
 
-        MainActivity.Instance.setFragment(IngredientEditFragment.class, args);
-    }
-
-    public String GetFragmentName(){
-        return "Ingredients";
+        if (position >= 0 && position < list.size()) {
+            databaseExecutor.delete(list.get(position));
+        }
     }
 }
 

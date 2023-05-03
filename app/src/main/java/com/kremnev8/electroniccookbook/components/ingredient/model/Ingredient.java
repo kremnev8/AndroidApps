@@ -2,12 +2,19 @@ package com.kremnev8.electroniccookbook.components.ingredient.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Pair;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
+
+import com.google.common.primitives.Floats;
+
+import java.text.DecimalFormat;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 @Entity(tableName = "ingredients",indices = {
         @Index(value = {"id"},unique = true),
@@ -40,6 +47,50 @@ public class Ingredient implements Parcelable {
         this.iconUri = iconUri;
         this.amount = amount;
         this.units = units;
+    }
+
+    public String getAmountString()
+    {
+        return getAmountString(amount, units);
+    }
+
+    public void setAmount(AmountPair pair){
+        amount = pair.amount;
+        units = pair.units;
+    }
+
+    public static String getAmountString(float amount, String units){
+        DecimalFormat df = new DecimalFormat("0");
+        df.setMaximumFractionDigits(3);
+        String amountFormatted = df.format(amount);
+
+        if (amount != 0 && units != null && units.length() > 0)
+            return amountFormatted + " " + units;
+        else if (amount == 0 && units != null && units.length() > 0)
+            return units;
+        else if (amount != 0)
+            return amountFormatted;
+        else
+            return "";
+    }
+
+    public static AmountPair ParseAmountString(String string){
+        AmountPair pair = new AmountPair();
+        String[] parts = string.split(" ");
+        if (parts.length == 1){
+            pair.amount = 0;
+            pair.units = string;
+        }else if (parts.length > 1){
+            Float amount = Floats.tryParse(parts[0]);
+            if (amount == null){
+                pair.amount = 0;
+                pair.units = string;
+            }else {
+                pair.amount = amount;
+                pair.units = Arrays.stream(parts).skip(1).collect(Collectors.joining(""));
+            }
+        }
+        return pair;
     }
 
     @Override
@@ -75,4 +126,9 @@ public class Ingredient implements Parcelable {
             return new Ingredient[size];
         }
     };
+
+    public static class AmountPair{
+        public float amount;
+        public String units;
+    }
 }

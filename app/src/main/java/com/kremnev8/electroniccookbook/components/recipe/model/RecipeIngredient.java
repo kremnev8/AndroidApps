@@ -45,17 +45,11 @@ public class RecipeIngredient {
 
 
     public String getAmountString(){
-        DecimalFormat df = new DecimalFormat("0");
-        df.setMaximumFractionDigits(3);
-        String amountFormatted = df.format(amount);
+        return Ingredient.getAmountString(amount, units);
+    }
 
-        if (amount != 0 && units != null && units.length() > 0)
-            return amountFormatted + " " + units;
-        else if (amount == 0 && units != null && units.length() > 0)
-            return units;
-        else if (amount != 0)
-            return amountFormatted;
-        else
-            return "";
+    public void setAmount(Ingredient.AmountPair pair){
+        amount = pair.amount;
+        units = pair.units;
     }
 }

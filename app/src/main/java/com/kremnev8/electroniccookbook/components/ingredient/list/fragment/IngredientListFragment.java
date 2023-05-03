@@ -2,6 +2,7 @@ package com.kremnev8.electroniccookbook.components.ingredient.list.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -11,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.kremnev8.electroniccookbook.MainActivity;
 import com.kremnev8.electroniccookbook.R;
+import com.kremnev8.electroniccookbook.common.recycler.IContextMenuPositionProvider;
 import com.kremnev8.electroniccookbook.components.ingredient.edit.fragment.IngredientEditFragment;
 import com.kremnev8.electroniccookbook.components.ingredient.list.viewmodel.IngredientListViewModel;
 import com.kremnev8.electroniccookbook.components.ingredient.model.Ingredient;
@@ -46,7 +48,25 @@ public class IngredientListFragment extends Fragment implements IMenu {
             MainActivity.Instance.setFragment(IngredientEditFragment.class, args);
         });
 
+        registerForContextMenu(binding.ingredientsList);
+
         return binding.getRoot();
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    public int getPosition(){
+        return ((IContextMenuPositionProvider) binding.ingredientsList.getAdapter()).getMenuPosition();
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        int position = getPosition();
+        if (item.getItemId() == R.id.ctx_edit){
+            ingredientListViewModel.editItem(position);
+        }else if (item.getItemId() == R.id.ctx_delete){
+            ingredientListViewModel.deleteItem(position);
+        }
+        return true;
     }
 
     @Override

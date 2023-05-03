@@ -5,7 +5,7 @@
     <data>
         <variable
             name="itemViewModel"
-            type="com.kremnev8.electroniccookbook.components.ingredient.list.viewmodel.IngredientViewModel" />
+            type="com.kremnev8.electroniccookbook.components.ingredient.list.viewmodel.IngredientItemViewModel" />
     </data>
 
 <androidx.constraintlayout.widget.ConstraintLayout
@@ -13,7 +13,6 @@
     android:layout_height="60dp"
     android:clickable="true"
     android:focusable="true"
-    android:onClick="@{itemViewModel::onEditClicked}"
     android:background="?attr/selectableItemBackground">
 
 
@@ -44,27 +43,12 @@
     <TextView
         android:id="@+id/amount"
         android:layout_width="wrap_content"
-        android:layout_height="19dp"
-        android:layout_marginEnd="20dp"
-        android:text="@{String.valueOf(itemViewModel.ingredient.amount)}"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/more"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/more"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:background="@drawable/round_selectable_background"
-        android:clickable="true"
-        android:contentDescription="@string/more"
-        android:focusable="true"
-        android:onClick="@{itemViewModel::onEditClicked}"
-        android:padding="9dp"
+        android:layout_height="20dp"
+        android:layout_marginEnd="30dp"
+        android:text="@{String.valueOf(itemViewModel.ingredient.amountString)}"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_more_d"
-        app:tint="#8F8F8F" />
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
