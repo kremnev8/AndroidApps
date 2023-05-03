@@ -105,11 +105,74 @@ public class MainActivity
         binding.drawerLayout.closeDrawer(binding.drawerMenuView);
 
         fragmentManager = getSupportFragmentManager();
+        updateCurrentFragment();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.i("INFO", "Main activity is starting");
+        Intent intent = new Intent(this , TimersService.class);
+        if (!isServiceRunning(TimersService.class))
+            startService(intent);
+        bindService(intent , serviceConnection, BIND_IMPORTANT);
+        fragmentManager.addOnBackStackChangedListener(this::updateCurrentFragment);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        unbindService(serviceConnection);
+        fragmentManager.removeOnBackStackChangedListener(this::updateCurrentFragment);
+    }
+
+    private void updateCurrentFragment() {
         Fragment currentFragment = fragmentManager.findFragmentById(R.id.fragmentContainerView);
-        fragments.add(currentFragment);
+        if (!fragments.contains(currentFragment))
+            fragments.add(currentFragment);
         if (currentFragment instanceof IMenu) {
             setIMenu((IMenu)currentFragment);
         }
+    }
+
+    public <T extends Fragment> void setFragment(Class<T> clazz, @Nullable Bundle args) {
+        if (Looper.myLooper() != Looper.getMainLooper()){
+            mainHandler.post(() -> Instance.setFragment(clazz, args));
+            return;
+        }
+
+        Optional<Fragment> fragment = Iterables.tryFind(fragments, frag -> frag.getClass().isInstance(clazz));
+        if (!fragment.isPresent()) {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.fragmentContainerView, clazz, args)
+                    .addToBackStack("open fragment")
+                    .commit();
+
+            fragmentManager.executePendingTransactions();
+            updateCurrentFragment();
+            return;
+        }
+
+        fragment.get().setArguments(args);
+
+        fragmentManager.beginTransaction()
+                .replace(R.id.fragmentContainerView, fragment.get())
+                .addToBackStack("open fragment")
+                .commit();
+
+        if (fragment.get() instanceof IMenu) {
+            setIMenu((IMenu)fragment.get());
+        }
+    }
+
+    public void setIMenu(IMenu menu){
+        binding.topBar.titleText.setText(menu.getMenuName());
+        int text = menu.getActionText();
+        int icon = menu.getActionImage();
+        binding.topBar.actionButton.setVisibility(text != 0 ? View.VISIBLE : View.INVISIBLE);
+        binding.topBar.imageMenuButton.setVisibility(icon != 0 ? View.VISIBLE : View.INVISIBLE);
+        binding.topBar.actionButton.setOnClickListener(v -> menu.onAction());
+        binding.topBar.imageMenuButton.setOnClickListener(v -> menu.onAction());
     }
 
     public View getDrawerView(DrawerKind kind){
@@ -138,51 +201,6 @@ public class MainActivity
         if (drawer == null) return;
 
         binding.drawerLayout.closeDrawer(drawer);
-    }
-
-    public <T extends Fragment> void setFragment(Class<T> clazz, @Nullable Bundle args) {
-        if (Looper.myLooper() != Looper.getMainLooper()){
-            mainHandler.post(() -> Instance.setFragment(clazz, args));
-            return;
-        }
-
-        Optional<Fragment> fragment = Iterables.tryFind(fragments, frag -> frag.getClass().isInstance(clazz));
-        if (!fragment.isPresent()) {
-            fragmentManager.beginTransaction()
-                    .replace(R.id.fragmentContainerView, clazz, args)
-                    .addToBackStack("open fragment")
-                    .commit();
-
-            fragmentManager.executePendingTransactions();
-
-            Fragment newFragment = fragmentManager.findFragmentById(R.id.fragmentContainerView);
-            fragments.add(newFragment);
-            if (newFragment instanceof IMenu) {
-                setIMenu((IMenu)newFragment);
-            }
-            return;
-        }
-
-        fragment.get().setArguments(args);
-
-        fragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainerView, fragment.get())
-                .addToBackStack("open fragment")
-                .commit();
-
-        if (fragment.get() instanceof IMenu) {
-            setIMenu((IMenu)fragment.get());
-        }
-    }
-
-    public void setIMenu(IMenu menu){
-        binding.topBar.titleText.setText(menu.getMenuName());
-        int text = menu.getActionText();
-        int icon = menu.getActionImage();
-        binding.topBar.actionButton.setVisibility(text != 0 ? View.VISIBLE : View.INVISIBLE);
-        binding.topBar.imageMenuButton.setVisibility(icon != 0 ? View.VISIBLE : View.INVISIBLE);
-        binding.topBar.actionButton.setOnClickListener(v -> menu.onAction());
-        binding.topBar.imageMenuButton.setOnClickListener(v -> menu.onAction());
     }
 
     //region Photos
@@ -317,21 +335,5 @@ public class MainActivity
             args.putInt(RecipeViewFragment.STEP_ID, data.stepId);
             MainActivity.Instance.setFragment(RecipeViewFragment.class, args);
         }
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        Log.i("INFO", "Main activity is starting");
-        Intent intent = new Intent(this , TimersService.class);
-        if (!isServiceRunning(TimersService.class))
-            startService(intent);
-        bindService(intent , serviceConnection, BIND_IMPORTANT);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        unbindService(serviceConnection);
     }
 }
