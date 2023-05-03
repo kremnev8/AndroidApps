@@ -19,4 +19,5 @@
     <color name="InputFieldBackground">#DADADA</color>
     <color name="SelectedGray">#D9D9D9</color>
     <color name="Placeholder">#DCDCDC</color>
+    <color name="noteColor">#606060</color>
 </resources>

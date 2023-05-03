@@ -21,6 +21,10 @@ public abstract class SimpleListViewModel <T>
         return itemViewModelHolder.viewModels;
     }
 
+    protected List<T> getData(){
+        return rawData.getValue();
+    }
+
     public SimpleListViewModel(SavedStateHandle handle, DatabaseExecutor databaseExecutor) {
         this.databaseExecutor = databaseExecutor;
         itemViewModelHolder = new ItemViewModelHolder<>(this);

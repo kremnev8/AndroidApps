@@ -56,6 +56,18 @@
     <string name="EditMenuText">Edit</string>
     <string name="ChangeProfileText">Change Profile</string>
     <string name="ProfileImageContentDesc">Profile Image</string>
+    <string name="SelectButtonText">Select</string>
+    <string name="LockedProfileDesc">Locked Profile</string>
+    <string name="EditProfileMenuText">Edit Profile</string>
+    <string name="profile_name_label">Name</string>
+    <string name="password_field_label">Password</string>
+    <string name="password_protection_notice">Leave this field empty to disable password protection</string>
+    <string name="password_hint">password</string>
+    <string name="profile_name_hint">Liza</string>
+    <string name="profile_image_label">Image</string>
+    <string name="select_image_button_text">Select Image</string>
+    <string name="profiles_menu_name">Profiles</string>
+    <string name="add_profile_text">Add Profile</string>
     <string-array name="AddPhotoDialogOptions">
         <item>Take Photo</item>
         <item>Pick Photo</item>

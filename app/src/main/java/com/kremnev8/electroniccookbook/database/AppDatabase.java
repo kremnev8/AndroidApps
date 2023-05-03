@@ -43,7 +43,7 @@ import java.util.concurrent.Executors;
         RecipeStepCache.class,
         RecipeIngredientCache.class,
         TimerCache.class},
-        version = 8,
+        version = 9,
         autoMigrations = {
                 @AutoMigration(from = 1, to = 2, spec = AppDatabase.UriRenameMigration.class),
                 @AutoMigration(from = 2, to = 3),
@@ -51,6 +51,7 @@ import java.util.concurrent.Executors;
                 @AutoMigration(from = 4, to = 5, spec = AppDatabase.RefactorMigration.class),
                 @AutoMigration(from = 5, to = 6, spec = AppDatabase.IngredientNameMigration.class),
                 @AutoMigration(from = 7, to = 8, spec = AppDatabase.AddIngredientCacheMigration.class),
+                @AutoMigration(from = 8, to = 9),
         }
 )
 public abstract class AppDatabase extends RoomDatabase implements DaoAccess {

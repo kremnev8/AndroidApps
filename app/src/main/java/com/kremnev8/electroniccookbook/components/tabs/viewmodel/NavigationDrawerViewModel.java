@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.kremnev8.electroniccookbook.common.ObservableViewModel;
 import com.kremnev8.electroniccookbook.components.ingredient.list.fragment.IngredientListFragment;
+import com.kremnev8.electroniccookbook.components.profile.list.fragment.ProfileListFragment;
 import com.kremnev8.electroniccookbook.components.recipe.list.fragment.RecipesListFragment;
 import com.kremnev8.electroniccookbook.interfaces.IDrawerController;
 import com.kremnev8.electroniccookbook.interfaces.IFragmentController;
@@ -56,6 +57,7 @@ public class NavigationDrawerViewModel extends ObservableViewModel {
     }
 
     public void changeProfileClicked(View view){
-
+        fragmentController.setFragment(ProfileListFragment.class, null);
+        drawerController.closeDrawer(IDrawerController.DrawerKind.NAVIGATION);
     }
 }

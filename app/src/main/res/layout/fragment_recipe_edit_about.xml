@@ -35,7 +35,7 @@
                     android:contentDescription="@string/RecipeIconContentDesc"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:roundedImage="@{viewModel.recipe.imageUri}"
+                    app:roundedImage="@{viewModel.model.imageUri}"
                     app:srcCompat="@drawable/empty_placeholder" />
 
                 <Button
@@ -70,7 +70,7 @@
                     android:autofillHints=""
                     android:hint="@string/recipeNameHint"
                     android:inputType="text"
-                    android:text="@={viewModel.recipe.name}"
+                    android:text="@={viewModel.model.name}"
                     android:textColorHint="#78909C"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -125,7 +125,7 @@
                     android:maxLines="10"
                     android:minLines="1"
                     android:scrollbars="vertical"
-                    android:text="@={viewModel.recipe.description}"
+                    android:text="@={viewModel.model.description}"
                     android:textColorHint="#78909C"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -229,7 +229,7 @@
                     android:maxLines="10"
                     android:minLines="1"
                     android:scrollbars="vertical"
-                    android:text="@={viewModel.recipe.nutritionInfo}"
+                    android:text="@={viewModel.model.nutritionInfo}"
                     android:textColorHint="#78909C"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

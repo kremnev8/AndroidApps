@@ -9,7 +9,9 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.ViewModel;
 
+import com.kremnev8.electroniccookbook.BR;
 import com.kremnev8.electroniccookbook.common.ObservableViewModel;
+import com.kremnev8.electroniccookbook.common.SimpleViewModel;
 import com.kremnev8.electroniccookbook.components.ingredient.model.Ingredient;
 import com.kremnev8.electroniccookbook.database.DatabaseExecutor;
 import com.kremnev8.electroniccookbook.interfaces.IPhotoProvider;
@@ -20,18 +22,11 @@ import javax.inject.Inject;
 import dagger.hilt.android.lifecycle.HiltViewModel;
 
 @HiltViewModel
-public class IngredientEditViewModel extends ObservableViewModel implements IPhotoRequestCallback {
+public class IngredientEditViewModel extends SimpleViewModel<Ingredient> implements IPhotoRequestCallback {
 
-    private final Handler handler = new Handler();
-    private final DatabaseExecutor databaseExecutor;
     private final IPhotoProvider photoProvider;
 
-    private final MutableLiveData<Ingredient> model;
     private String amountText;
-
-    public LiveData<Ingredient> getModel(){
-        return model;
-    }
 
     @Bindable
     public String getAmount()
@@ -41,26 +36,25 @@ public class IngredientEditViewModel extends ObservableViewModel implements IPho
 
     public void setAmount(String value){
         amountText = value;
-        if (model.getValue() != null)
-            model.getValue().setAmount(Ingredient.ParseAmountString(value));
-        notifyChange();
+        if (model != null)
+            model.setAmount(Ingredient.ParseAmountString(value));
+        notifyPropertyChanged(BR.amount);
     }
-
 
     @Inject
-    IngredientEditViewModel(SavedStateHandle handle, DatabaseExecutor ingredientDao, IPhotoProvider photoProvider) {
-        this.databaseExecutor = ingredientDao;
+    IngredientEditViewModel(SavedStateHandle handle, DatabaseExecutor databaseExecutor, IPhotoProvider photoProvider) {
+        super(databaseExecutor);
         this.photoProvider = photoProvider;
-        model = new MutableLiveData<>();
     }
 
+    @Override
     public void setData(Ingredient ingredient){
-        model.setValue(ingredient);
         amountText = ingredient.getAmountString();
+        super.setData(ingredient);
     }
 
     public void saveData(){
-        databaseExecutor.insert(model.getValue());
+        databaseExecutor.insert(model);
     }
 
     public void addPhotoClicked(View view){
@@ -69,10 +63,7 @@ public class IngredientEditViewModel extends ObservableViewModel implements IPho
 
     @Override
     public void onPhotoSelected(String imageUri) {
-        Ingredient ingredient = model.getValue();
-        assert ingredient != null;
-
-        ingredient.iconUri = imageUri;
-        model.postValue(ingredient);
+        model.iconUri = imageUri;
+        notifyChange();
     }
 }

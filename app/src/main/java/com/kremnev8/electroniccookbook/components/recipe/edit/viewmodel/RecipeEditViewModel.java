@@ -9,9 +9,11 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.ViewModel;
 
+import com.kremnev8.electroniccookbook.BR;
 import com.kremnev8.electroniccookbook.R;
 import com.kremnev8.electroniccookbook.common.FooterItemViewModel;
 import com.kremnev8.electroniccookbook.common.ObservableViewModel;
+import com.kremnev8.electroniccookbook.common.SimpleViewModel;
 import com.kremnev8.electroniccookbook.common.recycler.ItemViewModel;
 import com.kremnev8.electroniccookbook.common.recycler.ItemViewModelHolder;
 import com.kremnev8.electroniccookbook.components.recipe.edit.itemviewmodel.RecipeEditIngredientItemViewModel;
@@ -32,14 +34,11 @@ import javax.inject.Inject;
 import dagger.hilt.android.lifecycle.HiltViewModel;
 
 @HiltViewModel
-public class RecipeEditViewModel extends ObservableViewModel implements IPhotoRequestCallback {
+public class RecipeEditViewModel extends SimpleViewModel<Recipe> implements IPhotoRequestCallback {
 
     private final Handler handler = new Handler();
     private final IPhotoProvider photoProvider;
 
-    private final MutableLiveData<Recipe> recipe;
-
-    public final DatabaseExecutor databaseExecutor;
     protected ItemViewModelHolder<RecipeStep> stepsHolder;
     protected ItemViewModelHolder<RecipeIngredient> ingredientsHolder;
 
@@ -51,16 +50,11 @@ public class RecipeEditViewModel extends ObservableViewModel implements IPhotoRe
         return ingredientsHolder.getViewModels();
     }
 
-    public LiveData<Recipe> getRecipe(){
-        return recipe;
-    }
-
     @Inject
     public RecipeEditViewModel(SavedStateHandle handle, DatabaseExecutor databaseExecutor, IPhotoProvider photoProvider) {
+        super(databaseExecutor);
         this.photoProvider = photoProvider;
-        this.databaseExecutor = databaseExecutor;
 
-        recipe = new MutableLiveData<>();
         stepsHolder = new ItemViewModelHolder<>(item -> new RecipeEditStepItemViewModel(item, photoProvider));
         stepsHolder.setFooter(new FooterItemViewModel(R.string.addStepDesc, this::addStep));
 
@@ -68,8 +62,9 @@ public class RecipeEditViewModel extends ObservableViewModel implements IPhotoRe
         ingredientsHolder.setFooter(new FooterItemViewModel(R.string.AddIngredientText, this::addIngredient));
     }
 
+    @Override
     public void setData(Recipe recipe) {
-        this.recipe.setValue(recipe);
+        super.setData(recipe);
         stepsHolder.init(databaseExecutor.getRecipeSteps(recipe.id));
         stepsHolder.getData().observeForever(this::updateOrder);
         ingredientsHolder.init(databaseExecutor.getRecipeIngredients(recipe.id));
@@ -104,18 +99,12 @@ public class RecipeEditViewModel extends ObservableViewModel implements IPhotoRe
 
     @Bindable
     public int getYield(){
-        Recipe recipeValue = recipe.getValue();
-        assert recipeValue != null;
-
-        return recipeValue.yield;
+        return model.yield;
     }
 
     public void setYield(int yield){
-        Recipe recipeValue = recipe.getValue();
-        assert recipeValue != null;
-
-        recipeValue.yield = Math.max(0, yield);
-        notifyChange();
+        model.yield = Math.max(0, yield);
+        notifyPropertyChanged(BR.yield);
     }
 
     public void onIncreaseYieldClicked(View view){
@@ -128,20 +117,14 @@ public class RecipeEditViewModel extends ObservableViewModel implements IPhotoRe
 
     @Override
     public void onPhotoSelected(String imageUri) {
-        Recipe recipeValue = recipe.getValue();
-        assert recipeValue != null;
-
-        recipeValue.imageUri = imageUri;
-        recipe.setValue(recipeValue);
+        model.imageUri = imageUri;
+        notifyPropertyChanged(BR.model);
     }
 
     public void saveData() {
-        Recipe recipeValue = recipe.getValue();
-        assert recipeValue != null;
-
-        recipeValue.steps = stepsHolder.getData();
-        recipeValue.ingredients = ingredientsHolder.getData();
-        databaseExecutor.insertWithData(recipeValue);
+        model.steps = stepsHolder.getData();
+        model.ingredients = ingredientsHolder.getData();
+        databaseExecutor.insertWithData(model);
     }
 
     public void removeStep(int index){
@@ -167,14 +150,14 @@ public class RecipeEditViewModel extends ObservableViewModel implements IPhotoRe
     public void addStep() {
         saveData();
         RecipeStep step = new RecipeStep();
-        step.recipe = Objects.requireNonNull(recipe.getValue()).id;
+        step.recipe = model.id;
         databaseExecutor.insertStep(step);
     }
 
     public void addIngredient() {
         saveData();
         RecipeIngredient ingredient = new RecipeIngredient();
-        ingredient.recipe = Objects.requireNonNull(recipe.getValue()).id;
+        ingredient.recipe = model.id;
         databaseExecutor.insertIngredient(ingredient);
     }
 }

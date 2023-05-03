@@ -9,7 +9,6 @@ import com.kremnev8.electroniccookbook.common.recycler.SimpleListViewModel;
 import com.kremnev8.electroniccookbook.components.ingredient.edit.fragment.IngredientEditFragment;
 import com.kremnev8.electroniccookbook.components.ingredient.model.Ingredient;
 import com.kremnev8.electroniccookbook.database.DatabaseExecutor;
-import com.kremnev8.electroniccookbook.interfaces.IngredientClickHandler;
 
 import javax.inject.Inject;
 
@@ -30,8 +29,7 @@ public class IngredientListViewModel extends SimpleListViewModel<Ingredient> {
     }
 
     public void editItem(int position) {
-        var list = rawData.getValue();
-        assert list != null;
+        var list = getData();
 
         if (position >= 0 && position < list.size()) {
             Bundle args = new Bundle();
@@ -42,8 +40,7 @@ public class IngredientListViewModel extends SimpleListViewModel<Ingredient> {
     }
 
     public void deleteItem(int position) {
-        var list = rawData.getValue();
-        assert list != null;
+        var list = getData();
 
         if (position >= 0 && position < list.size()) {
             databaseExecutor.delete(list.get(position));

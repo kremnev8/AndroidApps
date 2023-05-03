@@ -7,7 +7,7 @@
             type="int" />
         <variable
             name="fieldName"
-            type="String" />
+            type="int" />
         <variable
             name="value"
             type="String" />
@@ -26,6 +26,7 @@
         android:layout_marginEnd="10dp"
         android:gravity="center|start"
         android:textSize="20sp"
+        android:text="@{fieldName}"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
