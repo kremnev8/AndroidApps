@@ -5,14 +5,11 @@ import android.view.View;
 
 import androidx.databinding.Bindable;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.SavedStateHandle;
-import androidx.lifecycle.ViewModel;
 
 import com.kremnev8.electroniccookbook.BR;
 import com.kremnev8.electroniccookbook.R;
 import com.kremnev8.electroniccookbook.common.FooterItemViewModel;
-import com.kremnev8.electroniccookbook.common.ObservableViewModel;
 import com.kremnev8.electroniccookbook.common.SimpleViewModel;
 import com.kremnev8.electroniccookbook.common.recycler.ItemViewModel;
 import com.kremnev8.electroniccookbook.common.recycler.ItemViewModelHolder;
@@ -27,7 +24,6 @@ import com.kremnev8.electroniccookbook.interfaces.IPhotoRequestCallback;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -56,10 +52,10 @@ public class RecipeEditViewModel extends SimpleViewModel<Recipe> implements IPho
         this.photoProvider = photoProvider;
 
         stepsHolder = new ItemViewModelHolder<>(item -> new RecipeEditStepItemViewModel(item, photoProvider));
-        stepsHolder.setFooter(new FooterItemViewModel(R.string.addStepDesc, this::addStep));
+        stepsHolder.setFooter(new FooterItemViewModel(R.string.add_step_label, this::addStep));
 
         ingredientsHolder = new ItemViewModelHolder<>(RecipeEditIngredientItemViewModel::new);
-        ingredientsHolder.setFooter(new FooterItemViewModel(R.string.AddIngredientText, this::addIngredient));
+        ingredientsHolder.setFooter(new FooterItemViewModel(R.string.add_ingredient_label, this::addIngredient));
     }
 
     @Override

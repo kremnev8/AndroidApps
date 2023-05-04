@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/ctx_edit"
-        android:title="@string/EditMenuText"/>
+        android:title="@string/edit_label"/>
     <item android:id="@+id/ctx_delete"
-        android:title="@string/DeleteMenuText"/>
+        android:title="@string/delete_label"/>
 </menu>

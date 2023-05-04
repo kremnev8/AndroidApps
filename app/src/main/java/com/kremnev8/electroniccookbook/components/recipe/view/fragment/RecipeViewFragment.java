@@ -69,27 +69,27 @@ public class RecipeViewFragment
         switch (position) {
             case 0:
                 tab.setIcon(R.drawable.ic_about);
-                tab.setText(R.string.AboutTabLabel);
+                tab.setText(R.string.about_label);
                 break;
             case 1:
                 tab.setIcon(R.drawable.ic_ingredients);
-                tab.setText(R.string.IngredientsTabLabel);
+                tab.setText(R.string.ingredients_label);
                 break;
             case 2:
                 tab.setIcon(R.drawable.ic_steps);
-                tab.setText(R.string.StepsTabLabel);
+                tab.setText(R.string.steps_tab_label);
                 break;
         }
     }
 
     @Override
     public int getMenuName() {
-        return R.string.recipesName;
+        return R.string.recipes_label;
     }
 
     @Override
     public int getActionText() {
-        return R.string.EditMenuText;
+        return R.string.edit_label;
     }
 
     @Override

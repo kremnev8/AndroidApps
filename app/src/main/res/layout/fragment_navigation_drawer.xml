@@ -31,7 +31,7 @@
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_marginStart="20dp"
-                android:contentDescription="@string/ProfileImageContentDesc"
+                android:contentDescription="@string/image_label"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -58,7 +58,7 @@
                 android:layout_height="60dp"
                 android:layout_marginEnd="20dp"
                 android:gravity="center"
-                android:text="@string/ChangeProfileText"
+                android:text="@string/change_profile_label"
                 android:textColor="#455A64"
                 android:textSize="16sp"
                 android:onClick="@{viewModel::changeProfileClicked}"
@@ -75,7 +75,7 @@
             android:gravity="center|start"
             android:insetLeft="20dp"
             android:insetRight="20dp"
-            android:text="@string/ingredientsName"
+            android:text="@string/ingredients_label"
             android:onClick="@{viewModel::ingredientsButtonClicked}"
             android:textColor="@color/black" />
 
@@ -87,7 +87,7 @@
             android:gravity="center|start"
             android:insetLeft="20dp"
             android:insetRight="20dp"
-            android:text="@string/RecipeListMenuName"
+            android:text="@string/recipe_label"
             android:onClick="@{viewModel::recipesButtonClicked}"
             android:textColor="@color/black" />
 
@@ -99,7 +99,7 @@
             android:gravity="center|start"
             android:insetLeft="20dp"
             android:insetRight="20dp"
-            android:text="@string/settingsName"
+            android:text="@string/settings_label"
             android:onClick="@{viewModel::settingsButtonClicked}"
             android:textColor="@color/black" />
 

@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModelProvider;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.KeyEvent;
@@ -17,13 +16,9 @@ import android.widget.TextView;
 
 import com.kremnev8.electroniccookbook.MainActivity;
 import com.kremnev8.electroniccookbook.R;
-import com.kremnev8.electroniccookbook.components.ingredient.edit.viewmodel.IngredientEditViewModel;
-import com.kremnev8.electroniccookbook.components.ingredient.list.fragment.IngredientListFragment;
-import com.kremnev8.electroniccookbook.components.ingredient.model.Ingredient;
 import com.kremnev8.electroniccookbook.components.profile.edit.viewmodel.ProfileEditViewModel;
 import com.kremnev8.electroniccookbook.components.profile.list.fragment.ProfileListFragment;
 import com.kremnev8.electroniccookbook.components.profile.model.Profile;
-import com.kremnev8.electroniccookbook.databinding.FragmentIngredientEditBinding;
 import com.kremnev8.electroniccookbook.databinding.FragmentProfileEditBinding;
 import com.kremnev8.electroniccookbook.interfaces.IMenu;
 
@@ -60,12 +55,12 @@ public class ProfileEditFragment
     }
     @Override
     public int getMenuName() {
-        return R.string.EditProfileMenuText;
+        return R.string.edit_profile_label;
     }
 
     @Override
     public int getActionText() {
-        return R.string.SaveButtonText;
+        return R.string.save_label;
     }
 
     @Override

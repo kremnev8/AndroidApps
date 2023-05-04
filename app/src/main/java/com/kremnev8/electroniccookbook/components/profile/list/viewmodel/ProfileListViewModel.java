@@ -3,18 +3,13 @@ package com.kremnev8.electroniccookbook.components.profile.list.viewmodel;
 import android.os.Bundle;
 
 import androidx.lifecycle.SavedStateHandle;
-import androidx.lifecycle.ViewModel;
 
 import com.kremnev8.electroniccookbook.MainActivity;
 import com.kremnev8.electroniccookbook.R;
 import com.kremnev8.electroniccookbook.common.FooterItemViewModel;
-import com.kremnev8.electroniccookbook.common.ObservableViewModel;
 import com.kremnev8.electroniccookbook.common.recycler.ItemViewModel;
 import com.kremnev8.electroniccookbook.common.recycler.SimpleListViewModel;
-import com.kremnev8.electroniccookbook.components.ingredient.edit.fragment.IngredientEditFragment;
-import com.kremnev8.electroniccookbook.components.ingredient.model.Ingredient;
 import com.kremnev8.electroniccookbook.components.profile.edit.fragment.ProfileEditFragment;
-import com.kremnev8.electroniccookbook.components.profile.edit.viewmodel.ProfileEditViewModel;
 import com.kremnev8.electroniccookbook.components.profile.list.itemviewmodel.ProfileItemViewModel;
 import com.kremnev8.electroniccookbook.components.profile.model.Profile;
 import com.kremnev8.electroniccookbook.database.DatabaseExecutor;
@@ -31,7 +26,7 @@ public class ProfileListViewModel extends SimpleListViewModel<Profile> implement
     public ProfileListViewModel(SavedStateHandle handle, DatabaseExecutor databaseExecutor) {
         super(handle, databaseExecutor);
         rawData = databaseExecutor.getProfiles();
-        itemViewModelHolder.setFooter(new FooterItemViewModel(R.string.add_profile_text, this::addProfile));
+        itemViewModelHolder.setFooter(new FooterItemViewModel(R.string.add_profile_label, this::addProfile));
         init();
     }
 

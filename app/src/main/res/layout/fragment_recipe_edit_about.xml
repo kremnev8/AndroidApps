@@ -32,7 +32,7 @@
                     android:layout_height="180dp"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
-                    android:contentDescription="@string/RecipeIconContentDesc"
+                    android:contentDescription="@string/recipe_image_label"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:roundedImage="@{viewModel.model.imageUri}"
@@ -45,7 +45,7 @@
                     android:layout_marginStart="12dp"
                     android:layout_marginTop="136dp"
                     android:onClick="@{viewModel::takePhotoButtonClicked}"
-                    android:text="@string/AddPhotoButtonLabel"
+                    android:text="@string/add_photo_label"
                     app:layout_constraintStart_toEndOf="@+id/imageView2"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -68,7 +68,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
                     android:autofillHints=""
-                    android:hint="@string/recipeNameHint"
+                    android:hint="@string/recipe_name_label"
                     android:inputType="text"
                     android:text="@={viewModel.model.name}"
                     android:textColorHint="#78909C"
@@ -82,7 +82,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
-                    android:text="@string/nameFieldLabel"
+                    android:text="@string/name_label"
                     android:textSize="20sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -105,7 +105,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
-                    android:text="@string/DescriptionLabel"
+                    android:text="@string/description_label"
                     android:textSize="20sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -118,7 +118,7 @@
                     android:layout_marginEnd="10dp"
                     android:autofillHints=""
                     android:gravity="top|start"
-                    android:hint="@string/recipeDescriptionhint"
+                    android:hint="@string/recipe_description_label"
                     android:imeOptions="actionDone"
                     android:inputType="textMultiLine"
                     android:lines="4"
@@ -148,7 +148,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
-                    android:text="@string/YieldLabel"
+                    android:text="@string/yield_label"
                     android:textSize="20sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -177,7 +177,7 @@
                     app:layout_constraintStart_toEndOf="@+id/yieldEdit"
                     app:layout_constraintTop_toTopOf="@+id/yieldEdit"
                     app:srcCompat="@drawable/ic_plus"
-                    android:contentDescription="@string/ButtonPlusContentDesc" />
+                    android:contentDescription="@string/button_plus_label" />
 
                 <ImageButton
                     android:id="@+id/minusButton"
@@ -190,7 +190,7 @@
                     app:layout_constraintStart_toEndOf="@+id/plusButton"
                     app:layout_constraintTop_toTopOf="@+id/yieldEdit"
                     app:srcCompat="@drawable/ic_minus"
-                    android:contentDescription="@string/ButtonMinusContentDesc" />
+                    android:contentDescription="@string/button_minus_label" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -209,7 +209,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
-                    android:text="@string/NutritionLabel"
+                    android:text="@string/nutrition_label"
                     android:textSize="20sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -222,7 +222,7 @@
                     android:layout_marginEnd="10dp"
                     android:autofillHints=""
                     android:gravity="top|start"
-                    android:hint="@string/recipeDescriptionhint"
+                    android:hint="@string/recipe_description_label"
                     android:imeOptions="actionDone"
                     android:inputType="textMultiLine"
                     android:lines="4"

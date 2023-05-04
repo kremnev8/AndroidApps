@@ -229,8 +229,8 @@ public class MainActivity
 
     private AlertDialog createPictureDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.AddPhotoDialogTitle)
-                .setItems(R.array.AddPhotoDialogOptions, (dialog, index) -> {
+        builder.setTitle(R.string.add_photo_label)
+                .setItems(R.array.add_photo_dialog_options, (dialog, index) -> {
                     if (index == 0)
                         tryTakePhoto();
                     else if (index == 1)

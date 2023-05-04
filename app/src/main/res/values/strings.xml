@@ -1,75 +1,69 @@
 <resources>
-    <string name="app_name">ElectronicCookBook</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="menu">menu</string>
-    <string name="more">more</string>
-    <string name="ingredient_icon_desc">Ingredient Image</string>
-    <string name="editText">Input Field</string>
-    <string name="imagePick">Select image</string>
-    <string name="iconFieldDesc">Icon</string>
-    <string name="SaveButtonText">Save</string>
-    <string name="nameFieldLabel">Name</string>
-    <string name="AddButtonLabel">Add</string>
-    <string name="amountFieldLabel">Amount</string>
-    <string name="takePhotoDesc">Make Photo</string>
-    <string name="recipeIconDesc">Recipe Image</string>
-    <string name="recipesName">Recipes</string>
-    <string name="ingredientsName">Ingredients</string>
-    <string name="settingsName">Settings</string>
-    <string name="TimerInputHint">00</string>
-    <string name="enableTimerCheckBox">Enable Timer</string>
-    <string name="optionalText">Optional</string>
-    <string name="stepNameHint">Step name</string>
-    <string name="stepImageDesc">Step Image</string>
-    <string name="stepDescriptionHint">Step Description</string>
-    <string name="recipeDescriptionhint">Recipe Description</string>
-    <string name="recipeNameHint">Recipe Name</string>
-    <string name="addStepDesc">Add Step</string>
-    <string name="EditIngredientMenuName">Edit Ingredient</string>
-    <string name="IngredientsListMenuName">Ingredients</string>
-    <string name="EditRecipeMenuName">Edit Recipe</string>
-    <string name="RecipeListMenuName">Recipes</string>
-    <string name="timerIconDesc">Timer Icon</string>
-    <string name="startButtonText">Start</string>
-    <string name="resetButtonText">Reset</string>
-    <string name="ConfirmActionText">Confirm</string>
-    <string name="editLabel">Edit</string>
-    <string name="AboutTabLabel">About</string>
-    <string name="IngredientsTabLabel">Ingredients</string>
-    <string name="StepsTabLabel">Steps</string>
-    <string name="TimerInputSeparator">:</string>
-    <string name="TimerInputLabelText">Timer</string>
-    <string name="AddPhotoButtonLabel">Add Photo</string>
-    <string name="RecipeIconContentDesc">RecipeIcon</string>
-    <string name="IngredientInputHint">Ingredient</string>
-    <string name="AmountInputHint">Amount</string>
-    <string name="menu_action_button_desc">Menu Action Button</string>
-    <string name="SaveActionButtonText">Save</string>
-    <string name="AddPhotoDialogTitle">Add Photo</string>
-    <string name="AddIngredientText">Add Ingredient</string>
-    <string name="DescriptionLabel">Description</string>
-    <string name="YieldLabel">Yield</string>
-    <string name="NutritionLabel">Nutrition</string>
-    <string name="ButtonPlusContentDesc">Button Plus</string>
-    <string name="ButtonMinusContentDesc">Button Minus</string>
-    <string name="DeleteMenuText">Delete</string>
-    <string name="EditMenuText">Edit</string>
-    <string name="ChangeProfileText">Change Profile</string>
-    <string name="ProfileImageContentDesc">Profile Image</string>
-    <string name="SelectButtonText">Select</string>
-    <string name="LockedProfileDesc">Locked Profile</string>
-    <string name="EditProfileMenuText">Edit Profile</string>
-    <string name="profile_name_label">Name</string>
-    <string name="password_field_label">Password</string>
-    <string name="password_protection_notice">Leave this field empty to disable password protection</string>
-    <string name="password_hint">password</string>
-    <string name="profile_name_hint">Liza</string>
-    <string name="profile_image_label">Image</string>
-    <string name="select_image_button_text">Select Image</string>
-    <string name="profiles_menu_name">Profiles</string>
-    <string name="add_profile_text">Add Profile</string>
-    <string-array name="AddPhotoDialogOptions">
+    <string-array name="add_photo_dialog_options">
         <item>Take Photo</item>
         <item>Pick Photo</item>
     </string-array>
+
+    <!--general-->
+    <string name="about_label">About</string>
+    <string name="add_label">Add</string>
+    <string name="add_photo_label">Add Photo</string>
+    <string name="app_name">Electronic Cook Book</string>
+    <string name="button_minus_label">Button Minus</string>
+    <string name="button_plus_label">Button Plus</string>
+    <string name="confirm_label">Confirm</string>
+    <string name="delete_label">Delete</string>
+    <string name="description_label">Description</string>
+    <string name="edit_label">Edit</string>
+    <string name="edit_text">Input Field</string>
+    <string name="image_label">Image</string>
+    <string name="menu">menu</string>
+    <string name="menu_action_button_desc">Menu Action Button</string>
+    <string name="name_label">Name</string>
+    <string name="optional_label">Optional</string>
+    <string name="reset_label">Reset</string>
+    <string name="save_label">Save</string>
+    <string name="select_image_label">Select Image</string>
+    <string name="select_label">Select</string>
+    <string name="settings_label">Settings</string>
+    <string name="start_label">Start</string>
+    <string name="yield_label">Yield</string>
+
+    <!--ingredient-->
+    <string name="add_ingredient_label">Add Ingredient</string>
+    <string name="amount_label">Amount</string>
+    <string name="edit_ingredient_label">Edit Ingredient</string>
+    <string name="ingredient_icon_label">Ingredient Image</string>
+    <string name="ingredient_label">Ingredient</string>
+    <string name="ingredients_label">Ingredients</string>
+
+    <!--recipe-->
+    <string name="edit_recipe_label">Edit Recipe</string>
+    <string name="nutrition_label">Nutrition</string>
+    <string name="recipe_description_label">Recipe Description</string>
+    <string name="recipe_image_label">Recipe Image</string>
+    <string name="recipe_label">Recipes</string>
+    <string name="recipe_name_label">Recipe Name</string>
+    <string name="recipes_label">Recipes</string>
+
+    <!--step-->
+    <string name="add_step_label">Add Step</string>
+    <string name="step_description_label">Step Description</string>
+    <string name="step_image_label">Step Image</string>
+    <string name="steps_tab_label">Steps</string>
+    <string name="timer_icon_label">Timer Icon</string>
+    <string name="timer_input_hint">00</string>
+    <string name="timer_input_label_text">Timer</string>
+    <string name="timer_input_separator">:</string>
+
+    <!--profile-->
+    <string name="add_profile_label">Add Profile</string>
+    <string name="change_profile_label">Change Profile</string>
+    <string name="edit_profile_label">Edit Profile</string>
+    <string name="locked_profile_label">Locked Profile</string>
+    <string name="password_label">Password</string>
+    <string name="password_protection_notice">Leave this field empty to disable password protection</string>
+    <string name="profile_name_hint">Liza</string>
+    <string name="profiles_label">Profiles</string>
+
 </resources>

@@ -71,7 +71,7 @@ public class IngredientListFragment extends Fragment implements IMenu {
 
     @Override
     public int getMenuName() {
-        return R.string.IngredientsListMenuName;
+        return R.string.ingredients_label;
     }
 
     @Override
