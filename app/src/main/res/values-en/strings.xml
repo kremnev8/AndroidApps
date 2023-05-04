@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="add_photo_dialog_options">
         <item>Take Photo</item>
@@ -8,7 +9,6 @@
     <string name="about_label">About</string>
     <string name="add_label">Add</string>
     <string name="add_photo_label">Add Photo</string>
-    <string name="app_name" translatable="false">Electronic Cook Book</string>
     <string name="button_minus_label">Button Minus</string>
     <string name="button_plus_label">Button Plus</string>
     <string name="confirm_label">Confirm</string>
@@ -47,9 +47,7 @@
     <string name="add_step_label">Add Step</string>
     <string name="steps_tab_label">Steps</string>
     <string name="timer_icon_label">Timer</string>
-    <string name="timer_input_hint" translatable="false">00</string>
     <string name="timer_input_label_text">Timer</string>
-    <string name="timer_input_separator" translatable="false">:</string>
 
     <!--profile-->
     <string name="add_profile_label">Add Profile</string>

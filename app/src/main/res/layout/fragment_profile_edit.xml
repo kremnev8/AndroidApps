@@ -18,7 +18,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="90dp"
-            android:background="@color/ItemFirst">
+            android:background="@color/item_first">
 
             <TextView
                 android:id="@+id/namePropertyText"
@@ -56,7 +56,7 @@
             android:id="@+id/iconArea"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/ItemFirst"
+            android:background="@color/item_first"
             android:paddingBottom="10dp">
 
             <TextView
@@ -101,7 +101,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/ItemFirst">
+            android:background="@color/item_first">
 
             <TextView
                 android:id="@+id/passwordPropertyName"
@@ -126,7 +126,7 @@
                 android:layout_marginEnd="10dp"
                 android:gravity="center|start"
                 android:text="@string/password_protection_notice"
-                android:textColor="@color/noteColor"
+                android:textColor="@color/dark_gray"
                 android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

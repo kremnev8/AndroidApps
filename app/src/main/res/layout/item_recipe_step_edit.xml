@@ -51,7 +51,7 @@
             android:id="@+id/imageMedia"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:contentDescription="@string/step_image_label"
+            android:contentDescription="@string/image_label"
             app:srcCompat="@drawable/empty_placeholder"
             app:switchRoundedImage="@{itemViewModel.step.mediaUri}"
             tools:ignore="ImageContrastCheck" />

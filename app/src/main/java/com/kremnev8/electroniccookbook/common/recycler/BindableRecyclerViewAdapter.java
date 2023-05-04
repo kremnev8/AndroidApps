@@ -29,8 +29,8 @@ public class BindableRecyclerViewAdapter<T, VT extends ItemViewModel>
         setHasStableIds(true);
 
         MainActivity activity = MainActivity.Instance;
-        firstColor = activity.getResources().getColor(R.color.ItemFirst, activity.getTheme());
-        secondColor = activity.getResources().getColor(R.color.ItemSecond, activity.getTheme());
+        firstColor = activity.getResources().getColor(R.color.item_first, activity.getTheme());
+        secondColor = activity.getResources().getColor(R.color.item_second, activity.getTheme());
     }
 
     public int getMenuPosition(){

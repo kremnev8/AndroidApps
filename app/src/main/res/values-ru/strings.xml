@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="add_photo_dialog_options">
+        <item>Сделать фото</item>
+        <item>Выбрать фото</item>
+    </string-array>
+
+    <string name="about_label">About</string>
+    <string name="add_label">Добавить</string>
+    <string name="add_photo_label">Добавить фото</string>
+    <string name="button_minus_label">Кнопка меньше</string>
+    <string name="button_plus_label">Кнопка больше</string>
+    <string name="confirm_label">Поддтвердить</string>
+    <string name="delete_label">Удалить</string>
+    <string name="description_label">Описание</string>
+    <string name="edit_label">Редактировать</string>
+    <string name="edit_text">Поле ввода</string>
+    <string name="image_label">Изображение</string>
+    <string name="menu">меню</string>
+    <string name="menu_action_button_desc">Кнопка действия меню</string>
+    <string name="name_label">Имя</string>
+    <string name="optional_label">Дополнительно</string>
+    <string name="reset_label">Сбросить</string>
+    <string name="save_label">Сохранить</string>
+    <string name="select_image_label">Выбрать изображение</string>
+    <string name="select_label">Выбрать</string>
+    <string name="settings_label">Настройки</string>
+    <string name="start_label">Начать</string>
+    <string name="yield_label">Порции</string>
+    <string name="add_ingredient_label">Добавить ингредиент</string>
+    <string name="amount_label">Количество</string>
+    <string name="edit_ingredient_label">Редактировать Ингредиент</string>
+    <string name="ingredient_icon_label">Изображение ингредиента</string>
+    <string name="ingredient_label">Ингредиент</string>
+    <string name="ingredients_label">Ингредиенты</string>
+    <string name="edit_recipe_label">Редактировать рецепт</string>
+    <string name="nutrition_label">Пищевая ценность</string>
+    <string name="recipe_label">Рецепт</string>
+    <string name="recipes_label">Рецепты</string>
+    <string name="add_step_label">Добавить шаг</string>
+    <string name="steps_tab_label">Шаги</string>
+    <string name="timer_icon_label">Таймер</string>
+    <string name="timer_input_label_text">Таймер</string>
+    <string name="add_profile_label">Добавить профиль</string>
+    <string name="change_profile_label">Сменить профиль</string>
+    <string name="edit_profile_label">Редактировать профиль</string>
+    <string name="locked_profile_label">Профиль зашишен</string>
+    <string name="password_label">Пароль</string>
+    <string name="password_protection_notice">Оставьте данное поле пустым чтобы выключить пароль</string>
+    <string name="profile_name_hint">Лиза</string>
+    <string name="profiles_label">Профили</string>
+</resources>
