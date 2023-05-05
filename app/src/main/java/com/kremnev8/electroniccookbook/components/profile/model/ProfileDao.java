@@ -1,4 +1,4 @@
-package com.kremnev8.electroniccookbook.components.profile.database;
+package com.kremnev8.electroniccookbook.components.profile.model;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;

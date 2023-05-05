@@ -1,4 +1,4 @@
-package com.kremnev8.electroniccookbook.components.recipe.database;
+package com.kremnev8.electroniccookbook.components.recipe.model;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
@@ -15,8 +15,8 @@ import java.util.List;
 @Dao
 public interface RecipeDao {
 
-    @Query("SELECT * FROM recipe")
-    LiveData<List<Recipe>> getRecipes();
+    @Query("SELECT * FROM recipe WHERE profileId = :profileId")
+    LiveData<List<Recipe>> getRecipes(int profileId);
 
     @Query("SELECT * FROM recipe WHERE id = :id")
     LiveData<Recipe> getRecipe(int id);

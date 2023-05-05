@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.room.AutoMigration;
 import androidx.room.Database;
 import androidx.room.DeleteColumn;
+import androidx.room.DeleteTable;
 import androidx.room.RenameColumn;
 import androidx.room.RenameTable;
 import androidx.room.Room;
@@ -15,21 +16,20 @@ import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.kremnev8.electroniccookbook.IngredientDataProvider;
-import com.kremnev8.electroniccookbook.components.ingredient.database.IngredientDao;
+import com.kremnev8.electroniccookbook.components.ingredient.model.IngredientDao;
 import com.kremnev8.electroniccookbook.components.ingredient.model.Ingredient;
-import com.kremnev8.electroniccookbook.components.profile.database.ProfileDao;
-import com.kremnev8.electroniccookbook.components.recipe.database.RecipeDao;
-import com.kremnev8.electroniccookbook.components.recipe.database.RecipeIngredientCacheDao;
-import com.kremnev8.electroniccookbook.components.recipe.database.RecipeIngredientDao;
-import com.kremnev8.electroniccookbook.components.recipe.database.RecipeStepCacheDao;
-import com.kremnev8.electroniccookbook.components.recipe.database.RecipeStepDao;
+import com.kremnev8.electroniccookbook.components.profile.model.ProfileDao;
+import com.kremnev8.electroniccookbook.components.recipe.model.RecipeDao;
+import com.kremnev8.electroniccookbook.components.recipe.model.RecipeIngredientCacheDao;
+import com.kremnev8.electroniccookbook.components.recipe.model.RecipeIngredientDao;
+import com.kremnev8.electroniccookbook.components.recipe.model.RecipeStepCacheDao;
+import com.kremnev8.electroniccookbook.components.recipe.model.RecipeStepDao;
 import com.kremnev8.electroniccookbook.components.recipe.model.Recipe;
 import com.kremnev8.electroniccookbook.components.recipe.model.RecipeIngredient;
 import com.kremnev8.electroniccookbook.components.recipe.model.RecipeIngredientCache;
 import com.kremnev8.electroniccookbook.components.recipe.model.RecipeStep;
 import com.kremnev8.electroniccookbook.components.recipe.model.RecipeStepCache;
 import com.kremnev8.electroniccookbook.components.profile.model.Profile;
-import com.kremnev8.electroniccookbook.model.TimerCache;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -41,9 +41,8 @@ import java.util.concurrent.Executors;
         RecipeIngredient.class,
         Profile.class,
         RecipeStepCache.class,
-        RecipeIngredientCache.class,
-        TimerCache.class},
-        version = 9,
+        RecipeIngredientCache.class},
+        version = 10,
         autoMigrations = {
                 @AutoMigration(from = 1, to = 2, spec = AppDatabase.UriRenameMigration.class),
                 @AutoMigration(from = 2, to = 3),
@@ -52,11 +51,16 @@ import java.util.concurrent.Executors;
                 @AutoMigration(from = 5, to = 6, spec = AppDatabase.IngredientNameMigration.class),
                 @AutoMigration(from = 7, to = 8, spec = AppDatabase.AddIngredientCacheMigration.class),
                 @AutoMigration(from = 8, to = 9),
+                @AutoMigration(from = 9, to = 10, spec = AppDatabase.ProfileSegregationMigration.class),
         }
 )
 public abstract class AppDatabase extends RoomDatabase implements DaoAccess {
 
     private static final String DATABASE_NAME = "app_database.db";
+
+    @DeleteTable(tableName = "timerCache")
+    public static class ProfileSegregationMigration implements AutoMigrationSpec {
+    }
 
     @RenameTable(fromTableName = "viewCache", toTableName = "recipeStepCache")
     public static class AddIngredientCacheMigration implements AutoMigrationSpec {

@@ -6,18 +6,31 @@ import android.os.Parcelable;
 import androidx.lifecycle.LiveData;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
+import com.kremnev8.electroniccookbook.components.profile.model.Profile;
+
 import java.util.List;
 
-@Entity(tableName = "recipe",indices = @Index(value = {"id"},unique = true))
+@Entity(tableName = "recipe",
+        indices = @Index(value = {"id"}, unique = true),
+        foreignKeys = {
+        @ForeignKey(entity = Profile.class,
+                parentColumns = "id",
+                childColumns = "profileId",
+                onDelete = ForeignKey.CASCADE)
+})
 public class Recipe implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     public int id;
+
+    @ColumnInfo(name = "profileId")
+    public int profileId;
 
     @ColumnInfo(name = "name")
     public String name;

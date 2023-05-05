@@ -2,15 +2,15 @@ package com.kremnev8.electroniccookbook.database;
 
 import androidx.lifecycle.LiveData;
 
-import com.kremnev8.electroniccookbook.components.ingredient.database.IngredientDao;
+import com.kremnev8.electroniccookbook.components.ingredient.model.IngredientDao;
 import com.kremnev8.electroniccookbook.components.ingredient.model.Ingredient;
-import com.kremnev8.electroniccookbook.components.profile.database.ProfileDao;
+import com.kremnev8.electroniccookbook.components.profile.model.ProfileDao;
 import com.kremnev8.electroniccookbook.components.profile.model.Profile;
-import com.kremnev8.electroniccookbook.components.recipe.database.RecipeExtendedDao;
-import com.kremnev8.electroniccookbook.components.recipe.database.RecipeIngredientCacheDao;
-import com.kremnev8.electroniccookbook.components.recipe.database.RecipeIngredientDao;
-import com.kremnev8.electroniccookbook.components.recipe.database.RecipeStepCacheDao;
-import com.kremnev8.electroniccookbook.components.recipe.database.RecipeStepDao;
+import com.kremnev8.electroniccookbook.components.recipe.model.RecipeExtendedDao;
+import com.kremnev8.electroniccookbook.components.recipe.model.RecipeIngredientCacheDao;
+import com.kremnev8.electroniccookbook.components.recipe.model.RecipeIngredientDao;
+import com.kremnev8.electroniccookbook.components.recipe.model.RecipeStepCacheDao;
+import com.kremnev8.electroniccookbook.components.recipe.model.RecipeStepDao;
 import com.kremnev8.electroniccookbook.components.recipe.model.Recipe;
 import com.kremnev8.electroniccookbook.components.recipe.model.RecipeIngredient;
 import com.kremnev8.electroniccookbook.components.recipe.model.RecipeIngredientCache;
@@ -44,8 +44,8 @@ public class DatabaseExecutor implements
     }
 
     @Override
-    public LiveData<List<Ingredient>> getIngredients() {
-        return daoAccess.ingredientDao().getIngredients();
+    public LiveData<List<Ingredient>> getIngredients(int profileId) {
+        return daoAccess.ingredientDao().getIngredients(profileId);
     }
 
     @Override
@@ -69,8 +69,8 @@ public class DatabaseExecutor implements
     }
 
     @Override
-    public LiveData<List<Recipe>> getRecipes() {
-        return daoAccess.recipeDao().getRecipes();
+    public LiveData<List<Recipe>> getRecipes(int profileId) {
+        return daoAccess.recipeDao().getRecipes(profileId);
     }
 
     @Override
@@ -79,8 +79,8 @@ public class DatabaseExecutor implements
     }
 
     @Override
-    public LiveData<List<Recipe>> getRecipesWithData() {
-        LiveData<List<Recipe>> recipes = getRecipes();
+    public LiveData<List<Recipe>> getRecipesWithData(int profileId) {
+        LiveData<List<Recipe>> recipes = getRecipes(profileId);
         if (recipes.getValue() != null) {
             for (var recipe : recipes.getValue()) {
                 recipe.ingredients = getRecipeIngredients(recipe.id);

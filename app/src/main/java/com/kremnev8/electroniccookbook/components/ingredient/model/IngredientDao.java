@@ -1,4 +1,4 @@
-package com.kremnev8.electroniccookbook.components.ingredient.database;
+package com.kremnev8.electroniccookbook.components.ingredient.model;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
@@ -15,8 +15,8 @@ import java.util.List;
 @Dao
 public interface IngredientDao {
 
-    @Query("SELECT * FROM ingredients")
-    LiveData<List<Ingredient>> getIngredients();
+    @Query("SELECT * FROM ingredients WHERE profileId = :profileId")
+    LiveData<List<Ingredient>> getIngredients(int profileId);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(Ingredient ingredient);

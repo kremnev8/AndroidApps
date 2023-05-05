@@ -6,11 +6,14 @@ import android.util.Pair;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import com.google.common.primitives.Floats;
+import com.kremnev8.electroniccookbook.components.profile.model.Profile;
+import com.kremnev8.electroniccookbook.components.recipe.model.Recipe;
 
 import java.text.DecimalFormat;
 import java.util.Arrays;
@@ -19,12 +22,20 @@ import java.util.stream.Collectors;
 @Entity(tableName = "ingredients",indices = {
         @Index(value = {"id"},unique = true),
         @Index(value = {"name"},unique = true)
+}, foreignKeys = {
+        @ForeignKey(entity = Profile.class,
+                parentColumns = "id",
+                childColumns = "profileId",
+                onDelete = ForeignKey.CASCADE)
 })
 public class Ingredient implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     public int id;
+
+    @ColumnInfo(name = "profileId")
+    public int profileId;
 
     @ColumnInfo(name = "name")
     public String name;
