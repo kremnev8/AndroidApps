@@ -5,19 +5,20 @@
     </string-array>
 
     <!--general-->
+    <string name="amount_label">Amount</string>
     <string name="about_label">About</string>
     <string name="add_label">Add</string>
     <string name="add_photo_label">Add Photo</string>
     <string name="app_name" translatable="false">Electronic Cook Book</string>
-    <string name="button_minus_label">Button Minus</string>
-    <string name="button_plus_label">Button Plus</string>
+    <string name="button_minus_label">Minus</string>
+    <string name="button_plus_label">Plus</string>
     <string name="confirm_label">Confirm</string>
     <string name="delete_label">Delete</string>
     <string name="description_label">Description</string>
     <string name="edit_label">Edit</string>
     <string name="edit_text">Input Field</string>
     <string name="image_label">Image</string>
-    <string name="menu">menu</string>
+    <string name="menu_desc">Menu</string>
     <string name="menu_action_button_desc">Menu Action Button</string>
     <string name="name_label">Name</string>
     <string name="optional_label">Optional</string>
@@ -28,10 +29,16 @@
     <string name="settings_label">Settings</string>
     <string name="start_label">Start</string>
     <string name="yield_label">Yield</string>
+    <string name="nutrition_label">Nutrition</string>
+
+    <string name="name_input_field_label">Name Field</string>
+    <string name="description_input_fieldlabel">Description Field</string>
+    <string name="yield_input_field_label">Yield Field</string>
+    <string name="amount_input_field_label">Amount Field</string>
+    <string name="nutrition_input_field_label">Nutrition Field</string>
 
     <!--ingredient-->
     <string name="add_ingredient_label">Add Ingredient</string>
-    <string name="amount_label">Amount</string>
     <string name="edit_ingredient_label">Edit Ingredient</string>
     <string name="ingredient_icon_label">Ingredient Image</string>
     <string name="ingredient_label">Ingredient</string>
@@ -39,7 +46,6 @@
 
     <!--recipe-->
     <string name="edit_recipe_label">Edit Recipe</string>
-    <string name="nutrition_label">Nutrition</string>
     <string name="recipe_label">Recipe</string>
     <string name="recipes_label">Recipes</string>
 

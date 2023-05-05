@@ -54,14 +54,14 @@
 
             <TextView
                 android:id="@+id/ChangeProfileText"
-                android:layout_width="60dp"
+                android:layout_width="80dp"
                 android:layout_height="60dp"
                 android:layout_marginEnd="20dp"
                 android:gravity="center"
+                android:onClick="@{viewModel::changeProfileClicked}"
                 android:text="@string/change_profile_label"
                 android:textColor="#455A64"
                 android:textSize="16sp"
-                android:onClick="@{viewModel::changeProfileClicked}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

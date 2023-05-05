@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
@@ -13,18 +14,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/iconEdit"
-                android:layout_width="391dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="10dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                android:background="@color/item_first">
 
                 <ImageView
                     android:id="@+id/imageView2"
@@ -36,7 +35,8 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:roundedImage="@{viewModel.model.imageUri}"
-                    app:srcCompat="@drawable/empty_placeholder" />
+                    app:srcCompat="@drawable/empty_placeholder"
+                    tools:ignore="ImageContrastCheck" />
 
                 <Button
                     android:id="@+id/button"
@@ -46,20 +46,17 @@
                     android:layout_marginTop="136dp"
                     android:onClick="@{viewModel::takePhotoButtonClicked}"
                     android:text="@string/add_photo_label"
+                    android:textColor="@color/black"
                     app:layout_constraintStart_toEndOf="@+id/imageView2"
                     app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/nameEditLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="10dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/iconEdit">
+                android:background="@color/item_second">
 
                 <EditText
                     android:id="@+id/nameEdit"
@@ -68,7 +65,7 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
                     android:autofillHints=""
-                    android:hint="@string/name_label"
+                    android:hint="@string/name_input_field_label"
                     android:inputType="text"
                     android:text="@={viewModel.model.name}"
                     android:textColorHint="#78909C"
@@ -90,14 +87,10 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/descriptionEditLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="10dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/nameEditLayout">
+                android:background="@color/item_first">
 
                 <TextView
                     android:id="@+id/descriptionLabel"
@@ -118,7 +111,7 @@
                     android:layout_marginEnd="10dp"
                     android:autofillHints=""
                     android:gravity="top|start"
-                    android:hint="@string/description_label"
+                    android:hint="@string/description_input_fieldlabel"
                     android:imeOptions="actionDone"
                     android:inputType="textMultiLine"
                     android:lines="4"
@@ -133,14 +126,10 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/yieldEditLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="10dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/descriptionEditLayout">
+                android:background="@color/item_second">
 
                 <TextView
                     android:id="@+id/yieldLabel"
@@ -157,12 +146,13 @@
                     android:id="@+id/yieldEdit"
                     android:layout_width="150dp"
                     android:layout_height="48dp"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginStart="10dp"
                     android:autofillHints="yield"
+                    android:hint="@string/yield_input_field_label"
                     android:imeOptions="actionDone"
                     android:inputType="number"
                     android:text="@={`` + viewModel.yield}"
-                    android:textColorHint="#78909C"
+                    android:textColorHint="#607D8B"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/yieldLabel" />
 
@@ -185,23 +175,20 @@
                     android:layout_height="48dp"
                     android:layout_marginStart="10dp"
                     android:backgroundTint="@color/primary_color"
+                    android:contentDescription="@string/button_minus_label"
                     android:onClick="@{viewModel::onDecreaseYieldClicked}"
                     android:scaleType="fitCenter"
                     app:layout_constraintStart_toEndOf="@+id/plusButton"
                     app:layout_constraintTop_toTopOf="@+id/yieldEdit"
                     app:srcCompat="@drawable/ic_minus"
-                    android:contentDescription="@string/button_minus_label" />
+                    tools:ignore="ImageContrastCheck" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/nutritionEditLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="10dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/yieldEditLayout">
+                android:background="@color/item_first">
 
                 <TextView
                     android:id="@+id/nutritionLabel"
@@ -222,7 +209,7 @@
                     android:layout_marginEnd="10dp"
                     android:autofillHints=""
                     android:gravity="top|start"
-                    android:hint="@string/description_label"
+                    android:hint="@string/nutrition_input_field_label"
                     android:imeOptions="actionDone"
                     android:inputType="textMultiLine"
                     android:lines="4"
@@ -236,6 +223,6 @@
                     app:layout_constraintTop_toBottomOf="@+id/nutritionLabel" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
     </ScrollView>
 </layout>

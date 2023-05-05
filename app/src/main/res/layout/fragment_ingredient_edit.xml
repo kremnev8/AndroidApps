@@ -8,21 +8,19 @@
             name="viewModel"
             type="com.kremnev8.electroniccookbook.components.ingredient.edit.viewmodel.IngredientEditViewModel" />
     </data>
-<androidx.constraintlayout.widget.ConstraintLayout
+<LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    tools:context=".components.ingredient.edit.fragment.IngredientEditFragment">
+    tools:context=".components.ingredient.edit.fragment.IngredientEditFragment"
+    android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/iconArea"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/item_first"
-        android:paddingBottom="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:paddingBottom="10dp">
 
         <ImageView
             android:id="@+id/imageView"
@@ -47,28 +45,77 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <include
-        android:id="@+id/nameField"
-        layout="@layout/element_string_field"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/iconArea"
-        app:value="@={viewModel.model.name}"
-        app:background="@color/item_second" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:background="@color/item_second">
 
-    <include
-        android:id="@+id/amountField"
-        layout="@layout/element_string_field"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:background="@color/item_first"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nameField"
-        app:value="@={viewModel.amount}" />
+        <TextView
+            android:id="@+id/namePropertyLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:gravity="center|start"
+            android:textSize="20sp"
+            android:text="@string/name_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <EditText
+            android:id="@+id/nameInput"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="10dp"
+            android:hint="@string/name_label"
+            android:text="@={viewModel.model.name}"
+            android:importantForAutofill="no"
+            android:inputType="text"
+            android:textColorHint="@color/gray"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/namePropertyLabel" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:background="@color/item_second">
+
+        <TextView
+            android:id="@+id/amountPropertyLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:gravity="center|start"
+            android:textSize="20sp"
+            android:text="@string/amount_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/amountInput"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="10dp"
+            android:hint="@string/amount_label"
+            android:text="@={viewModel.amount}"
+            android:importantForAutofill="no"
+            android:inputType="text"
+            android:textColorHint="@color/gray"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/amountPropertyLabel" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>
 </layout>

@@ -9,15 +9,15 @@
     <string name="about_label">About</string>
     <string name="add_label">Add</string>
     <string name="add_photo_label">Add Photo</string>
-    <string name="button_minus_label">Button Minus</string>
-    <string name="button_plus_label">Button Plus</string>
+    <string name="button_minus_label">Minus</string>
+    <string name="button_plus_label">Plus</string>
     <string name="confirm_label">Confirm</string>
     <string name="delete_label">Delete</string>
     <string name="description_label">Description</string>
     <string name="edit_label">Edit</string>
     <string name="edit_text">Input Field</string>
     <string name="image_label">Image</string>
-    <string name="menu">menu</string>
+    <string name="menu_desc">Menu</string>
     <string name="menu_action_button_desc">Menu Action Button</string>
     <string name="name_label">Name</string>
     <string name="optional_label">Optional</string>
@@ -58,5 +58,10 @@
     <string name="password_protection_notice">Leave this field empty to disable password protection</string>
     <string name="profile_name_hint">Liza</string>
     <string name="profiles_label">Profiles</string>
+    <string name="name_input_field_label">Name Field</string>
+    <string name="description_input_fieldlabel">Description Field</string>
+    <string name="yield_input_field_label">Yield Field</string>
+    <string name="amount_input_field_label">Amount Field</string>
+    <string name="nutrition_input_field_label">Nutrition Field</string>
 
 </resources>

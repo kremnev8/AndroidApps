@@ -48,9 +48,6 @@ public class IngredientEditFragment extends Fragment implements IMenu {
 
         binding.setViewModel(viewModel);
 
-        binding.nameField.propertyNameText.setText(R.string.name_label);
-        binding.amountField.propertyNameText.setText(R.string.amount_label);
-
         return binding.getRoot();
     }
     @Override

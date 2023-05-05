@@ -40,7 +40,7 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:background="@color/invisible"
-        android:contentDescription="@string/menu"
+        android:contentDescription="@string/menu_desc"
         android:scaleType="fitXY"
         android:src="@drawable/row_256"
         app:layout_constraintStart_toStartOf="parent"
