@@ -38,7 +38,7 @@ public class RecipeViewStepItemViewModel extends ItemViewModel {
     public void toggleComplete(View view){
         step.cache.stepComplete = !step.cache.stepComplete;
         notifyChange();
-        executor.update(step.cache);
+        executor.upsert(step.cache);
     }
 
     public void updateTimer(TimerData timer){

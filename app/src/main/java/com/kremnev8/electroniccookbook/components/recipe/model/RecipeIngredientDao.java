@@ -6,6 +6,7 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Transaction;
+import androidx.room.Upsert;
 
 import com.kremnev8.electroniccookbook.components.recipe.model.RecipeIngredient;
 
@@ -23,11 +24,11 @@ public interface RecipeIngredientDao {
     @Query("SELECT * FROM recipeIngredient WHERE recipe = :id")
     Single<List<RecipeIngredient>> getRecipeIngredientsDirect(int id);
 
-    @Insert
-    void insertAllIngredients(List<RecipeIngredient> ingredients);
+    @Upsert
+    void upsertAllIngredients(List<RecipeIngredient> ingredients);
 
-    @Insert
-    void insertIngredient(RecipeIngredient ingredient);
+    @Upsert
+    void upsertIngredient(RecipeIngredient ingredient);
 
     @Delete
     void deleteIngredient(RecipeIngredient ingredient);

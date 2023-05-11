@@ -14,20 +14,27 @@ import com.kremnev8.electroniccookbook.components.profile.list.itemviewmodel.Pro
 import com.kremnev8.electroniccookbook.components.profile.model.Profile;
 import com.kremnev8.electroniccookbook.database.DatabaseExecutor;
 import com.kremnev8.electroniccookbook.interfaces.IClickHandler;
+import com.kremnev8.electroniccookbook.interfaces.IFragmentController;
+import com.kremnev8.electroniccookbook.interfaces.ILoginSuccessCallback;
+import com.kremnev8.electroniccookbook.interfaces.IProfileProvider;
 
 import javax.inject.Inject;
 
 import dagger.hilt.android.lifecycle.HiltViewModel;
 
 @HiltViewModel
-public class ProfileListViewModel extends SimpleListViewModel<Profile> implements IClickHandler<Profile> {
+public class ProfileListViewModel extends SimpleListViewModel<Profile> implements IClickHandler<Profile>, ILoginSuccessCallback {
+
+    private final IFragmentController fragmentController;
+    private final IProfileProvider profileProvider;
 
     @Inject
-    public ProfileListViewModel(SavedStateHandle handle, DatabaseExecutor databaseExecutor) {
+    public ProfileListViewModel(SavedStateHandle handle, DatabaseExecutor databaseExecutor, IFragmentController fragmentController,IProfileProvider profileProvider) {
         super(handle, databaseExecutor);
-        rawData = databaseExecutor.getProfiles();
+        this.fragmentController = fragmentController;
+        this.profileProvider = profileProvider;
         itemViewModelHolder.setFooter(new FooterItemViewModel(R.string.add_profile_label, this::addProfile));
-        init();
+        setData(databaseExecutor.getProfiles());
     }
 
     private void addProfile() {
@@ -44,7 +51,10 @@ public class ProfileListViewModel extends SimpleListViewModel<Profile> implement
 
     @Override
     public void OnClicked(Profile item) {
-
+        if (item.passwordRequired)
+            fragmentController.showLoginDialog(this, item);
+        else
+            profileProvider.loginIntoProfile(item, "");
     }
 
     public void editItem(int position) {
@@ -64,5 +74,10 @@ public class ProfileListViewModel extends SimpleListViewModel<Profile> implement
         if (position >= 0 && position < list.size()) {
             databaseExecutor.deleteProfileById(list.get(position).id);
         }
+    }
+
+    @Override
+    public void OnSuccessfulLogin() {
+
     }
 }

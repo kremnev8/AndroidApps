@@ -172,7 +172,7 @@ public abstract class AppDatabase extends RoomDatabase implements DaoAccess {
                     profile.name = "Default Profile";
                     profile.passwordRequired = false;
                     profile.profileImageUrl = "";
-                    profileDao.insertOrUpdate(profile);
+                    profileDao.upsert(profile);
                 }
             });
         }

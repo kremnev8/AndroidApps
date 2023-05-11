@@ -23,21 +23,27 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.OptIn;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.Iterables;
+import com.kremnev8.electroniccookbook.components.profile.dialog.fragment.LoginFragment;
+import com.kremnev8.electroniccookbook.components.profile.model.Profile;
 import com.kremnev8.electroniccookbook.components.recipe.model.ShowRecipeData;
 import com.kremnev8.electroniccookbook.components.recipe.view.fragment.RecipeViewFragment;
 import com.kremnev8.electroniccookbook.components.timers.TimersService;
 import com.kremnev8.electroniccookbook.contract.TakePictureWithUriReturnContract;
+import com.kremnev8.electroniccookbook.database.DatabaseExecutor;
 import com.kremnev8.electroniccookbook.databinding.ActivityMainBinding;
 import com.kremnev8.electroniccookbook.interfaces.IFragmentController;
+import com.kremnev8.electroniccookbook.interfaces.ILoginSuccessCallback;
 import com.kremnev8.electroniccookbook.interfaces.IMenu;
 import com.kremnev8.electroniccookbook.interfaces.IDrawerController;
 import com.kremnev8.electroniccookbook.interfaces.IPhotoProvider;
@@ -48,9 +54,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
+@OptIn(markerClass = kotlinx.coroutines.ExperimentalCoroutinesApi.class)
 public class MainActivity
         extends AppCompatActivity
         implements IPhotoProvider, IDrawerController, IFragmentController {
@@ -65,9 +74,13 @@ public class MainActivity
     private ActivityMainBinding binding;
     private FragmentManager fragmentManager;
     private final List<Fragment> fragments = new ArrayList<>();
+    private LoginFragment loginFragment;
+
     private IPhotoRequestCallback lastRequester;
     private AlertDialog photoDialog;
     Handler mainHandler = new Handler(Looper.getMainLooper());
+
+    @Inject DatabaseExecutor executor;
 
     ActivityResultLauncher<String> mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(),
             uri -> {
@@ -106,6 +119,7 @@ public class MainActivity
 
         fragmentManager = getSupportFragmentManager();
         updateCurrentFragment();
+        loginFragment = new LoginFragment();
     }
 
     @Override
@@ -203,6 +217,23 @@ public class MainActivity
         binding.drawerLayout.closeDrawer(drawer);
     }
 
+    public void showLoginDialog(ILoginSuccessCallback callback, Profile profile) {
+        FragmentTransaction ft = fragmentManager.beginTransaction();
+        Fragment prev = fragmentManager.findFragmentByTag("dialog");
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+
+        Bundle args = new Bundle();
+        args.putParcelable(LoginFragment.ProfileData, profile);
+
+        loginFragment.setArguments(args);
+        loginFragment.setLoginSuccessCallback(callback);
+
+        loginFragment.show(ft, "dialog");
+    }
+
     //region Photos
     public void requestPhoto(IPhotoRequestCallback callback) {
         lastRequester = callback;
@@ -279,7 +310,7 @@ public class MainActivity
     private Uri getTmpFileUri() throws IOException {
         File path = new File(getFilesDir(), "camera");
         path.mkdirs();
-        var tmpFile = File.createTempFile("photo", ".png", path);
+        var tmpFile = File.createTempFile("photo", ".jpg", path);
         tmpFile.createNewFile();
 
         return FileProvider.getUriForFile(getApplicationContext(), BuildConfig.APPLICATION_ID + ".provider", tmpFile);

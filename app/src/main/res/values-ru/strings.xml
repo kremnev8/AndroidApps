@@ -54,4 +54,10 @@
     <string name="yield_input_field_label">Поле для количества порции</string>
     <string name="amount_input_field_label">Поле для количества</string>
     <string name="nutrition_input_field_label">Поле для пищевой ценности</string>
+    <string name="action_sign_in">Войти</string>
+    <string name="invalid_password">Пароль должен иметь больше 5 символов</string>
+    <string name="login_failed">Неверный пароль</string>
+    <string name="log_in_dialog_label">Требуется вход</string>
+    <string name="login_password_notice">Для доступа к профилю требуется ввести пароль!</string>
+    <string name="login_successful_message">Вход успешен</string>
 </resources>

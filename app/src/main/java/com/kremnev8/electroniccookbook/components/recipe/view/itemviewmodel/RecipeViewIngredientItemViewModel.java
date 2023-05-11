@@ -27,7 +27,7 @@ public class RecipeViewIngredientItemViewModel extends ItemViewModel {
     public void itemClicked(View view){
         ingredient.cache.ingredientUsed = !ingredient.cache.ingredientUsed;
         notifyChange();
-        executor.update(ingredient.cache);
+        executor.upsert(ingredient.cache);
     }
 
 

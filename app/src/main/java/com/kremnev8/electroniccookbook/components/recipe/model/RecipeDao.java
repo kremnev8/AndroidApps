@@ -7,6 +7,7 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
+import androidx.room.Upsert;
 
 import com.kremnev8.electroniccookbook.components.recipe.model.Recipe;
 
@@ -21,8 +22,8 @@ public interface RecipeDao {
     @Query("SELECT * FROM recipe WHERE id = :id")
     LiveData<Recipe> getRecipe(int id);
 
-    @Insert(entity = Recipe.class, onConflict = OnConflictStrategy.REPLACE)
-    long insert(Recipe recipe);
+    @Upsert(entity = Recipe.class)
+    long upsert(Recipe recipe);
 
     @Update(entity = Recipe.class)
     void update(Recipe recipe);

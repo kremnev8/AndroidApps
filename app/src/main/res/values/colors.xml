@@ -3,6 +3,8 @@
     <color name="primary_color">#E6A80A</color>
     <color name="primary_color_variant">#E3A402</color>
 
+    <color name="hint">#78909C</color>
+
     <color name="white">#FFFFFFFF</color>
     <color name="item_first">#F8F7F7</color>
     <color name="item_second">#EFEFEF</color>

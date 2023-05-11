@@ -30,6 +30,7 @@
     <string name="start_label">Start</string>
     <string name="yield_label">Yield</string>
     <string name="nutrition_label">Nutrition</string>
+    <string name="empty" translatable="false" />
 
     <string name="name_input_field_label">Name Field</string>
     <string name="description_input_fieldlabel">Description Field</string>
@@ -66,5 +67,13 @@
     <string name="password_protection_notice">Leave this field empty to disable password protection</string>
     <string name="profile_name_hint">Liza</string>
     <string name="profiles_label">Profiles</string>
+
+    <!-- Strings related to login -->
+    <string name="log_in_dialog_label">Log In Required</string>
+    <string name="action_sign_in">Log In</string>
+    <string name="invalid_password">Password must be longer than 5 characters</string>
+    <string name="login_failed">"Wrong Password"</string>
+    <string name="login_password_notice">To access this profile you must enter the password!</string>
+    <string name="login_successful_message">Login Successful!</string>
 
 </resources>

@@ -15,10 +15,15 @@ public abstract class SimpleListViewModel <T>
 
     public final DatabaseExecutor databaseExecutor;
     protected ItemViewModelHolder<T> itemViewModelHolder;
-    protected LiveData<List<T>> rawData;
+    private LiveData<List<T>> rawData;
 
     public LiveData<ArrayList<ItemViewModel>> getViewModels(){
         return itemViewModelHolder.viewModels;
+    }
+
+    public void setData(LiveData<List<T>> rawData) {
+        this.rawData = rawData;
+        itemViewModelHolder.updateData(rawData);
     }
 
     protected List<T> getData(){
@@ -28,10 +33,6 @@ public abstract class SimpleListViewModel <T>
     public SimpleListViewModel(SavedStateHandle handle, DatabaseExecutor databaseExecutor) {
         this.databaseExecutor = databaseExecutor;
         itemViewModelHolder = new ItemViewModelHolder<>(this);
-    }
-
-    protected void init() {
-        itemViewModelHolder.init(rawData);
     }
 
     public abstract ItemViewModel CreateInstance(T item);

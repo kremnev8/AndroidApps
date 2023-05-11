@@ -23,6 +23,8 @@ import android.view.ViewGroup;
 import com.kremnev8.electroniccookbook.components.tabs.viewmodel.NavigationDrawerViewModel;
 import com.kremnev8.electroniccookbook.database.DatabaseExecutor;
 import com.kremnev8.electroniccookbook.databinding.FragmentNavigationDrawerBinding;
+import com.kremnev8.electroniccookbook.interfaces.IFragmentController;
+import com.kremnev8.electroniccookbook.interfaces.IProfileProvider;
 
 import javax.inject.Inject;
 
@@ -31,29 +33,15 @@ import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 @AndroidEntryPoint
-@OptIn(markerClass = kotlinx.coroutines.ExperimentalCoroutinesApi.class)
 public class NavigationDrawerFragment extends Fragment {
 
     private NavigationDrawerViewModel viewModel;
     private FragmentNavigationDrawerBinding binding;
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
     @Inject DatabaseExecutor executor;
+    @Inject IProfileProvider profileProvider;
 
-    private static final Preferences.Key<Integer> CURRENT_PROFILE = PreferencesKeys.intKey("currentProfile");
 
-    private static Integer getOrDefaultProfileId(Preferences prefs) {
-        Integer profileId = prefs.get(CURRENT_PROFILE);
-        if (profileId == null || profileId == 0) {
-            profileId = 1;
-
-            dataStore.updateDataAsync(prefs1 -> {
-                var mutPref = prefs1.toMutablePreferences();
-                mutPref.set(CURRENT_PROFILE, 1);
-                return Single.just(mutPref);
-            }).subscribe();
-        }
-        return profileId;
-    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -64,9 +52,7 @@ public class NavigationDrawerFragment extends Fragment {
         viewModel = new ViewModelProvider(this).get(NavigationDrawerViewModel.class);
         binding.setViewModel(viewModel);
 
-        dataStore.data()
-                .map(NavigationDrawerFragment::getOrDefaultProfileId)
-                .flatMap(id -> executor.getProfile(id))
+        profileProvider.getCurrentProfile()
                 .subscribeOn(Schedulers.computation())
                 .subscribe(profile -> mainHandler.post(() -> viewModel.setProfile(profile)),
                         throwable -> Log.e("App", "Error while getting profile", throwable));

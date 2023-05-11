@@ -103,14 +103,14 @@ public class DatabaseExecutor implements
     }
 
     @Override
-    public long insert(Recipe recipe) {
-        executor.execute(() -> daoAccess.recipeDao().insert(recipe));
+    public long upsert(Recipe recipe) {
+        executor.execute(() -> daoAccess.recipeDao().upsert(recipe));
         return -1;
     }
 
-    public void insertWithCallback(Recipe recipe, IInsertCallback callback) {
+    public void upsertWithCallback(Recipe recipe, IInsertCallback callback) {
         executor.execute(() -> {
-            long id = daoAccess.recipeDao().insert(recipe);
+            long id = daoAccess.recipeDao().upsert(recipe);
             callback.onComplete(id);
         });
     }
@@ -139,8 +139,8 @@ public class DatabaseExecutor implements
     }
 
     @Override
-    public long insertOrUpdate(Profile profile) {
-        executor.execute(() -> daoAccess.profileDao().insertOrUpdate(profile));
+    public long upsert(Profile profile) {
+        executor.execute(() -> daoAccess.profileDao().upsert(profile));
         return 0;
     }
 
@@ -172,11 +172,11 @@ public class DatabaseExecutor implements
             }
         }
         executor.execute(() -> {
-            daoAccess.recipeDao().insert(recipe);
+            daoAccess.recipeDao().upsert(recipe);
             if (recipe.steps != null)
-                daoAccess.recipeStepDao().insertAllSteps(recipe.steps.getValue());
+                daoAccess.recipeStepDao().upsertAllSteps(recipe.steps.getValue());
             if (recipe.ingredients != null)
-                daoAccess.recipeIngredientDao().insertAllIngredients(recipe.ingredients.getValue());
+                daoAccess.recipeIngredientDao().upsertAllIngredients(recipe.ingredients.getValue());
 
             daoAccess.recipeStepCacheDao().clearRecipeCache(recipe.id);
         });
@@ -193,13 +193,13 @@ public class DatabaseExecutor implements
     }
 
     @Override
-    public void insertAllIngredients(List<RecipeIngredient> ingredients) {
-        executor.execute(() -> daoAccess.recipeIngredientDao().insertAllIngredients(ingredients));
+    public void upsertAllIngredients(List<RecipeIngredient> ingredients) {
+        executor.execute(() -> daoAccess.recipeIngredientDao().upsertAllIngredients(ingredients));
     }
 
     @Override
-    public void insertIngredient(RecipeIngredient ingredient) {
-        executor.execute(() -> daoAccess.recipeIngredientDao().insertIngredient(ingredient));
+    public void upsertIngredient(RecipeIngredient ingredient) {
+        executor.execute(() -> daoAccess.recipeIngredientDao().upsertIngredient(ingredient));
     }
 
     @Override
@@ -221,21 +221,16 @@ public class DatabaseExecutor implements
     }
 
     @Override
-    public void insertStep(RecipeStep step) {
+    public void upsertStep(RecipeStep step) {
         executor.execute(() -> {
-            daoAccess.recipeStepDao().insertStep(step);
+            daoAccess.recipeStepDao().upsertStep(step);
             daoAccess.recipeStepCacheDao().clearRecipeCache(step.recipe);
         });
     }
 
     @Override
-    public void insertAllSteps(List<RecipeStep> steps) {
-        executor.execute(() -> daoAccess.recipeStepDao().insertAllSteps(steps));
-    }
-
-    @Override
-    public void updateAllSteps(List<RecipeStep> steps) {
-        executor.execute(() -> daoAccess.recipeStepDao().updateAllSteps(steps));
+    public void upsertAllSteps(List<RecipeStep> steps) {
+        executor.execute(() -> daoAccess.recipeStepDao().upsertAllSteps(steps));
     }
 
     @Override
@@ -267,7 +262,7 @@ public class DatabaseExecutor implements
             var finalRes = stepsRequest.map(steps -> {
                 if (steps != null) {
                     for (var step : steps) {
-                        daoAccess.recipeStepCacheDao().insert(new RecipeStepCache(recipeId, step.id));
+                        daoAccess.recipeStepCacheDao().upsert(new RecipeStepCache(recipeId, step.id));
                     }
                 }
                 return daoAccess.recipeStepCacheDao().getRecipeCache(recipeId);
@@ -278,14 +273,9 @@ public class DatabaseExecutor implements
     }
 
     @Override
-    public long insert(RecipeStepCache recipe) {
-        executor.execute(() -> daoAccess.recipeStepCacheDao().insert(recipe));
+    public long upsert(RecipeStepCache recipe) {
+        executor.execute(() -> daoAccess.recipeStepCacheDao().upsert(recipe));
         return 0;
-    }
-
-    @Override
-    public void update(RecipeStepCache recipe) {
-        executor.execute(() -> daoAccess.recipeStepCacheDao().update(recipe));
     }
 
     @Override
@@ -304,14 +294,9 @@ public class DatabaseExecutor implements
     }
 
     @Override
-    public long insert(RecipeIngredientCache recipe) {
-        executor.execute(() -> daoAccess.recipeIngredientCacheDao().insert(recipe));
+    public long upsert(RecipeIngredientCache recipe) {
+        executor.execute(() -> daoAccess.recipeIngredientCacheDao().upsert(recipe));
         return 0;
-    }
-
-    @Override
-    public void update(RecipeIngredientCache recipe) {
-        executor.execute(() -> daoAccess.recipeIngredientCacheDao().update(recipe));
     }
 
     @Override
@@ -330,7 +315,7 @@ public class DatabaseExecutor implements
             var finalRes = stepsRequest.map(ingredients -> {
                 if (ingredients != null) {
                     for (var ingredient : ingredients) {
-                        daoAccess.recipeIngredientCacheDao().insert(new RecipeIngredientCache(recipeId, ingredient.id));
+                        daoAccess.recipeIngredientCacheDao().upsert(new RecipeIngredientCache(recipeId, ingredient.id));
                     }
                 }
                 return daoAccess.recipeIngredientCacheDao().getIngredientCache(recipeId);

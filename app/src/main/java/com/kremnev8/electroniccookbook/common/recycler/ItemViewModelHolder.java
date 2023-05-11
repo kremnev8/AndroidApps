@@ -24,17 +24,23 @@ public class ItemViewModelHolder<T> {
 
     public ItemViewModelHolder(IItemViewModelSource<T, ItemViewModel> activator) {
         this.itemViewModelActivator = activator;
+        this.viewModels.postValue(createViewData());
     }
 
     public void setFooter(ItemViewModel footer){
         footerItemViewModel = footer;
+        if (rawData == null || rawData.getValue() == null)
+            this.viewModels.postValue(createViewData());
+        else
+            updateViewData(rawData.getValue());
     }
 
-    public void init(LiveData<List<T>> rawData){
-        this.rawData = rawData;
+    public void updateData(LiveData<List<T>> newData){
+        if (rawData != null)
+            rawData.removeObserver(this::updateViewData);
+
+        this.rawData = newData;
         rawData.observeForever(this::updateViewData);
-        var viewModels = createViewData();
-        this.viewModels.postValue(viewModels);
     }
 
     public ArrayList<ItemViewModel> createViewData(){

@@ -42,15 +42,7 @@ public class RecipesListFragment extends Fragment implements IMenu {
         recipesListViewModel = new ViewModelProvider(this).get(RecipesListViewModel.class);
         binding.setViewModel(recipesListViewModel);
 
-        binding.addButton.setOnClickListener(v -> {
-            Recipe recipe = new Recipe();
-            recipesListViewModel.databaseExecutor.insertWithCallback(recipe, itemId -> {
-                Bundle args = new Bundle();
-                recipe.id = (int)itemId;
-                args.putParcelable(RecipeEditFragment.TARGET_RECIPE, recipe);
-                MainActivity.Instance.setFragment(RecipeEditFragment.class, args);
-            });
-        });
+        binding.addButton.setOnClickListener(v -> recipesListViewModel.addIngredient());
 
         registerForContextMenu(binding.recipeList);
 

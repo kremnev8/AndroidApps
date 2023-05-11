@@ -61,9 +61,9 @@ public class RecipeEditViewModel extends SimpleViewModel<Recipe> implements IPho
     @Override
     public void setData(Recipe recipe) {
         super.setData(recipe);
-        stepsHolder.init(databaseExecutor.getRecipeSteps(recipe.id));
+        stepsHolder.updateData(databaseExecutor.getRecipeSteps(recipe.id));
         stepsHolder.getData().observeForever(this::updateOrder);
-        ingredientsHolder.init(databaseExecutor.getRecipeIngredients(recipe.id));
+        ingredientsHolder.updateData(databaseExecutor.getRecipeIngredients(recipe.id));
     }
 
     @Override
@@ -85,7 +85,7 @@ public class RecipeEditViewModel extends SimpleViewModel<Recipe> implements IPho
         }
 
         if (!allInOrder){
-            databaseExecutor.updateAllSteps(newData);
+            databaseExecutor.upsertAllSteps(newData);
         }
     }
 
@@ -147,13 +147,13 @@ public class RecipeEditViewModel extends SimpleViewModel<Recipe> implements IPho
         saveData();
         RecipeStep step = new RecipeStep();
         step.recipe = model.id;
-        databaseExecutor.insertStep(step);
+        databaseExecutor.upsertStep(step);
     }
 
     public void addIngredient() {
         saveData();
         RecipeIngredient ingredient = new RecipeIngredient();
         ingredient.recipe = model.id;
-        databaseExecutor.insertIngredient(ingredient);
+        databaseExecutor.upsertIngredient(ingredient);
     }
 }

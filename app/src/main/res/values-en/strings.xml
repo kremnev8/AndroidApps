@@ -63,5 +63,11 @@
     <string name="yield_input_field_label">Yield Field</string>
     <string name="amount_input_field_label">Amount Field</string>
     <string name="nutrition_input_field_label">Nutrition Field</string>
+    <string name="action_sign_in">Log In</string>
+    <string name="invalid_password">Password must be longer than 5 characters</string>
+    <string name="login_failed">Wrong Password</string>
+    <string name="log_in_dialog_label">Log In Required</string>
+    <string name="login_password_notice">To access this profile you must enter the password!</string>
+    <string name="login_successful_message">Login Successful!</string>
 
 </resources>

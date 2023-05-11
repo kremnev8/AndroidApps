@@ -62,11 +62,11 @@ public class RecipeViewModel extends ViewModel implements ITimerCallback {
 
         databaseExecutor.getOrCreateRecipeCache(recipeId)
                 .subscribeOn(Schedulers.computation())
-                .subscribe((result, throwable) -> mainHandler.post(() -> stepsModelsHolder.init(result)));
+                .subscribe((result, throwable) -> mainHandler.post(() -> stepsModelsHolder.updateData(result)));
 
         databaseExecutor.getOrCreateIngredientCache(recipeId)
                 .subscribeOn(Schedulers.computation())
-                .subscribe((result, throwable) -> mainHandler.post(() -> ingredientsModelsHolder.init(result)));
+                .subscribe((result, throwable) -> mainHandler.post(() -> ingredientsModelsHolder.updateData(result)));
         timers.listen(this);
     }
 

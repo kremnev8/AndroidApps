@@ -29,7 +29,7 @@ public class Recipe implements Parcelable {
     @ColumnInfo(name = "id")
     public int id;
 
-    @ColumnInfo(name = "profileId")
+    @ColumnInfo(name = "profileId", index = true, defaultValue = "1")
     public int profileId;
 
     @ColumnInfo(name = "name")

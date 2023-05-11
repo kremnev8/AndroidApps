@@ -56,7 +56,7 @@ public class ProfileEditViewModel extends SimpleViewModel<Profile> implements IP
 
     public void saveData(){
         confirmPassword();
-        databaseExecutor.insertOrUpdate(model);
+        databaseExecutor.upsert(model);
     }
 
     public void addPhotoClicked(View view){

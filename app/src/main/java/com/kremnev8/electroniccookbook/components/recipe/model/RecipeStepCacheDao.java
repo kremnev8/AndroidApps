@@ -7,6 +7,7 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Transaction;
 import androidx.room.Update;
+import androidx.room.Upsert;
 
 import com.kremnev8.electroniccookbook.components.recipe.model.RecipeStepCache;
 import com.kremnev8.electroniccookbook.components.recipe.model.RecipeViewStepCache;
@@ -29,11 +30,8 @@ public interface RecipeStepCacheDao {
     @Query("SELECT (SELECT COUNT(*) FROM recipeStepCache WHERE recipeId = :recipeId) > 0")
     Single<Boolean> hasRecipeCache(int recipeId);
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    long insert(RecipeStepCache recipe);
-
-    @Update
-    void update(RecipeStepCache recipe);
+    @Upsert
+    long upsert(RecipeStepCache recipe);
 
     @Query("DELETE FROM recipeStepCache WHERE recipeId = :recipeId")
     void clearRecipeCache(int recipeId);

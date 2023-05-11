@@ -7,6 +7,7 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
+import androidx.room.Upsert;
 
 import com.kremnev8.electroniccookbook.components.ingredient.model.Ingredient;
 
@@ -18,7 +19,7 @@ public interface IngredientDao {
     @Query("SELECT * FROM ingredients WHERE profileId = :profileId")
     LiveData<List<Ingredient>> getIngredients(int profileId);
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Upsert
     void insert(Ingredient ingredient);
 
     @Update
