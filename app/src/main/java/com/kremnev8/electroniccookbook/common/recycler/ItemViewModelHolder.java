@@ -1,10 +1,12 @@
 package com.kremnev8.electroniccookbook.common.recycler;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ItemViewModelHolder<T> {
 
@@ -18,8 +20,13 @@ public class ItemViewModelHolder<T> {
         return viewModels;
     }
 
-    public LiveData<List<T>> getData(){
+    public LiveData<List<T>> getLiveData(){
         return rawData;
+    }
+
+    @NonNull
+    public List<T> getList(){
+        return Objects.requireNonNull(rawData.getValue());
     }
 
     public ItemViewModelHolder(IItemViewModelSource<T, ItemViewModel> activator) {

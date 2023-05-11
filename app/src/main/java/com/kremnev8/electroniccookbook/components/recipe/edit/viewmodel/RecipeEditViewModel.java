@@ -63,14 +63,14 @@ public class RecipeEditViewModel extends SimpleViewModel<Recipe> implements IPho
     public void setData(Recipe recipe) {
         super.setData(recipe);
         stepsHolder.updateData(databaseExecutor.getRecipeSteps(recipe.id));
-        stepsHolder.getData().observeForever(this::updateOrder);
+        stepsHolder.getLiveData().observeForever(this::updateOrder);
         ingredientsHolder.updateData(databaseExecutor.getRecipeIngredients(recipe.id));
     }
 
     @Override
     protected void onCleared() {
         super.onCleared();
-        stepsHolder.getData().removeObserver(this::updateOrder);
+        stepsHolder.getLiveData().removeObserver(this::updateOrder);
         stepsHolder.onCleared();
         ingredientsHolder.onCleared();
     }
@@ -119,14 +119,13 @@ public class RecipeEditViewModel extends SimpleViewModel<Recipe> implements IPho
     }
 
     public void saveData() {
-        model.steps = stepsHolder.getData();
-        model.ingredients = ingredientsHolder.getData();
+        model.steps = stepsHolder.getLiveData();
+        model.ingredients = ingredientsHolder.getLiveData();
         databaseExecutor.insertWithData(model);
     }
 
     public void removeStep(int index){
-        List<RecipeStep> list = stepsHolder.getData().getValue();
-        assert list != null;
+        List<RecipeStep> list = stepsHolder.getList();
 
         if (index >= 0 && index < list.size()){
             saveData();
@@ -135,8 +134,7 @@ public class RecipeEditViewModel extends SimpleViewModel<Recipe> implements IPho
     }
 
     public void removeIngredient(int index){
-        List<RecipeIngredient> list = ingredientsHolder.getData().getValue();
-        assert list != null;
+        List<RecipeIngredient> list = ingredientsHolder.getList();
 
         if (index >= 0 && index < list.size()){
             saveData();
@@ -148,6 +146,7 @@ public class RecipeEditViewModel extends SimpleViewModel<Recipe> implements IPho
         saveData();
         RecipeStep step = new RecipeStep();
         step.recipe = model.id;
+        step.stepNumber = stepsHolder.getList().size() + 1;
         databaseExecutor.upsertStep(step);
     }
 
