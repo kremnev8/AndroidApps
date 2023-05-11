@@ -84,7 +84,7 @@ public class RecipeViewFragment
 
     @Override
     public int getMenuName() {
-        return R.string.recipes_label;
+        return R.string.recipe_label;
     }
 
     @Override

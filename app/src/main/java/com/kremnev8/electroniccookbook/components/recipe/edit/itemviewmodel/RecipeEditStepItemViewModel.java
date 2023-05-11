@@ -5,6 +5,7 @@ import android.view.View;
 import androidx.databinding.Bindable;
 
 import com.kremnev8.electroniccookbook.R;
+import com.kremnev8.electroniccookbook.common.ContextMenuKind;
 import com.kremnev8.electroniccookbook.common.recycler.IHasContextMenu;
 import com.kremnev8.electroniccookbook.common.recycler.ItemViewModel;
 import com.kremnev8.electroniccookbook.components.recipe.model.RecipeStep;
@@ -89,5 +90,10 @@ public class RecipeEditStepItemViewModel
     @Override
     public int getMenuResId() {
         return R.menu.delete_menu;
+    }
+
+    @Override
+    public ContextMenuKind getMenuKind() {
+        return ContextMenuKind.RECIPE_STEP;
     }
 }

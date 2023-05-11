@@ -11,7 +11,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.kremnev8.electroniccookbook.common.recycler.IContextMenuPositionProvider;
+import com.kremnev8.electroniccookbook.common.ContextMenuKind;
+import com.kremnev8.electroniccookbook.common.recycler.ItemView;
 import com.kremnev8.electroniccookbook.components.recipe.edit.viewmodel.RecipeEditViewModel;
 import com.kremnev8.electroniccookbook.databinding.FragmentRecipeEditIngredientsBinding;
 
@@ -30,20 +31,17 @@ public class RecipeEditIngredientsFragment extends Fragment {
         binding.setLifecycleOwner(this);
         binding.setViewModel(viewModel);
 
-        registerForContextMenu(binding.stepsList);
+        registerForContextMenu(binding.ingredientsList);
 
         return binding.getRoot();
     }
 
-    @SuppressWarnings("ConstantConditions")
-    public int getPosition(){
-        return ((IContextMenuPositionProvider) binding.stepsList.getAdapter()).getMenuPosition();
-    }
-
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
-        int position = getPosition();
-        viewModel.removeIngredient(position);
+        ItemView.ItemExtraInfo extra = (ItemView.ItemExtraInfo)item.getMenuInfo();
+        if (extra.menuKind != ContextMenuKind.RECIPE_INGREDIENT) return false;
+
+        viewModel.removeIngredient(extra.index);
         return true;
     }
 }

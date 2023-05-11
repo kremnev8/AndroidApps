@@ -3,6 +3,7 @@ package com.kremnev8.electroniccookbook.components.profile.list.itemviewmodel;
 import android.view.View;
 
 import com.kremnev8.electroniccookbook.R;
+import com.kremnev8.electroniccookbook.common.ContextMenuKind;
 import com.kremnev8.electroniccookbook.common.recycler.IHasContextMenu;
 import com.kremnev8.electroniccookbook.common.recycler.ItemViewModel;
 import com.kremnev8.electroniccookbook.components.profile.model.Profile;
@@ -44,5 +45,10 @@ public class ProfileItemViewModel extends ItemViewModel implements IHasContextMe
     @Override
     public int getMenuResId() {
         return R.menu.edit_menu;
+    }
+
+    @Override
+    public ContextMenuKind getMenuKind() {
+        return ContextMenuKind.PROFILE;
     }
 }

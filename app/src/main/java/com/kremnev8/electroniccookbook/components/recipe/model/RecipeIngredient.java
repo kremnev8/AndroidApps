@@ -16,10 +16,6 @@ import java.text.DecimalFormat;
                 @ForeignKey(entity = Recipe.class,
                         parentColumns = "id",
                         childColumns = "recipe",
-                        onDelete = ForeignKey.CASCADE),
-                @ForeignKey(entity = Ingredient.class,
-                        parentColumns = "id",
-                        childColumns = "ingredient",
                         onDelete = ForeignKey.CASCADE)
         })
 public class RecipeIngredient {
@@ -33,9 +29,6 @@ public class RecipeIngredient {
 
     @ColumnInfo(name = "ingredientName")
     public String ingredientName;
-
-    @ColumnInfo(name = "ingredient", index = true)
-    public Integer ingredient;
 
     @ColumnInfo(name = "amount")
     public float amount;

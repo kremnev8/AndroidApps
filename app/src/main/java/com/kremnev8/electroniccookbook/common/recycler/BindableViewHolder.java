@@ -3,6 +3,7 @@ package com.kremnev8.electroniccookbook.common.recycler;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.widget.AdapterView;
 
 import androidx.databinding.ViewDataBinding;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,11 +23,16 @@ class BindableViewHolder<T, VT extends ItemViewModel>
         this.binding = binding;
     }
 
-    public void bind(VT itemViewModel) {
+    public void bind(VT itemViewModel, int position) {
         binding.setVariable(BR.itemViewModel, itemViewModel);
         viewModel = itemViewModel;
-        if (viewModel instanceof IHasContextMenu)
-            binding.getRoot().setOnCreateContextMenuListener(this);
+        if (viewModel instanceof IHasContextMenu) {
+            IHasContextMenu hasContextMenu = (IHasContextMenu) viewModel;
+            ItemView itemView = (ItemView) binding.getRoot();
+
+            itemView.setInfo(position, hasContextMenu.getMenuKind());
+            itemView.setOnCreateContextMenuListener(this);
+        }
     }
 
     @Override

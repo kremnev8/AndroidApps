@@ -16,6 +16,8 @@ import android.widget.TextView;
 
 import com.kremnev8.electroniccookbook.MainActivity;
 import com.kremnev8.electroniccookbook.R;
+import com.kremnev8.electroniccookbook.common.ParcelableUtil;
+import com.kremnev8.electroniccookbook.components.ingredient.model.Ingredient;
 import com.kremnev8.electroniccookbook.components.profile.edit.viewmodel.ProfileEditViewModel;
 import com.kremnev8.electroniccookbook.components.profile.list.fragment.ProfileListFragment;
 import com.kremnev8.electroniccookbook.components.profile.model.Profile;
@@ -34,7 +36,6 @@ public class ProfileEditFragment
     private FragmentProfileEditBinding binding;
     private ProfileEditViewModel viewModel;
 
-    @SuppressWarnings("deprecated")
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -44,7 +45,7 @@ public class ProfileEditFragment
         viewModel = new ViewModelProvider(MainActivity.Instance).get(ProfileEditViewModel.class);
 
         if (getArguments() != null) {
-            Profile profile = getArguments().getParcelable(ProfileData);
+            Profile profile = ParcelableUtil.GetParcelable(getArguments(), ProfileData, Profile.class);
             viewModel.setData(profile);
         }
 

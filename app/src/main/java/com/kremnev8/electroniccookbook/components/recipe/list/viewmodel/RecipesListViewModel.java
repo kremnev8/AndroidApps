@@ -5,13 +5,10 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.SavedStateHandle;
 
 import com.kremnev8.electroniccookbook.MainActivity;
 import com.kremnev8.electroniccookbook.common.recycler.SimpleListViewModel;
-import com.kremnev8.electroniccookbook.components.ingredient.edit.fragment.IngredientEditFragment;
-import com.kremnev8.electroniccookbook.components.ingredient.model.Ingredient;
 import com.kremnev8.electroniccookbook.components.profile.model.Profile;
 import com.kremnev8.electroniccookbook.components.recipe.edit.fragment.RecipeEditFragment;
 import com.kremnev8.electroniccookbook.components.recipe.list.itemviewmodel.RecipeItemViewModel;
@@ -19,8 +16,6 @@ import com.kremnev8.electroniccookbook.components.recipe.model.Recipe;
 import com.kremnev8.electroniccookbook.database.DatabaseExecutor;
 import com.kremnev8.electroniccookbook.interfaces.IFragmentController;
 import com.kremnev8.electroniccookbook.interfaces.IProfileProvider;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -53,7 +48,7 @@ public class RecipesListViewModel extends SimpleListViewModel<Recipe> {
         });
     }
 
-    public void addIngredient(){
+    public void addRecipe(){
         if (profileId == 0) return;
 
         Recipe recipe = new Recipe();

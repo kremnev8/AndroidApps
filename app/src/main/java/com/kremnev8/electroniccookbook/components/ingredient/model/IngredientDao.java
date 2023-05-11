@@ -19,6 +19,9 @@ public interface IngredientDao {
     @Query("SELECT * FROM ingredients WHERE profileId = :profileId")
     LiveData<List<Ingredient>> getIngredients(int profileId);
 
+    @Query("SELECT * FROM ingredients WHERE name = :name")
+    Ingredient findIngredient(String name);
+
     @Upsert
     void insert(Ingredient ingredient);
 

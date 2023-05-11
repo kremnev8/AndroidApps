@@ -11,9 +11,11 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.kremnev8.electroniccookbook.MainActivity;
 import com.kremnev8.electroniccookbook.R;
+import com.kremnev8.electroniccookbook.common.ParcelableUtil;
 import com.kremnev8.electroniccookbook.components.ingredient.edit.viewmodel.IngredientEditViewModel;
 import com.kremnev8.electroniccookbook.components.ingredient.list.fragment.IngredientListFragment;
 import com.kremnev8.electroniccookbook.components.ingredient.model.Ingredient;
+import com.kremnev8.electroniccookbook.components.recipe.model.Recipe;
 import com.kremnev8.electroniccookbook.databinding.FragmentIngredientEditBinding;
 import com.kremnev8.electroniccookbook.interfaces.IMenu;
 
@@ -32,7 +34,6 @@ public class IngredientEditFragment extends Fragment implements IMenu {
         // Required empty public constructor
     }
 
-    @SuppressWarnings("deprecated")
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -42,7 +43,7 @@ public class IngredientEditFragment extends Fragment implements IMenu {
         viewModel = new ViewModelProvider(MainActivity.Instance).get(IngredientEditViewModel.class);
 
         if (getArguments() != null) {
-            Ingredient ingredient = getArguments().getParcelable(InspectIngredient);
+            Ingredient ingredient = ParcelableUtil.GetParcelable(getArguments(), InspectIngredient, Ingredient.class);
             viewModel.setData(ingredient);
         }
 

@@ -1,6 +1,7 @@
 package com.kremnev8.electroniccookbook.components.recipe.edit.viewmodel;
 
 import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 
 import androidx.databinding.Bindable;
@@ -32,7 +33,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 @HiltViewModel
 public class RecipeEditViewModel extends SimpleViewModel<Recipe> implements IPhotoRequestCallback {
 
-    private final Handler handler = new Handler();
+    private final Handler handler = new Handler(Looper.getMainLooper());
     private final IPhotoProvider photoProvider;
 
     protected ItemViewModelHolder<RecipeStep> stepsHolder;

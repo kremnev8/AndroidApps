@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="itemViewModel"
             type="com.kremnev8.electroniccookbook.components.recipe.view.itemviewmodel.RecipeViewStepItemViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <com.kremnev8.electroniccookbook.common.recycler.ItemView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
@@ -27,13 +28,13 @@
             android:gravity="start|top"
             android:hint="@string/name_label"
             android:minHeight="48dp"
-            android:text="@={itemViewModel.step.step.text}"
             android:onClick="@{itemViewModel::toggleComplete}"
-            app:strikethrough="@{itemViewModel.complete}"
+            android:text="@={itemViewModel.step.step.text}"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/textView2"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:strikethrough="@{itemViewModel.complete}" />
 
         <FrameLayout
             android:id="@+id/mediaFrame"
@@ -89,6 +90,5 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.kremnev8.electroniccookbook.common.recycler.ItemView>
 </layout>

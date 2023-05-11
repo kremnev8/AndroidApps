@@ -15,6 +15,7 @@ import com.google.android.material.tabs.TabLayoutMediator;
 import com.kremnev8.electroniccookbook.CookBookApplication;
 import com.kremnev8.electroniccookbook.MainActivity;
 import com.kremnev8.electroniccookbook.R;
+import com.kremnev8.electroniccookbook.common.ParcelableUtil;
 import com.kremnev8.electroniccookbook.components.recipe.edit.RecipeEditStateAdapter;
 import com.kremnev8.electroniccookbook.components.recipe.edit.viewmodel.RecipeEditViewModel;
 import com.kremnev8.electroniccookbook.components.recipe.list.fragment.RecipesListFragment;
@@ -48,7 +49,7 @@ public class RecipeEditFragment
         viewModel = new ViewModelProvider(this).get(RecipeEditViewModel.class);
 
         if (getArguments() != null) {
-            Recipe recipe = getArguments().getParcelable(TARGET_RECIPE);
+            Recipe recipe = ParcelableUtil.GetParcelable(getArguments(), TARGET_RECIPE, Recipe.class);
             viewModel.setData(recipe);
         }
 

@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 
 import com.kremnev8.electroniccookbook.MainActivity;
 import com.kremnev8.electroniccookbook.R;
-import com.kremnev8.electroniccookbook.common.recycler.IContextMenuPositionProvider;
+import com.kremnev8.electroniccookbook.common.recycler.ItemView;
 import com.kremnev8.electroniccookbook.components.profile.list.viewmodel.ProfileListViewModel;
 import com.kremnev8.electroniccookbook.databinding.FragmentProfileListBinding;
 import com.kremnev8.electroniccookbook.interfaces.IMenu;
@@ -42,14 +42,11 @@ public class ProfileListFragment extends Fragment implements IMenu {
         return binding.getRoot();
     }
 
-    @SuppressWarnings("ConstantConditions")
-    public int getPosition(){
-        return ((IContextMenuPositionProvider) binding.profileList.getAdapter()).getMenuPosition();
-    }
-
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
-        int position = getPosition();
+        ItemView.ItemExtraInfo extra = (ItemView.ItemExtraInfo)item.getMenuInfo();
+        int position = extra.index;
+
         if (item.getItemId() == R.id.ctx_edit){
             ingredientListViewModel.editItem(position);
         }else if (item.getItemId() == R.id.ctx_delete){

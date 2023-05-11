@@ -8,7 +8,7 @@
             type="com.kremnev8.electroniccookbook.components.profile.list.itemviewmodel.ProfileItemViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <com.kremnev8.electroniccookbook.common.recycler.ItemView
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:background="?attr/selectableItemBackground"
@@ -62,5 +62,5 @@
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_protected" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.kremnev8.electroniccookbook.common.recycler.ItemView>
 </layout>

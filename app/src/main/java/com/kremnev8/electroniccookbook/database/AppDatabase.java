@@ -42,7 +42,7 @@ import java.util.concurrent.Executors;
         Profile.class,
         RecipeStepCache.class,
         RecipeIngredientCache.class},
-        version = 10,
+        version = 11,
         autoMigrations = {
                 @AutoMigration(from = 1, to = 2, spec = AppDatabase.UriRenameMigration.class),
                 @AutoMigration(from = 2, to = 3),
@@ -52,11 +52,17 @@ import java.util.concurrent.Executors;
                 @AutoMigration(from = 7, to = 8, spec = AppDatabase.AddIngredientCacheMigration.class),
                 @AutoMigration(from = 8, to = 9),
                 @AutoMigration(from = 9, to = 10, spec = AppDatabase.ProfileSegregationMigration.class),
+                @AutoMigration(from = 10, to = 11, spec = AppDatabase.DeleteIngredientLinkMigration.class),
         }
 )
 public abstract class AppDatabase extends RoomDatabase implements DaoAccess {
 
     private static final String DATABASE_NAME = "app_database.db";
+
+    @DeleteColumn(tableName = "recipeIngredient", columnName = "ingredient")
+    public static class DeleteIngredientLinkMigration implements AutoMigrationSpec{
+
+    }
 
     @DeleteTable(tableName = "timerCache")
     public static class ProfileSegregationMigration implements AutoMigrationSpec {

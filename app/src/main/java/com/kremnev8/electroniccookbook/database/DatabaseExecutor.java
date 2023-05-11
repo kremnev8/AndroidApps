@@ -2,6 +2,7 @@ package com.kremnev8.electroniccookbook.database;
 
 import androidx.lifecycle.LiveData;
 
+import com.google.common.base.Strings;
 import com.kremnev8.electroniccookbook.components.ingredient.model.IngredientDao;
 import com.kremnev8.electroniccookbook.components.ingredient.model.Ingredient;
 import com.kremnev8.electroniccookbook.components.profile.model.ProfileDao;
@@ -46,6 +47,11 @@ public class DatabaseExecutor implements
     @Override
     public LiveData<List<Ingredient>> getIngredients(int profileId) {
         return daoAccess.ingredientDao().getIngredients(profileId);
+    }
+
+    @Override
+    public Ingredient findIngredient(String name) {
+        return daoAccess.ingredientDao().findIngredient(name);
     }
 
     @Override
@@ -175,10 +181,23 @@ public class DatabaseExecutor implements
             daoAccess.recipeDao().upsert(recipe);
             if (recipe.steps != null)
                 daoAccess.recipeStepDao().upsertAllSteps(recipe.steps.getValue());
-            if (recipe.ingredients != null)
+            if (recipe.ingredients != null && recipe.ingredients.getValue() != null) {
                 daoAccess.recipeIngredientDao().upsertAllIngredients(recipe.ingredients.getValue());
+                for (var recipeIngredient: recipe.ingredients.getValue()) {
+                    if (Strings.isNullOrEmpty(recipeIngredient.ingredientName)) continue;
+
+                    Ingredient ingredient = daoAccess.ingredientDao().findIngredient(recipeIngredient.ingredientName);
+                    if (ingredient == null){
+                        ingredient = new Ingredient();
+                        ingredient.profileId = recipe.profileId;
+                        ingredient.name = recipeIngredient.ingredientName;
+                        daoAccess.ingredientDao().insert(ingredient);
+                    }
+                }
+            }
 
             daoAccess.recipeStepCacheDao().clearRecipeCache(recipe.id);
+            daoAccess.recipeIngredientCacheDao().clearIngredientCache(recipe.id);
         });
     }
 

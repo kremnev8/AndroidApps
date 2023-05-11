@@ -47,6 +47,8 @@
                     android:onClick="@{viewModel::takePhotoButtonClicked}"
                     android:text="@string/add_photo_label"
                     android:textColor="@color/black"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toEndOf="@+id/imageView2"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -61,12 +63,13 @@
                 <EditText
                     android:id="@+id/nameEdit"
                     android:layout_width="0dp"
-                    android:layout_height="48dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
                     android:autofillHints=""
                     android:hint="@string/name_input_field_label"
                     android:inputType="text"
+                    android:minHeight="48dp"
                     android:text="@={viewModel.model.name}"
                     android:textColorHint="#78909C"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -106,7 +109,8 @@
                 <EditText
                     android:id="@+id/descriptionEdit"
                     android:layout_width="0dp"
-                    android:layout_height="48dp"
+                    android:layout_height="wrap_content"
+                    android:minHeight="48dp"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
                     android:autofillHints=""
@@ -204,7 +208,8 @@
                 <EditText
                     android:id="@+id/nutritionEdit"
                     android:layout_width="0dp"
-                    android:layout_height="48dp"
+                    android:layout_height="wrap_content"
+                    android:minHeight="48dp"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
                     android:autofillHints=""
@@ -219,6 +224,7 @@
                     android:text="@={viewModel.model.nutritionInfo}"
                     android:textColorHint="#78909C"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/nutritionLabel" />
             </androidx.constraintlayout.widget.ConstraintLayout>

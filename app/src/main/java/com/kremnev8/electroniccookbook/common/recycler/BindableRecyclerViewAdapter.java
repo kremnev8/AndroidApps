@@ -15,12 +15,10 @@ import java.util.HashMap;
 import java.util.List;
 
 public class BindableRecyclerViewAdapter<T, VT extends ItemViewModel>
-        extends RecyclerView.Adapter<BindableViewHolder<T, VT>>
-        implements IContextMenuPositionProvider {
+        extends RecyclerView.Adapter<BindableViewHolder<T, VT>> {
 
     private List<VT> itemViewModels = new ArrayList<>();
     private final HashMap<Integer, Integer> viewTypeToLayoutId = new HashMap<>();
-    private int lastMenuPosition;
 
     private final int firstColor;
     private final int secondColor;
@@ -31,10 +29,6 @@ public class BindableRecyclerViewAdapter<T, VT extends ItemViewModel>
         MainActivity activity = MainActivity.Instance;
         firstColor = activity.getResources().getColor(R.color.item_first, activity.getTheme());
         secondColor = activity.getResources().getColor(R.color.item_second, activity.getTheme());
-    }
-
-    public int getMenuPosition(){
-        return lastMenuPosition;
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -53,11 +47,7 @@ public class BindableRecyclerViewAdapter<T, VT extends ItemViewModel>
 
     @Override
     public void onBindViewHolder(@NonNull BindableViewHolder<T, VT> holder, int position) {
-        holder.bind(itemViewModels.get(position));
-        holder.itemView.setOnLongClickListener(v -> {
-            lastMenuPosition = holder.getAdapterPosition();
-            return false;
-        });
+        holder.bind(itemViewModels.get(position), position);
         SetItemBackgroundColor(holder, position);
         SetLastItemPadding(holder, position);
     }

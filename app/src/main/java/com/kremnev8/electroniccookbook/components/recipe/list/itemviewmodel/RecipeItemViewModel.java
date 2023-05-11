@@ -5,6 +5,7 @@ import android.view.View;
 
 import com.kremnev8.electroniccookbook.MainActivity;
 import com.kremnev8.electroniccookbook.R;
+import com.kremnev8.electroniccookbook.common.ContextMenuKind;
 import com.kremnev8.electroniccookbook.common.recycler.IHasContextMenu;
 import com.kremnev8.electroniccookbook.common.recycler.ItemViewModel;
 import com.kremnev8.electroniccookbook.components.recipe.model.Recipe;
@@ -46,5 +47,10 @@ public class RecipeItemViewModel extends ItemViewModel implements IHasContextMen
     @Override
     public int getMenuResId() {
         return R.menu.edit_menu;
+    }
+
+    @Override
+    public ContextMenuKind getMenuKind() {
+        return ContextMenuKind.RECIPE;
     }
 }

@@ -3,12 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="itemViewModel"
             type="com.kremnev8.electroniccookbook.components.recipe.view.itemviewmodel.RecipeViewIngredientItemViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <com.kremnev8.electroniccookbook.common.recycler.ItemView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
@@ -28,11 +29,11 @@
             android:hint="@string/name_label"
             android:minHeight="48dp"
             android:text="@{itemViewModel.ingredient.ingredient.ingredientName}"
-            app:strikethrough="@{itemViewModel.used}"
             android:textSize="20sp"
             app:layout_constraintEnd_toStartOf="@+id/amount"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:strikethrough="@{itemViewModel.used}" />
 
         <TextView
             android:id="@+id/amount"
@@ -50,5 +51,5 @@
             app:layout_constraintTop_toTopOf="parent" />
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.kremnev8.electroniccookbook.common.recycler.ItemView>
 </layout>

@@ -8,31 +8,32 @@
             name="itemViewModel"
             type="com.kremnev8.electroniccookbook.common.FooterItemViewModel" />
     </data>
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:layout_width="match_parent"
-    android:layout_height="70dp"
-    android:onClick="@{itemViewModel::footerClicked}">
 
-    <ImageView
-        android:id="@+id/addIcon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_plus"
-        android:contentDescription="@string/button_plus_label" />
+    <com.kremnev8.electroniccookbook.common.recycler.ItemView
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:onClick="@{itemViewModel::footerClicked}">
 
-    <TextView
-        android:id="@+id/addText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:gravity="center"
-        app:textId="@{itemViewModel.footerText}"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addIcon" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <ImageView
+            android:id="@+id/addIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:contentDescription="@string/button_plus_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_plus" />
+
+        <TextView
+            android:id="@+id/addText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/addIcon"
+            app:textId="@{itemViewModel.footerText}" />
+    </com.kremnev8.electroniccookbook.common.recycler.ItemView>
 </layout>

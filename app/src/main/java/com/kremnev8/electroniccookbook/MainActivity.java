@@ -183,8 +183,15 @@ public class MainActivity
         binding.topBar.titleText.setText(menu.getMenuName());
         int text = menu.getActionText();
         int icon = menu.getActionImage();
+
         binding.topBar.actionButton.setVisibility(text != 0 ? View.VISIBLE : View.INVISIBLE);
+        if (text != 0)
+            binding.topBar.actionButton.setText(text);
+
         binding.topBar.imageMenuButton.setVisibility(icon != 0 ? View.VISIBLE : View.INVISIBLE);
+        if (icon != 0)
+            binding.topBar.imageMenuButton.setImageResource(icon);
+
         binding.topBar.actionButton.setOnClickListener(v -> menu.onAction());
         binding.topBar.imageMenuButton.setOnClickListener(v -> menu.onAction());
     }

@@ -1,145 +1,147 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="itemViewModel"
             type="com.kremnev8.electroniccookbook.components.recipe.edit.itemviewmodel.RecipeEditStepItemViewModel" />
     </data>
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/white"
-    android:paddingBottom="5dp">
 
-
-    <EditText
-        android:id="@+id/stepName"
-        android:layout_width="0dp"
+    <com.kremnev8.electroniccookbook.common.recycler.ItemView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="20dp"
-        android:autofillHints=""
-        android:gravity="start|top"
-        android:hint="@string/name_label"
-        android:imeOptions="actionDone"
-        android:inputType="textMultiLine"
-        android:lines="4"
-        android:maxLines="10"
-        android:minHeight="48dp"
-        android:minLines="1"
-        android:scrollbars="vertical"
-        android:text="@={itemViewModel.step.text}"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <FrameLayout
-        android:id="@+id/mediaFrame"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/stepName">
+        android:background="@color/white"
+        android:paddingBottom="5dp">
 
 
-        <ImageView
-            android:id="@+id/imageMedia"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:contentDescription="@string/image_label"
-            app:srcCompat="@drawable/empty_placeholder"
-            app:switchRoundedImage="@{itemViewModel.step.mediaUri}"
-            tools:ignore="ImageContrastCheck" />
+        <EditText
+            android:id="@+id/stepName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            android:autofillHints=""
+            android:gravity="start|top"
+            android:hint="@string/name_label"
+            android:imeOptions="actionDone"
+            android:inputType="textMultiLine"
+            android:lines="4"
+            android:maxLines="10"
+            android:minHeight="48dp"
+            android:minLines="1"
+            android:scrollbars="vertical"
+            android:text="@={itemViewModel.step.text}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <VideoView
-            android:id="@+id/videoMedia"
+        <FrameLayout
+            android:id="@+id/mediaFrame"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/stepName">
+
+
+            <ImageView
+                android:id="@+id/imageMedia"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/image_label"
+                app:srcCompat="@drawable/empty_placeholder"
+                app:switchRoundedImage="@{itemViewModel.step.mediaUri}"
+                tools:ignore="ImageContrastCheck" />
+
+            <VideoView
+                android:id="@+id/videoMedia"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:switchRoundedVideo="@{itemViewModel.step.mediaUri}" />
+        </FrameLayout>
+
+        <EditText
+            android:id="@+id/minutesInput"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:autofillHints=""
+            android:ems="5"
+            android:gravity="center"
+            android:hint="@string/timer_input_hint"
+            android:imeOptions="actionDone"
+            android:inputType="number"
+            android:text="@={itemViewModel.hours}"
+            android:textColorHint="#757575"
+            app:layout_constraintStart_toEndOf="@+id/textView"
+            app:layout_constraintTop_toBottomOf="@+id/stepName" />
+
+        <EditText
+            android:id="@+id/secondsInput"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="7dp"
+            android:layout_marginTop="5dp"
+            android:autofillHints=""
+            android:ems="5"
+            android:gravity="center"
+            android:hint="@string/timer_input_hint"
+            android:imeOptions="actionDone"
+            android:inputType="number"
+            android:text="@={itemViewModel.minutes}"
+            android:textColorHint="#757575"
+            app:layout_constraintStart_toEndOf="@+id/textView3"
+            app:layout_constraintTop_toBottomOf="@+id/stepName" />
+
+        <TextView
+            android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            app:switchRoundedVideo="@{itemViewModel.step.mediaUri}" />
-    </FrameLayout>
+            android:layout_marginStart="10dp"
+            android:text="@{`#` + itemViewModel.step.stepNumber}"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@+id/stepName"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/stepName" />
 
-    <EditText
-        android:id="@+id/minutesInput"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="5dp"
-        android:autofillHints=""
-        android:ems="5"
-        android:gravity="center"
-        android:hint="@string/timer_input_hint"
-        android:imeOptions="actionDone"
-        android:inputType="number"
-        android:text="@={itemViewModel.hours}"
-        android:textColorHint="#757575"
-        app:layout_constraintStart_toEndOf="@+id/textView"
-        app:layout_constraintTop_toBottomOf="@+id/stepName" />
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/timer_input_label_text"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="@+id/minutesInput"
+            app:layout_constraintStart_toStartOf="@+id/stepName"
+            app:layout_constraintTop_toTopOf="@+id/minutesInput" />
 
-    <EditText
-        android:id="@+id/secondsInput"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="7dp"
-        android:layout_marginTop="5dp"
-        android:autofillHints=""
-        android:ems="5"
-        android:gravity="center"
-        android:hint="@string/timer_input_hint"
-        android:imeOptions="actionDone"
-        android:inputType="number"
-        android:text="@={itemViewModel.minutes}"
-        android:textColorHint="#757575"
-        app:layout_constraintStart_toEndOf="@+id/textView3"
-        app:layout_constraintTop_toBottomOf="@+id/stepName" />
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="7dp"
+            android:text="@string/timer_input_separator"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="@+id/minutesInput"
+            app:layout_constraintStart_toEndOf="@+id/minutesInput"
+            app:layout_constraintTop_toTopOf="@+id/minutesInput" />
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:text="@{`#` + itemViewModel.step.stepNumber}"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/stepName"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/stepName" />
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/timer_input_label_text"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="@+id/minutesInput"
-        app:layout_constraintStart_toStartOf="@+id/stepName"
-        app:layout_constraintTop_toTopOf="@+id/minutesInput" />
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="7dp"
-        android:text="@string/timer_input_separator"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="@+id/minutesInput"
-        app:layout_constraintStart_toEndOf="@+id/minutesInput"
-        app:layout_constraintTop_toTopOf="@+id/minutesInput" />
-
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:text="@string/add_photo_label"
-        android:onClick="@{itemViewModel::takePhotoButtonClicked}"
-        app:layout_constraintStart_toStartOf="@+id/stepName"
-        app:layout_constraintTop_toBottomOf="@+id/minutesInput" />
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:onClick="@{itemViewModel::takePhotoButtonClicked}"
+            android:text="@string/add_photo_label"
+            app:layout_constraintStart_toStartOf="@+id/stepName"
+            app:layout_constraintTop_toBottomOf="@+id/minutesInput" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
-    </layout>
+    </com.kremnev8.electroniccookbook.common.recycler.ItemView>
+</layout>
