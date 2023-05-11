@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.VideoView;
 
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -17,6 +18,8 @@ import com.bumptech.glide.request.RequestOptions;
 import com.kremnev8.electroniccookbook.MainActivity;
 import com.kremnev8.electroniccookbook.R;
 import com.kremnev8.electroniccookbook.common.recycler.BindableRecyclerViewAdapter;
+import com.kremnev8.electroniccookbook.common.recycler.IReorderCallback;
+import com.kremnev8.electroniccookbook.common.recycler.ItemMoveCallback;
 import com.kremnev8.electroniccookbook.common.recycler.ItemViewModel;
 
 import java.net.URLConnection;
@@ -31,20 +34,36 @@ public class BindingAdapters {
     }
 
     @androidx.databinding.BindingAdapter("itemViewModels")
-    public static <T, VT extends ItemViewModel> void bindItemViewModels(RecyclerView recyclerView, List<VT> itemViewModels) {
-        BindableRecyclerViewAdapter<T, VT> adapter = getOrCreateAdapter(recyclerView);
+    public static <VT extends ItemViewModel> void bindItemViewModels(RecyclerView recyclerView, List<VT> itemViewModels) {
+        BindableRecyclerViewAdapter<VT> adapter = getOrCreateAdapter(recyclerView);
         adapter.updateItems(itemViewModels);
     }
 
-    @SuppressWarnings("unchecked")
-    public static <T, VT extends ItemViewModel> BindableRecyclerViewAdapter<T, VT> getOrCreateAdapter(RecyclerView recyclerView) {
+    public static <VT extends ItemViewModel> BindableRecyclerViewAdapter<VT> getOrCreateAdapter(RecyclerView recyclerView) {
         if (recyclerView.getAdapter() != null && recyclerView.getAdapter() instanceof BindableRecyclerViewAdapter) {
-            return (BindableRecyclerViewAdapter<T, VT>) recyclerView.getAdapter();
+            return (BindableRecyclerViewAdapter<VT>) recyclerView.getAdapter();
         } else {
-            BindableRecyclerViewAdapter<T, VT> bindableRecyclerAdapter = new BindableRecyclerViewAdapter<>();
+            BindableRecyclerViewAdapter<VT> bindableRecyclerAdapter = new BindableRecyclerViewAdapter<>();
             recyclerView.setAdapter(bindableRecyclerAdapter);
             return bindableRecyclerAdapter;
         }
+    }
+
+    /**
+     * Bind ItemTouchHelper.SimpleCallback with RecyclerView
+     *
+     * @param recyclerView      RecyclerView to bind to DragItemTouchHelperCallback
+     * @param onItemDrag        OnItemDragListener for dragged
+     */
+    @androidx.databinding.BindingAdapter("onItemDrag")
+    public static <VT extends ItemViewModel> void setItemDragToRecyclerView(RecyclerView recyclerView, IReorderCallback onItemDrag) {
+        BindableRecyclerViewAdapter<VT> adapter = getOrCreateAdapter(recyclerView);
+
+        ItemTouchHelper.Callback dragCallback = new ItemMoveCallback<>(adapter, onItemDrag);
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(dragCallback);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
+        adapter.setItemTouchHelper(itemTouchHelper);
     }
 
     @androidx.databinding.BindingAdapter("switchRoundedImage")

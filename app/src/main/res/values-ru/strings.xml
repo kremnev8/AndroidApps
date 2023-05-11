@@ -60,4 +60,5 @@
     <string name="log_in_dialog_label">Требуется вход</string>
     <string name="login_password_notice">Для доступа к профилю требуется ввести пароль!</string>
     <string name="login_successful_message">Вход успешен</string>
+    <string name="drag_handle_desc">Кнопка перетаскивания</string>
 </resources>

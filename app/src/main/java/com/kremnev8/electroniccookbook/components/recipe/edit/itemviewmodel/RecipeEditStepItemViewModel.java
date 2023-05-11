@@ -4,8 +4,10 @@ import android.view.View;
 
 import androidx.databinding.Bindable;
 
+import com.google.common.base.Strings;
 import com.kremnev8.electroniccookbook.R;
 import com.kremnev8.electroniccookbook.common.ContextMenuKind;
+import com.kremnev8.electroniccookbook.common.recycler.ICanBeReordered;
 import com.kremnev8.electroniccookbook.common.recycler.IHasContextMenu;
 import com.kremnev8.electroniccookbook.common.recycler.ItemViewModel;
 import com.kremnev8.electroniccookbook.components.recipe.model.RecipeStep;
@@ -14,7 +16,7 @@ import com.kremnev8.electroniccookbook.interfaces.IPhotoRequestCallback;
 
 public class RecipeEditStepItemViewModel
         extends ItemViewModel
-        implements IPhotoRequestCallback, IHasContextMenu {
+        implements IPhotoRequestCallback, IHasContextMenu, ICanBeReordered {
 
     public RecipeStep step;
     private int hours;
@@ -25,6 +27,11 @@ public class RecipeEditStepItemViewModel
     public RecipeEditStepItemViewModel(RecipeStep item, IPhotoProvider photoProvider){
         setItem(item);
         this.photoProvider = photoProvider;
+    }
+
+    @Bindable
+    public boolean getHasMedia(){
+        return Strings.isNullOrEmpty(step.mediaUri);
     }
 
     @Bindable
@@ -95,5 +102,10 @@ public class RecipeEditStepItemViewModel
     @Override
     public ContextMenuKind getMenuKind() {
         return ContextMenuKind.RECIPE_STEP;
+    }
+
+    @Override
+    public int getDragHandleId() {
+        return R.id.dragHandle;
     }
 }

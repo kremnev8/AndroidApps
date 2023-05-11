@@ -69,5 +69,6 @@
     <string name="log_in_dialog_label">Log In Required</string>
     <string name="login_password_notice">To access this profile you must enter the password!</string>
     <string name="login_successful_message">Login Successful!</string>
+    <string name="drag_handle_desc">Drag Handle</string>
 
 </resources>

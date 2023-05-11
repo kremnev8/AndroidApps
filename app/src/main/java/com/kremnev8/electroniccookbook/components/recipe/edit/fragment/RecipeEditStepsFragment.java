@@ -32,7 +32,6 @@ public class RecipeEditStepsFragment extends Fragment {
         binding.setViewModel(viewModel);
 
         registerForContextMenu(binding.stepsList);
-
         return binding.getRoot();
     }
 

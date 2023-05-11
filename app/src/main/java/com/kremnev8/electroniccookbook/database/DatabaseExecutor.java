@@ -3,20 +3,20 @@ package com.kremnev8.electroniccookbook.database;
 import androidx.lifecycle.LiveData;
 
 import com.google.common.base.Strings;
-import com.kremnev8.electroniccookbook.components.ingredient.model.IngredientDao;
 import com.kremnev8.electroniccookbook.components.ingredient.model.Ingredient;
-import com.kremnev8.electroniccookbook.components.profile.model.ProfileDao;
+import com.kremnev8.electroniccookbook.components.ingredient.model.IngredientDao;
 import com.kremnev8.electroniccookbook.components.profile.model.Profile;
-import com.kremnev8.electroniccookbook.components.recipe.model.RecipeExtendedDao;
-import com.kremnev8.electroniccookbook.components.recipe.model.RecipeIngredientCacheDao;
-import com.kremnev8.electroniccookbook.components.recipe.model.RecipeIngredientDao;
-import com.kremnev8.electroniccookbook.components.recipe.model.RecipeStepCacheDao;
-import com.kremnev8.electroniccookbook.components.recipe.model.RecipeStepDao;
+import com.kremnev8.electroniccookbook.components.profile.model.ProfileDao;
 import com.kremnev8.electroniccookbook.components.recipe.model.Recipe;
+import com.kremnev8.electroniccookbook.components.recipe.model.RecipeExtendedDao;
 import com.kremnev8.electroniccookbook.components.recipe.model.RecipeIngredient;
 import com.kremnev8.electroniccookbook.components.recipe.model.RecipeIngredientCache;
+import com.kremnev8.electroniccookbook.components.recipe.model.RecipeIngredientCacheDao;
+import com.kremnev8.electroniccookbook.components.recipe.model.RecipeIngredientDao;
 import com.kremnev8.electroniccookbook.components.recipe.model.RecipeStep;
 import com.kremnev8.electroniccookbook.components.recipe.model.RecipeStepCache;
+import com.kremnev8.electroniccookbook.components.recipe.model.RecipeStepCacheDao;
+import com.kremnev8.electroniccookbook.components.recipe.model.RecipeStepDao;
 import com.kremnev8.electroniccookbook.components.recipe.model.RecipeViewIngredientCache;
 import com.kremnev8.electroniccookbook.components.recipe.model.RecipeViewStepCache;
 
@@ -183,11 +183,11 @@ public class DatabaseExecutor implements
                 daoAccess.recipeStepDao().upsertAllSteps(recipe.steps.getValue());
             if (recipe.ingredients != null && recipe.ingredients.getValue() != null) {
                 daoAccess.recipeIngredientDao().upsertAllIngredients(recipe.ingredients.getValue());
-                for (var recipeIngredient: recipe.ingredients.getValue()) {
+                for (var recipeIngredient : recipe.ingredients.getValue()) {
                     if (Strings.isNullOrEmpty(recipeIngredient.ingredientName)) continue;
 
                     Ingredient ingredient = daoAccess.ingredientDao().findIngredient(recipeIngredient.ingredientName);
-                    if (ingredient == null){
+                    if (ingredient == null) {
                         ingredient = new Ingredient();
                         ingredient.profileId = recipe.profileId;
                         ingredient.name = recipeIngredient.ingredientName;
@@ -248,8 +248,20 @@ public class DatabaseExecutor implements
     }
 
     @Override
+    public void upsertTwoSteps(RecipeStep step1, RecipeStep step2) {
+        executor.execute(() -> {
+            daoAccess.recipeStepDao().upsertTwoSteps(step1, step2);
+            daoAccess.recipeStepCacheDao().clearRecipeCache(step1.recipe);
+        });
+    }
+
+    @Override
     public void upsertAllSteps(List<RecipeStep> steps) {
-        executor.execute(() -> daoAccess.recipeStepDao().upsertAllSteps(steps));
+        executor.execute(() -> {
+            daoAccess.recipeStepDao().upsertAllSteps(steps);
+            if (steps.size() > 0)
+                daoAccess.recipeStepCacheDao().clearRecipeCache(steps.get(0).recipe);
+        });
     }
 
     @Override

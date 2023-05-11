@@ -23,6 +23,9 @@ public interface RecipeStepDao {
     void upsertStep(RecipeStep step);
 
     @Upsert
+    void upsertTwoSteps(RecipeStep step1, RecipeStep step2);
+
+    @Upsert
     void upsertAllSteps(List<RecipeStep> steps);
 
     @Delete

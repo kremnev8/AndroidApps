@@ -12,6 +12,7 @@ import com.kremnev8.electroniccookbook.BR;
 import com.kremnev8.electroniccookbook.R;
 import com.kremnev8.electroniccookbook.common.FooterItemViewModel;
 import com.kremnev8.electroniccookbook.common.SimpleViewModel;
+import com.kremnev8.electroniccookbook.common.recycler.IReorderCallback;
 import com.kremnev8.electroniccookbook.common.recycler.ItemViewModel;
 import com.kremnev8.electroniccookbook.common.recycler.ItemViewModelHolder;
 import com.kremnev8.electroniccookbook.components.recipe.edit.itemviewmodel.RecipeEditIngredientItemViewModel;
@@ -140,6 +141,23 @@ public class RecipeEditViewModel extends SimpleViewModel<Recipe> implements IPho
             saveData();
             databaseExecutor.deleteIngredient(list.get(index));
         }
+    }
+
+    public void onStepDrag(int fromPosition, int toPosition) {
+        List<RecipeStep> list = stepsHolder.getList();
+
+        toPosition = Math.min(toPosition, list.size() - 1);
+        if (fromPosition == toPosition) return;
+
+        saveData();
+        var item1 = list.get(fromPosition);
+        var item2 = list.get(toPosition);
+
+        int oldNumber = item1.stepNumber;
+        item1.stepNumber = item2.stepNumber;
+        item2.stepNumber = oldNumber;
+
+        databaseExecutor.upsertTwoSteps(item1, item2);
     }
 
     public void addStep() {
