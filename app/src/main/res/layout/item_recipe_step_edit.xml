@@ -39,35 +39,20 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <FrameLayout
-            android:id="@+id/mediaFrame"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <ImageView
+            android:id="@+id/imageMedia"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
             android:layout_marginTop="10dp"
-            android:minWidth="48dp"
-            android:minHeight="48dp"
+            android:layout_marginEnd="20dp"
+            android:contentDescription="@string/image_label"
+            app:isVisibleOrGone="@{itemViewModel.hasMedia}"
+            app:layout_constraintDimensionRatio="16:9"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/button"
-            app:layout_constraintTop_toBottomOf="@+id/secondsInput">
-
-
-            <ImageView
-                android:id="@+id/imageMedia"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:contentDescription="@string/image_label"
-                app:isVisibleOrGone="@{itemViewModel.hasMedia}"
-                app:srcCompat="@drawable/empty_placeholder"
-                app:switchRoundedImage="@{itemViewModel.step.mediaUri}"
-                tools:ignore="ImageContrastCheck" />
-
-            <VideoView
-                android:id="@+id/videoMedia"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                app:isVisibleOrGone="@{itemViewModel.hasMedia}"
-                app:switchRoundedVideo="@{itemViewModel.step.mediaUri}" />
-        </FrameLayout>
+            app:layout_constraintTop_toBottomOf="@+id/secondsInput"
+            app:srcCompat="@drawable/empty_placeholder"
+            app:switchRoundedImage="@{itemViewModel.mediaPreviewURI}"
+            tools:ignore="ImageContrastCheck" />
 
         <EditText
             android:id="@+id/minutesInput"
@@ -138,14 +123,17 @@
 
         <Button
             android:id="@+id/button"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:onClick="@{itemViewModel::takePhotoButtonClicked}"
-            android:text="@string/add_photo_label"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="20dp"
+            android:onClick="@{itemViewModel::addMediaButtonClicked}"
+            android:text="@string/add_media_label"
             android:textColor="@color/black"
-            app:layout_constraintBottom_toBottomOf="@+id/mediaFrame"
-            app:layout_constraintStart_toStartOf="@+id/stepName"
-            app:layout_constraintTop_toTopOf="@+id/mediaFrame" />
+            app:layout_constraintBottom_toBottomOf="@+id/imageMedia"
+            app:layout_constraintEnd_toStartOf="@+id/imageMedia"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/imageMedia" />
 
         <ImageView
             android:id="@+id/dragHandle"

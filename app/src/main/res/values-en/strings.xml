@@ -2,7 +2,13 @@
 <resources>
     <string-array name="add_photo_dialog_options">
         <item>Take Photo</item>
-        <item>Pick Photo</item>
+        <item>Select Photo</item>
+    </string-array>
+
+    <string-array name="add_media_dialog_options">
+        <item>Take Photo</item>
+        <item>Select Photo</item>
+        <item>Select Video</item>
     </string-array>
 
     <!--general-->
@@ -70,5 +76,7 @@
     <string name="login_password_notice">To access this profile you must enter the password!</string>
     <string name="login_successful_message">Login Successful!</string>
     <string name="drag_handle_desc">Drag Handle</string>
+    <string name="add_media_label">Add Media</string>
+    <string name="select_youtube_uri">Enter YouTube video uri</string>
 
 </resources>

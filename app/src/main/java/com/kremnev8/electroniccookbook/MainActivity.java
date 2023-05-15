@@ -5,8 +5,10 @@ import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
@@ -14,10 +16,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.EditText;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -46,8 +50,9 @@ import com.kremnev8.electroniccookbook.interfaces.IFragmentController;
 import com.kremnev8.electroniccookbook.interfaces.ILoginSuccessCallback;
 import com.kremnev8.electroniccookbook.interfaces.IMenu;
 import com.kremnev8.electroniccookbook.interfaces.IDrawerController;
-import com.kremnev8.electroniccookbook.interfaces.IPhotoProvider;
-import com.kremnev8.electroniccookbook.interfaces.IPhotoRequestCallback;
+import com.kremnev8.electroniccookbook.interfaces.IMediaProvider;
+import com.kremnev8.electroniccookbook.interfaces.IMediaRequestCallback;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.FullscreenListener;
 
 import java.io.File;
 import java.io.IOException;
@@ -57,12 +62,14 @@ import java.util.List;
 import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
+import kotlin.Unit;
+import kotlin.jvm.functions.Function0;
 
 @AndroidEntryPoint
 @OptIn(markerClass = kotlinx.coroutines.ExperimentalCoroutinesApi.class)
 public class MainActivity
         extends AppCompatActivity
-        implements IPhotoProvider, IDrawerController, IFragmentController {
+        implements IMediaProvider, IDrawerController, IFragmentController, FullscreenListener, DialogInterface.OnClickListener {
 
     private static final int FILES_REQUEST_CODE = 1;
     private static final int CAMERA_REQUEST_CODE = 2;
@@ -76,8 +83,12 @@ public class MainActivity
     private final List<Fragment> fragments = new ArrayList<>();
     private LoginFragment loginFragment;
 
-    private IPhotoRequestCallback lastRequester;
+    private boolean isFullscreen;
+
+    private IMediaRequestCallback lastRequester;
     private AlertDialog photoDialog;
+    private AlertDialog mediaDialog;
+    private AlertDialog videoUriDialog;
     Handler mainHandler = new Handler(Looper.getMainLooper());
 
     @Inject DatabaseExecutor executor;
@@ -85,7 +96,7 @@ public class MainActivity
     ActivityResultLauncher<String> mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(),
             uri -> {
                 if (lastRequester != null && uri != null) {
-                    lastRequester.onPhotoSelected(uri.toString());
+                    lastRequester.onMediaSelected(uri.toString());
                     lastRequester = null;
                 }
             });
@@ -98,7 +109,7 @@ public class MainActivity
                     return;
                 }
                 if (lastRequester != null) {
-                    lastRequester.onPhotoSelected(result.second.toString());
+                    lastRequester.onMediaSelected(result.second.toString());
                     lastRequester = null;
                 }
             });
@@ -108,7 +119,9 @@ public class MainActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Instance = this;
-        photoDialog = createPictureDialog();
+        photoDialog = createMediaDialog(R.array.add_photo_dialog_options);
+        mediaDialog = createMediaDialog(R.array.add_media_dialog_options);
+        videoUriDialog = createSelectVideoDialog();
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -141,12 +154,16 @@ public class MainActivity
     }
 
     private void updateCurrentFragment() {
-        Fragment currentFragment = fragmentManager.findFragmentById(R.id.fragmentContainerView);
+        Fragment currentFragment = getCurrentFragment();
         if (!fragments.contains(currentFragment))
             fragments.add(currentFragment);
         if (currentFragment instanceof IMenu) {
             setIMenu((IMenu)currentFragment);
         }
+    }
+
+    public Fragment getCurrentFragment() {
+        return fragmentManager.findFragmentById(R.id.fragmentContainerView);
     }
 
     public <T extends Fragment> void setFragment(Class<T> clazz, @Nullable Bundle args) {
@@ -241,10 +258,39 @@ public class MainActivity
         loginFragment.show(ft, "dialog");
     }
 
+    @Override
+    public void onEnterFullscreen(@NonNull View fullscreenView, @NonNull Function0<Unit> exitFullscreen) {
+        isFullscreen = true;
+
+        // the video will continue playing in fullscreenView
+        //lastPlayer.setVisibility(View.GONE);
+        binding.fullScreenViewContainer.setVisibility(View.VISIBLE);
+        binding.fullScreenViewContainer.addView(fullscreenView);
+
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+    }
+
+    @Override
+    public void onExitFullscreen() {
+        isFullscreen = false;
+
+        // the video will continue playing in the player
+        //youTubePlayerView.visibility = View.VISIBLE
+        binding.fullScreenViewContainer.setVisibility(View.GONE);
+        binding.fullScreenViewContainer.removeAllViews();
+
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+    }
+
     //region Photos
-    public void requestPhoto(IPhotoRequestCallback callback) {
+    public void requestPhoto(IMediaRequestCallback callback) {
         lastRequester = callback;
         photoDialog.show();
+    }
+
+    public void requestMedia(IMediaRequestCallback callback){
+        lastRequester = callback;
+        mediaDialog.show();
     }
 
     private void tryPickPhoto(){
@@ -265,16 +311,43 @@ public class MainActivity
         }
     }
 
-    private AlertDialog createPictureDialog(){
+    private AlertDialog createMediaDialog(int items){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.add_photo_label)
-                .setItems(R.array.add_photo_dialog_options, (dialog, index) -> {
-                    if (index == 0)
-                        tryTakePhoto();
-                    else if (index == 1)
-                        tryPickPhoto();
-                    dialog.dismiss();
-                });
+        builder.setTitle(R.string.add_media_label)
+                .setItems(items, this);
+        return builder.create();
+    }
+
+    @Override
+    public void onClick(DialogInterface dialog, int index) {
+        if (index == 0)
+            MainActivity.this.tryTakePhoto();
+        else if (index == 1)
+            MainActivity.this.tryPickPhoto();
+        else if (index == 2)
+            videoUriDialog.show();
+        dialog.dismiss();
+    }
+
+    private AlertDialog createSelectVideoDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.select_youtube_uri);
+
+// Set up the input
+        final EditText input = new EditText(this);
+// Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_URI);
+        builder.setView(input);
+
+// Set up the buttons
+        builder.setPositiveButton("OK", (dialog, which) -> {
+            if (lastRequester != null) {
+                lastRequester.onMediaSelected(input.getText().toString());
+                lastRequester = null;
+            }
+        });
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+
         return builder.create();
     }
 

@@ -40,7 +40,7 @@ public class RecipeViewFragment
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         binding = FragmentRecipeViewBinding.inflate(inflater, container, false);
-        binding.setLifecycleOwner(this);
+        binding.setLifecycleOwner(getViewLifecycleOwner());
 
         viewModel = new ViewModelProvider(this).get(RecipeViewModel.class);
 

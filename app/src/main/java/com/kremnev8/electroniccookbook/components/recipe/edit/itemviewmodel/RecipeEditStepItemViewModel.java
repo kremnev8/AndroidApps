@@ -1,5 +1,6 @@
 package com.kremnev8.electroniccookbook.components.recipe.edit.itemviewmodel;
 
+import android.net.Uri;
 import android.view.View;
 
 import androidx.databinding.Bindable;
@@ -11,20 +12,23 @@ import com.kremnev8.electroniccookbook.common.recycler.ICanBeReordered;
 import com.kremnev8.electroniccookbook.common.recycler.IHasContextMenu;
 import com.kremnev8.electroniccookbook.common.recycler.ItemViewModel;
 import com.kremnev8.electroniccookbook.components.recipe.model.RecipeStep;
-import com.kremnev8.electroniccookbook.interfaces.IPhotoProvider;
-import com.kremnev8.electroniccookbook.interfaces.IPhotoRequestCallback;
+import com.kremnev8.electroniccookbook.interfaces.IMediaProvider;
+import com.kremnev8.electroniccookbook.interfaces.IMediaRequestCallback;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class RecipeEditStepItemViewModel
         extends ItemViewModel
-        implements IPhotoRequestCallback, IHasContextMenu, ICanBeReordered {
+        implements IMediaRequestCallback, IHasContextMenu, ICanBeReordered {
 
     public RecipeStep step;
     private int hours;
     private int minutes;
 
-    private final IPhotoProvider photoProvider;
+    private final IMediaProvider photoProvider;
 
-    public RecipeEditStepItemViewModel(RecipeStep item, IPhotoProvider photoProvider){
+    public RecipeEditStepItemViewModel(RecipeStep item, IMediaProvider photoProvider){
         setItem(item);
         this.photoProvider = photoProvider;
     }
@@ -32,6 +36,31 @@ public class RecipeEditStepItemViewModel
     @Bindable
     public boolean getHasMedia(){
         return Strings.isNullOrEmpty(step.mediaUri);
+    }
+
+    @Bindable
+    public String getMediaPreviewURI() {
+        if (Strings.isNullOrEmpty(step.mediaUri)) return "";
+
+        String videoId = getVideoId();
+
+        if (!Strings.isNullOrEmpty(videoId)){
+            return "https://img.youtube.com/vi/" + videoId + "/mqdefault.jpg";
+        }else{
+            return step.mediaUri;
+        }
+    }
+
+    private String getVideoId() {
+        String vId = null;
+        Pattern pattern = Pattern.compile(
+                "^https?://.*(?:youtu.be/|v/|u/\\w/|embed/|watch?v=)([^#&?]*).*$",
+                Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(step.mediaUri);
+        if (matcher.matches()){
+            vId = matcher.group(1);
+        }
+        return vId;
     }
 
     @Bindable
@@ -69,12 +98,12 @@ public class RecipeEditStepItemViewModel
         minutes = (int)(step.timer % 60);
     }
 
-    public void takePhotoButtonClicked(View view){
-        photoProvider.requestPhoto(this);
+    public void addMediaButtonClicked(View view){
+        photoProvider.requestMedia(this);
     }
 
     @Override
-    public void onPhotoSelected(String imageUri) {
+    public void onMediaSelected(String imageUri) {
         step.mediaUri = imageUri;
         notifyChange();
     }

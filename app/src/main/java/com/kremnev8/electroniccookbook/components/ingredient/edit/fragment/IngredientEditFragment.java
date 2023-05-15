@@ -38,7 +38,7 @@ public class IngredientEditFragment extends Fragment implements IMenu {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentIngredientEditBinding.inflate(inflater, container, false);
-        binding.setLifecycleOwner(this);
+        binding.setLifecycleOwner(getViewLifecycleOwner());
 
         viewModel = new ViewModelProvider(MainActivity.Instance).get(IngredientEditViewModel.class);
 

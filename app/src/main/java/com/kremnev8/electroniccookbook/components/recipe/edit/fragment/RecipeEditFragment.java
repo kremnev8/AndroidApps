@@ -44,7 +44,7 @@ public class RecipeEditFragment
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         binding = FragmentRecipeEditBinding.inflate(inflater, container, false);
-        binding.setLifecycleOwner(this);
+        binding.setLifecycleOwner(getViewLifecycleOwner());
 
         viewModel = new ViewModelProvider(this).get(RecipeEditViewModel.class);
 

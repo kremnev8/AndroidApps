@@ -24,7 +24,7 @@ public class RecipeAboutFragment extends Fragment {
         binding = FragmentRecipeAboutBinding.inflate(inflater, container, false);
         viewModel = new ViewModelProvider(requireParentFragment()).get(RecipeViewModel.class);
 
-        binding.setLifecycleOwner(this);
+        binding.setLifecycleOwner(getViewLifecycleOwner());
         binding.setViewModel(viewModel);
 
         return binding.getRoot();

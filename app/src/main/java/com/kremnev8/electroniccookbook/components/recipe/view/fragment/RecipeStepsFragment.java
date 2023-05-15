@@ -29,7 +29,7 @@ public class RecipeStepsFragment extends Fragment {
         binding = FragmentRecipeStepsBinding.inflate(inflater, container, false);
         viewModel = new ViewModelProvider(requireParentFragment()).get(RecipeViewModel.class);
 
-        binding.setLifecycleOwner(this);
+        binding.setLifecycleOwner(getViewLifecycleOwner());
 
 
         viewModel.getSteps().observe(getViewLifecycleOwner(), itemViewModels -> {

@@ -35,7 +35,7 @@ public class IngredientListFragment extends Fragment implements IMenu {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentIngredientListBinding.inflate(inflater, container, false);
-        binding.setLifecycleOwner(this);
+        binding.setLifecycleOwner(getViewLifecycleOwner());
 
         ingredientListViewModel = new ViewModelProvider(MainActivity.Instance).get(IngredientListViewModel.class);
 

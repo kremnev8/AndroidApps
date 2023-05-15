@@ -28,7 +28,7 @@ public class RecipeEditIngredientsFragment extends Fragment {
         binding = FragmentRecipeEditIngredientsBinding.inflate(inflater, container, false);
         viewModel = new ViewModelProvider(requireParentFragment()).get(RecipeEditViewModel.class);
 
-        binding.setLifecycleOwner(this);
+        binding.setLifecycleOwner(getViewLifecycleOwner());
         binding.setViewModel(viewModel);
 
         registerForContextMenu(binding.ingredientsList);

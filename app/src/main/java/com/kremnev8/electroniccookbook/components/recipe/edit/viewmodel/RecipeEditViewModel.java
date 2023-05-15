@@ -12,7 +12,6 @@ import com.kremnev8.electroniccookbook.BR;
 import com.kremnev8.electroniccookbook.R;
 import com.kremnev8.electroniccookbook.common.FooterItemViewModel;
 import com.kremnev8.electroniccookbook.common.SimpleViewModel;
-import com.kremnev8.electroniccookbook.common.recycler.IReorderCallback;
 import com.kremnev8.electroniccookbook.common.recycler.ItemViewModel;
 import com.kremnev8.electroniccookbook.common.recycler.ItemViewModelHolder;
 import com.kremnev8.electroniccookbook.components.recipe.edit.itemviewmodel.RecipeEditIngredientItemViewModel;
@@ -21,8 +20,8 @@ import com.kremnev8.electroniccookbook.components.recipe.model.Recipe;
 import com.kremnev8.electroniccookbook.components.recipe.model.RecipeIngredient;
 import com.kremnev8.electroniccookbook.components.recipe.model.RecipeStep;
 import com.kremnev8.electroniccookbook.database.DatabaseExecutor;
-import com.kremnev8.electroniccookbook.interfaces.IPhotoProvider;
-import com.kremnev8.electroniccookbook.interfaces.IPhotoRequestCallback;
+import com.kremnev8.electroniccookbook.interfaces.IMediaProvider;
+import com.kremnev8.electroniccookbook.interfaces.IMediaRequestCallback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,10 +31,10 @@ import javax.inject.Inject;
 import dagger.hilt.android.lifecycle.HiltViewModel;
 
 @HiltViewModel
-public class RecipeEditViewModel extends SimpleViewModel<Recipe> implements IPhotoRequestCallback {
+public class RecipeEditViewModel extends SimpleViewModel<Recipe> implements IMediaRequestCallback {
 
     private final Handler handler = new Handler(Looper.getMainLooper());
-    private final IPhotoProvider photoProvider;
+    private final IMediaProvider photoProvider;
 
     protected ItemViewModelHolder<RecipeStep> stepsHolder;
     protected ItemViewModelHolder<RecipeIngredient> ingredientsHolder;
@@ -49,7 +48,7 @@ public class RecipeEditViewModel extends SimpleViewModel<Recipe> implements IPho
     }
 
     @Inject
-    public RecipeEditViewModel(SavedStateHandle handle, DatabaseExecutor databaseExecutor, IPhotoProvider photoProvider) {
+    public RecipeEditViewModel(SavedStateHandle handle, DatabaseExecutor databaseExecutor, IMediaProvider photoProvider) {
         super(databaseExecutor);
         this.photoProvider = photoProvider;
 
@@ -114,7 +113,7 @@ public class RecipeEditViewModel extends SimpleViewModel<Recipe> implements IPho
     }
 
     @Override
-    public void onPhotoSelected(String imageUri) {
+    public void onMediaSelected(String imageUri) {
         model.imageUri = imageUri;
         notifyPropertyChanged(BR.model);
     }

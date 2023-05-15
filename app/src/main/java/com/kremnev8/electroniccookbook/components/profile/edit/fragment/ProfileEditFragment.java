@@ -40,7 +40,7 @@ public class ProfileEditFragment
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentProfileEditBinding.inflate(inflater, container, false);
-        binding.setLifecycleOwner(this);
+        binding.setLifecycleOwner(getViewLifecycleOwner());
 
         viewModel = new ViewModelProvider(MainActivity.Instance).get(ProfileEditViewModel.class);
 

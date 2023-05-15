@@ -40,9 +40,9 @@
             android:id="@+id/mediaFrame"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginStart="50dp"
+            android:layout_marginStart="30dp"
             android:layout_marginTop="10dp"
-            android:layout_marginEnd="50dp"
+            android:layout_marginEnd="30dp"
             app:isVisibleOrGone="@{itemViewModel.hasMedia}"
             app:layout_constraintDimensionRatio="16:9"
             app:layout_constraintEnd_toEndOf="parent"
@@ -56,16 +56,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:contentDescription="@string/image_label"
+                app:isVisibleOrGone="@{!itemViewModel.isVideo}"
                 app:srcCompat="@drawable/empty_placeholder"
                 app:switchRoundedImage="@{itemViewModel.step.step.mediaUri}"
                 tools:ignore="ImageContrastCheck" />
 
-            <VideoView
-                android:id="@+id/videoMedia"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                app:switchRoundedVideo="@{itemViewModel.step.step.mediaUri}" />
+            <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+                android:id="@+id/youtubeView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:enableAutomaticInitialization="false"
+                app:isVisibleOrGone="@{itemViewModel.isVideo}" />
         </FrameLayout>
 
         <include

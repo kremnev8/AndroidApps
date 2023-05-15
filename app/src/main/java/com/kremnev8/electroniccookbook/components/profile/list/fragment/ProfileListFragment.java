@@ -32,7 +32,7 @@ public class ProfileListFragment extends Fragment implements IMenu {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentProfileListBinding.inflate(inflater, container, false);
-        binding.setLifecycleOwner(this);
+        binding.setLifecycleOwner(getViewLifecycleOwner());
 
         ingredientListViewModel = new ViewModelProvider(MainActivity.Instance).get(ProfileListViewModel.class);
 

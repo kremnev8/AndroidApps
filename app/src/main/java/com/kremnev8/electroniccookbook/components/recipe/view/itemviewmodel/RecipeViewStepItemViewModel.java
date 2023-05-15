@@ -1,11 +1,13 @@
 package com.kremnev8.electroniccookbook.components.recipe.view.itemviewmodel;
 
+import android.net.Uri;
 import android.view.View;
 
 import androidx.databinding.Bindable;
 
 import com.google.common.base.Strings;
 import com.kremnev8.electroniccookbook.R;
+import com.kremnev8.electroniccookbook.common.recycler.IHasYouTubePlayer;
 import com.kremnev8.electroniccookbook.common.recycler.ItemViewModel;
 import com.kremnev8.electroniccookbook.components.recipe.model.RecipeViewStepCache;
 import com.kremnev8.electroniccookbook.components.timers.ITimerService;
@@ -13,8 +15,10 @@ import com.kremnev8.electroniccookbook.components.timers.TimerData;
 import com.kremnev8.electroniccookbook.database.DatabaseExecutor;
 
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-public class RecipeViewStepItemViewModel extends ItemViewModel {
+public class RecipeViewStepItemViewModel extends ItemViewModel implements IHasYouTubePlayer {
 
     public RecipeViewStepCache step;
     private final DatabaseExecutor executor;
@@ -61,6 +65,14 @@ public class RecipeViewStepItemViewModel extends ItemViewModel {
     public boolean getHasMedia(){
         return !Strings.isNullOrEmpty(step.step.mediaUri);
     }
+
+    public boolean getIsVideo(){
+        if (Strings.isNullOrEmpty(step.step.mediaUri)) return false;
+        String videoId = getYouTubeVideoID();
+
+        return !Strings.isNullOrEmpty(videoId);
+    }
+
 
     private String formatTime(long timeLeft){
         int hours = (int) Math.floor(timeLeft / 3600f);
@@ -117,5 +129,24 @@ public class RecipeViewStepItemViewModel extends ItemViewModel {
     @Override
     public int getViewType() {
         return 2;
+    }
+
+    @Override
+    public int getYouTubePlayerID() {
+        return R.id.youtubeView;
+    }
+
+    @Override
+    public String getYouTubeVideoID() {
+        if (Strings.isNullOrEmpty(step.step.mediaUri)) return "";
+        String vId = null;
+        Pattern pattern = Pattern.compile(
+                "^https?://.*(?:youtu.be/|v/|u/\\w/|embed/|watch?v=)([^#&?]*).*$",
+                Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(step.step.mediaUri);
+        if (matcher.matches()){
+            vId = matcher.group(1);
+        }
+        return vId;
     }
 }

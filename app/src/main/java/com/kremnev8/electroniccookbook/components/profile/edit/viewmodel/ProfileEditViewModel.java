@@ -11,21 +11,21 @@ import com.kremnev8.electroniccookbook.common.Passwords;
 import com.kremnev8.electroniccookbook.common.SimpleViewModel;
 import com.kremnev8.electroniccookbook.components.profile.model.Profile;
 import com.kremnev8.electroniccookbook.database.DatabaseExecutor;
-import com.kremnev8.electroniccookbook.interfaces.IPhotoProvider;
-import com.kremnev8.electroniccookbook.interfaces.IPhotoRequestCallback;
+import com.kremnev8.electroniccookbook.interfaces.IMediaProvider;
+import com.kremnev8.electroniccookbook.interfaces.IMediaRequestCallback;
 
 import javax.inject.Inject;
 
 import dagger.hilt.android.lifecycle.HiltViewModel;
 
 @HiltViewModel
-public class ProfileEditViewModel extends SimpleViewModel<Profile> implements IPhotoRequestCallback {
+public class ProfileEditViewModel extends SimpleViewModel<Profile> implements IMediaRequestCallback {
 
-    private final IPhotoProvider photoProvider;
+    private final IMediaProvider photoProvider;
     private String editedPasswordText;
 
     @Inject
-    ProfileEditViewModel(SavedStateHandle handle, DatabaseExecutor databaseExecutor, IPhotoProvider photoProvider) {
+    ProfileEditViewModel(SavedStateHandle handle, DatabaseExecutor databaseExecutor, IMediaProvider photoProvider) {
         super(databaseExecutor);
         this.photoProvider = photoProvider;
     }
@@ -64,7 +64,7 @@ public class ProfileEditViewModel extends SimpleViewModel<Profile> implements IP
     }
 
     @Override
-    public void onPhotoSelected(String imageUri) {
+    public void onMediaSelected(String imageUri) {
         model.profileImageUrl = imageUri;
         notifyChange();
     }

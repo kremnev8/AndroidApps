@@ -23,7 +23,7 @@ public class RecipeEditAboutFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         binding = FragmentRecipeEditAboutBinding.inflate(inflater, container, false);
-        binding.setLifecycleOwner(this);
+        binding.setLifecycleOwner(getViewLifecycleOwner());
         viewModel = new ViewModelProvider(requireParentFragment()).get(RecipeEditViewModel.class);
 
         binding.setViewModel(viewModel);

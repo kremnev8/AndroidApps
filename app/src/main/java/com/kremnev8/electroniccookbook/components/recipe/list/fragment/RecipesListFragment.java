@@ -35,7 +35,7 @@ public class RecipesListFragment extends Fragment implements IMenu {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         binding = FragmentRecipesListBinding.inflate(inflater, container, false);
-        binding.setLifecycleOwner(this);
+        binding.setLifecycleOwner(getViewLifecycleOwner());
 
         recipesListViewModel = new ViewModelProvider(this).get(RecipesListViewModel.class);
         binding.setViewModel(recipesListViewModel);
