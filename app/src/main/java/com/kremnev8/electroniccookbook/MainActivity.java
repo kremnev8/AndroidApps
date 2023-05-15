@@ -36,8 +36,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.google.common.base.Optional;
-import com.google.common.collect.Iterables;
 import com.kremnev8.electroniccookbook.components.profile.dialog.fragment.LoginFragment;
 import com.kremnev8.electroniccookbook.components.profile.model.Profile;
 import com.kremnev8.electroniccookbook.components.recipe.model.ShowRecipeData;
@@ -46,12 +44,12 @@ import com.kremnev8.electroniccookbook.components.timers.TimersService;
 import com.kremnev8.electroniccookbook.contract.TakePictureWithUriReturnContract;
 import com.kremnev8.electroniccookbook.database.DatabaseExecutor;
 import com.kremnev8.electroniccookbook.databinding.ActivityMainBinding;
+import com.kremnev8.electroniccookbook.interfaces.IDrawerController;
 import com.kremnev8.electroniccookbook.interfaces.IFragmentController;
 import com.kremnev8.electroniccookbook.interfaces.ILoginSuccessCallback;
-import com.kremnev8.electroniccookbook.interfaces.IMenu;
-import com.kremnev8.electroniccookbook.interfaces.IDrawerController;
 import com.kremnev8.electroniccookbook.interfaces.IMediaProvider;
 import com.kremnev8.electroniccookbook.interfaces.IMediaRequestCallback;
+import com.kremnev8.electroniccookbook.interfaces.IMenu;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.FullscreenListener;
 
 import java.io.File;
@@ -80,7 +78,6 @@ public class MainActivity
 
     private ActivityMainBinding binding;
     private FragmentManager fragmentManager;
-    private final List<Fragment> fragments = new ArrayList<>();
     private LoginFragment loginFragment;
 
     private boolean isFullscreen;
@@ -91,7 +88,8 @@ public class MainActivity
     private AlertDialog videoUriDialog;
     Handler mainHandler = new Handler(Looper.getMainLooper());
 
-    @Inject DatabaseExecutor executor;
+    @Inject
+    DatabaseExecutor executor;
 
     ActivityResultLauncher<String> mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(),
             uri -> {
@@ -103,8 +101,7 @@ public class MainActivity
 
     ActivityResultLauncher<Uri> mTakePicture = registerForActivityResult(new TakePictureWithUriReturnContract(),
             result -> {
-                if (!result.first)
-                {
+                if (!result.first) {
                     new File(result.second.toString()).delete();
                     return;
                 }
@@ -139,10 +136,10 @@ public class MainActivity
     public void onStart() {
         super.onStart();
         Log.i("INFO", "Main activity is starting");
-        Intent intent = new Intent(this , TimersService.class);
+        Intent intent = new Intent(this, TimersService.class);
         if (!isServiceRunning(TimersService.class))
             startService(intent);
-        bindService(intent , serviceConnection, BIND_IMPORTANT);
+        bindService(intent, serviceConnection, BIND_IMPORTANT);
         fragmentManager.addOnBackStackChangedListener(this::updateCurrentFragment);
     }
 
@@ -155,10 +152,8 @@ public class MainActivity
 
     private void updateCurrentFragment() {
         Fragment currentFragment = getCurrentFragment();
-        if (!fragments.contains(currentFragment))
-            fragments.add(currentFragment);
         if (currentFragment instanceof IMenu) {
-            setIMenu((IMenu)currentFragment);
+            setIMenu((IMenu) currentFragment);
         }
     }
 
@@ -167,36 +162,21 @@ public class MainActivity
     }
 
     public <T extends Fragment> void setFragment(Class<T> clazz, @Nullable Bundle args) {
-        if (Looper.myLooper() != Looper.getMainLooper()){
+        if (Looper.myLooper() != Looper.getMainLooper()) {
             mainHandler.post(() -> Instance.setFragment(clazz, args));
             return;
         }
 
-        Optional<Fragment> fragment = Iterables.tryFind(fragments, frag -> frag.getClass().isInstance(clazz));
-        if (!fragment.isPresent()) {
-            fragmentManager.beginTransaction()
-                    .replace(R.id.fragmentContainerView, clazz, args)
-                    .addToBackStack("open fragment")
-                    .commit();
-
-            fragmentManager.executePendingTransactions();
-            updateCurrentFragment();
-            return;
-        }
-
-        fragment.get().setArguments(args);
-
         fragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainerView, fragment.get())
+                .replace(R.id.fragmentContainerView, clazz, args)
                 .addToBackStack("open fragment")
                 .commit();
 
-        if (fragment.get() instanceof IMenu) {
-            setIMenu((IMenu)fragment.get());
-        }
+        fragmentManager.executePendingTransactions();
+        updateCurrentFragment();
     }
 
-    public void setIMenu(IMenu menu){
+    public void setIMenu(IMenu menu) {
         binding.topBar.titleText.setText(menu.getMenuName());
         int text = menu.getActionText();
         int icon = menu.getActionImage();
@@ -213,8 +193,8 @@ public class MainActivity
         binding.topBar.imageMenuButton.setOnClickListener(v -> menu.onAction());
     }
 
-    public View getDrawerView(DrawerKind kind){
-        switch (kind){
+    public View getDrawerView(DrawerKind kind) {
+        switch (kind) {
             case NAVIGATION:
                 return binding.drawerMenuView;
             case FILTERS:
@@ -267,7 +247,7 @@ public class MainActivity
         binding.fullScreenViewContainer.setVisibility(View.VISIBLE);
         binding.fullScreenViewContainer.addView(fullscreenView);
 
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
     }
 
     @Override
@@ -279,7 +259,7 @@ public class MainActivity
         binding.fullScreenViewContainer.setVisibility(View.GONE);
         binding.fullScreenViewContainer.removeAllViews();
 
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+       //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
     }
 
     //region Photos
@@ -288,12 +268,12 @@ public class MainActivity
         photoDialog.show();
     }
 
-    public void requestMedia(IMediaRequestCallback callback){
+    public void requestMedia(IMediaRequestCallback callback) {
         lastRequester = callback;
         mediaDialog.show();
     }
 
-    private void tryPickPhoto(){
+    private void tryPickPhoto() {
         if (ContextCompat.checkSelfPermission(MainActivity.Instance, Manifest.permission.READ_EXTERNAL_STORAGE)
                 == PackageManager.PERMISSION_GRANTED) {
             mGetContent.launch("image/*");
@@ -306,12 +286,12 @@ public class MainActivity
         if (ContextCompat.checkSelfPermission(MainActivity.Instance, Manifest.permission.CAMERA)
                 == PackageManager.PERMISSION_GRANTED) {
             tryTakePicture();
-        }else {
+        } else {
             requestCameraPermission();
         }
     }
 
-    private AlertDialog createMediaDialog(int items){
+    private AlertDialog createMediaDialog(int items) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.add_media_label)
                 .setItems(items, this);
@@ -329,7 +309,7 @@ public class MainActivity
         dialog.dismiss();
     }
 
-    private AlertDialog createSelectVideoDialog(){
+    private AlertDialog createSelectVideoDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.select_youtube_uri);
 
@@ -381,7 +361,7 @@ public class MainActivity
 
         if (requestCode == FILES_REQUEST_CODE && grantResults[0] == PackageManager.PERMISSION_GRANTED && lastRequester != null) {
             mGetContent.launch("image/*");
-        }else if (requestCode == CAMERA_REQUEST_CODE && grantResults[0] == PackageManager.PERMISSION_GRANTED && lastRequester != null) {
+        } else if (requestCode == CAMERA_REQUEST_CODE && grantResults[0] == PackageManager.PERMISSION_GRANTED && lastRequester != null) {
             tryTakePicture();
         }
 
@@ -401,7 +381,7 @@ public class MainActivity
     private final ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            TimersService.TimerBinder binderBridge = (TimersService.TimerBinder) service ;
+            TimersService.TimerBinder binderBridge = (TimersService.TimerBinder) service;
             timersService = binderBridge.getService();
         }
 
@@ -421,7 +401,7 @@ public class MainActivity
         return false;
     }
 
-    public void wakeScreen(){
+    public void wakeScreen() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
             this.setTurnScreenOn(true);
         } else {
@@ -434,12 +414,12 @@ public class MainActivity
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
 
-        if (intent.hasExtra(NOTIFICATION_ID_EXTRA)){
+        if (intent.hasExtra(NOTIFICATION_ID_EXTRA)) {
             int notificationId = intent.getIntExtra(NOTIFICATION_ID_EXTRA, 0);
             CookBookApplication.NotificationManager.cancel(notificationId);
         }
 
-        if (intent.hasExtra(SHOW_RECIPE_EXTRA)){
+        if (intent.hasExtra(SHOW_RECIPE_EXTRA)) {
             ShowRecipeData data = intent.getParcelableExtra(SHOW_RECIPE_EXTRA);
             Bundle args = new Bundle();
             args.putInt(RecipeViewFragment.RECIPE_ID, data.recipeId);

@@ -1,12 +1,8 @@
 package com.kremnev8.electroniccookbook.components.tabs.fragment;
 
-import static com.kremnev8.electroniccookbook.CookBookApplication.dataStore;
-
-import androidx.annotation.OptIn;
-import androidx.datastore.preferences.core.Preferences;
-import androidx.datastore.preferences.core.PreferencesKeys;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -23,13 +19,11 @@ import android.view.ViewGroup;
 import com.kremnev8.electroniccookbook.components.tabs.viewmodel.NavigationDrawerViewModel;
 import com.kremnev8.electroniccookbook.database.DatabaseExecutor;
 import com.kremnev8.electroniccookbook.databinding.FragmentNavigationDrawerBinding;
-import com.kremnev8.electroniccookbook.interfaces.IFragmentController;
 import com.kremnev8.electroniccookbook.interfaces.IProfileProvider;
 
 import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
-import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 @AndroidEntryPoint
@@ -40,8 +34,6 @@ public class NavigationDrawerFragment extends Fragment {
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
     @Inject DatabaseExecutor executor;
     @Inject IProfileProvider profileProvider;
-
-
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -58,5 +50,12 @@ public class NavigationDrawerFragment extends Fragment {
                         throwable -> Log.e("App", "Error while getting profile", throwable));
 
         return binding.getRoot();
+    }
+
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        getParentFragmentManager().beginTransaction().detach(NavigationDrawerFragment.this).commit();
+        getParentFragmentManager().beginTransaction().attach(NavigationDrawerFragment.this).commit();
     }
 }

@@ -1,5 +1,6 @@
 package com.kremnev8.electroniccookbook.components.recipe.list.fragment;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -47,6 +48,12 @@ public class RecipesListFragment extends Fragment implements IMenu {
         return binding.getRoot();
     }
 
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        getParentFragmentManager().beginTransaction().detach(RecipesListFragment.this).commit();
+        getParentFragmentManager().beginTransaction().attach(RecipesListFragment.this).commit();
+    }
 
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
