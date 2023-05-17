@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
             name="model"
@@ -9,9 +10,7 @@
     android:layout_width="match_parent"
     android:layout_height="50dp"
     android:layout_marginTop="5dp"
-    app:isVisibleOrGone="@{model.step.step.timer > 0}"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    app:isVisibleOrGone="@{model.step.step.timer > 0}">
 
     <ImageView
         android:id="@+id/timerIcon"
@@ -69,12 +68,12 @@
 
     <Button
         android:id="@+id/timerResetButton"
-        android:layout_width="60dp"
+        android:layout_width="wrap_content"
         android:layout_height="50dp"
+        android:onClick="@{model::stopClicked}"
         android:padding="0dp"
         android:text="@string/reset_label"
         app:isVisible="@{model.running}"
-        android:onClick="@{model::stopClicked}"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/timerStopButton"
         app:layout_constraintTop_toTopOf="parent"

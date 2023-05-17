@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+option java_package = "com.kremnev8.electroniccookbook.components.timers";
+option java_multiple_files = true;
+
+
+message TimerList{
+  message TimerState {
+    // filter for showing / hiding completed tasks
+    int64 mStopTimeInFuture = 1;
+    int32 recipeId = 2;
+    int32 stepId = 3;
+    bool isRunning = 4;
+    bool isPaused = 5;
+    string stepName = 6;
+    int64 mMillisInFuture = 7;
+  }
+  repeated TimerState timers = 1;
+}

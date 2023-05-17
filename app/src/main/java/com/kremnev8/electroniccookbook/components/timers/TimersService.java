@@ -12,11 +12,15 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.Build;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.SystemClock;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.OptIn;
 import androidx.core.app.NotificationCompat;
 
 import com.kremnev8.electroniccookbook.CookBookApplication;
@@ -27,7 +31,14 @@ import com.kremnev8.electroniccookbook.components.recipe.model.ShowRecipeData;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.OptionalInt;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.IntStream;
 
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+
+@OptIn(markerClass = kotlinx.coroutines.ExperimentalCoroutinesApi.class)
 public class TimersService extends Service implements Runnable, ITimerService {
 
     private static final String MAIN_CHANNEL_ID = "TimersServiceChannel";
@@ -38,8 +49,11 @@ public class TimersService extends Service implements Runnable, ITimerService {
 
     private final IBinder binder = new TimerBinder();
     private final TimerPool timers = new TimerPool(10);
+    private boolean hasInitializedTimers = false;
+
     private NotificationCompat.Builder builder;
     private Thread updateThread = null;
+    private final Handler mainHandler = new Handler(Looper.getMainLooper());
     private final StringBuilder stringBuilder = new StringBuilder();
     private PendingIntent pendingIntent;
 
@@ -60,16 +74,22 @@ public class TimersService extends Service implements Runnable, ITimerService {
         TimerData timer = timers.addTimer(step);
         timer.start();
         notify(timer);
+
+        CookBookApplication.timerDataStore.updateDataAsync(timerList -> {
+            var res = timerList.toBuilder()
+                    .addTimers(timer.saveState())
+                    .build();
+            return Single.just(res);
+        }).subscribe();
     }
 
-    public void stopTimer(RecipeStep step){
+    public void stopTimer(RecipeStep step) {
         Log.i(TAG, "Stopping timer for step " + step.id);
-        timers.removeTimer(step.recipe, step.id);
-
         notify(TimerData.emptyWith(step.recipe, step.id));
+        removeTimer(step.recipe, step.id);
     }
 
-    public void togglePausedTimer(RecipeStep step){
+    public void togglePausedTimer(RecipeStep step) {
         Log.i(TAG, "Pausing timer for step " + step.id);
         TimerData timer = timers.get(step.recipe, step.id);
         if (timer == null) return;
@@ -79,14 +99,51 @@ public class TimersService extends Service implements Runnable, ITimerService {
         else
             timer.pause();
         notify(timer);
+        CookBookApplication.timerDataStore.updateDataAsync(timerList -> {
+            var index = findTimer(step.recipe, step.id, timerList);
+            if (!index.isPresent())
+                return Single.just(timerList);
+
+            var res = timerList.toBuilder()
+                    .setTimers(index.getAsInt(), timer.saveState())
+                    .build();
+            return Single.just(res);
+        }).subscribe();
     }
 
-    public void listen(ITimerCallback callback){
+    @NonNull
+    private OptionalInt findTimer(int recipeId, int stepId, TimerList timerList) {
+        var list = timerList.getTimersList();
+        return IntStream
+                .range(0, list.size())
+                .filter(i -> {
+                    return list.get(i).getRecipeId() == recipeId &&
+                            list.get(i).getStepId() == stepId;
+                })
+                .findFirst();
+
+    }
+
+    private void removeTimer(int recipeId, int stepId){
+        timers.removeTimer(recipeId, stepId);
+        CookBookApplication.timerDataStore.updateDataAsync(timerList -> {
+            var index = findTimer(recipeId, stepId, timerList);
+            if (!index.isPresent())
+                return Single.just(timerList);
+
+            var res = timerList.toBuilder()
+                    .removeTimers(index.getAsInt())
+                    .build();
+            return Single.just(res);
+        }).subscribe();
+    }
+
+    public void listen(ITimerCallback callback) {
         if (!callbacks.contains(callback))
             callbacks.add(callback);
     }
 
-    public void stopListening(ITimerCallback callback){
+    public void stopListening(ITimerCallback callback) {
         callbacks.remove(callback);
     }
 
@@ -95,8 +152,8 @@ public class TimersService extends Service implements Runnable, ITimerService {
         notify(timer);
     }
 
-    public void notify(TimerData timer){
-        for (var callback : callbacks){
+    public void notify(TimerData timer) {
+        for (var callback : callbacks) {
             callback.timerUpdated(timer);
         }
     }
@@ -104,10 +161,24 @@ public class TimersService extends Service implements Runnable, ITimerService {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        if (hasInitializedTimers)
+            return;
+
+        CookBookApplication.timerDataStore.data()
+                .map(TimerList::getTimersList)
+                .subscribeOn(Schedulers.computation())
+                .subscribe(timerStates -> mainHandler.post(() -> {
+                    for (var timerState : timerStates) {
+                        timers.addTimer(timerState);
+                    }
+                }));
+        hasInitializedTimers = true;
     }
 
     @Override
     public void onDestroy() {
+        stop();
         timers.free();
         super.onDestroy();
         Log.i(TAG, "Timers service is destroyed!");
@@ -137,7 +208,7 @@ public class TimersService extends Service implements Runnable, ITimerService {
                     0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
 
             builder.setContentTitle("Cooking Timers")
-                    .setContentText("No timers running.")
+                    .setContentText("Timers service is active")
                     .setSmallIcon(R.drawable.ic_timer)
                     .setContentIntent(pendingIntent)
                     .setOnlyAlertOnce(true);
@@ -155,7 +226,7 @@ public class TimersService extends Service implements Runnable, ITimerService {
     }
 
     @SuppressLint("UnspecifiedImmutableFlag")
-    private void notifyUserTimerEnded(TimerData timer){
+    private void notifyUserTimerEnded(TimerData timer) {
         Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         int notificationId = NotificationID.getID();
         int uniqueInt = (int) (System.currentTimeMillis() & 0xfffffff);
@@ -164,8 +235,8 @@ public class TimersService extends Service implements Runnable, ITimerService {
         intent.putExtra(MainActivity.SHOW_RECIPE_EXTRA, new ShowRecipeData(timer.recipeId, timer.stepId));
         intent.putExtra(MainActivity.NOTIFICATION_ID_EXTRA, notificationId);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-         PendingIntent notificationIntent = PendingIntent.getActivity(this,
-                 uniqueInt, intent,  PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent notificationIntent = PendingIntent.getActivity(this,
+                uniqueInt, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         MainActivity.Instance.wakeScreen();
         Notification notification = new NotificationCompat.Builder(this, TIMER_ELAPSED_CHANNEL_ID)
@@ -205,24 +276,20 @@ public class TimersService extends Service implements Runnable, ITimerService {
         }
     }
 
-    private void update() {
+    private void update() throws InterruptedException {
         stringBuilder.setLength(0);
-        boolean anyTimersRunning = false;
 
-        for (int i = 0; i < timers.getCapacity(); i++) {
+        for (int i = 1; i < timers.getCapacity(); i++) {
             TimerData timer = timers.get(i);
             if (timer.getId() == i) {
-                updateTimer(timer);
-                gatherTimerInfo(stringBuilder, timer);
-                anyTimersRunning = true;
-                notify(timer);
+                boolean isLockAcquired = timer.lock.tryLock(1, TimeUnit.SECONDS);
+                if (isLockAcquired) {
+                    updateTimer(timer);
+                    gatherTimerInfo(stringBuilder, timer);
+                    timer.lock.unlock();
+                    notify(timer);
+                }
             }
-        }
-
-        if (!anyTimersRunning){
-            updateNotification("No timers running.");
-        }else{
-            updateNotification(stringBuilder.toString());
         }
     }
 
@@ -233,7 +300,7 @@ public class TimersService extends Service implements Runnable, ITimerService {
 
         if (millisLeft <= 0) {
             timerFinished(timer);
-            timers.removeTimer(timer.getId());
+            removeTimer(timer.recipeId, timer.stepId);
         }
     }
 

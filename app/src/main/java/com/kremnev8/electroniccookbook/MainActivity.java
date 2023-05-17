@@ -247,7 +247,7 @@ public class MainActivity
         binding.fullScreenViewContainer.setVisibility(View.VISIBLE);
         binding.fullScreenViewContainer.addView(fullscreenView);
 
-        //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
     }
 
     @Override
@@ -256,10 +256,10 @@ public class MainActivity
 
         // the video will continue playing in the player
         //youTubePlayerView.visibility = View.VISIBLE
-        binding.fullScreenViewContainer.setVisibility(View.GONE);
         binding.fullScreenViewContainer.removeAllViews();
+        binding.fullScreenViewContainer.setVisibility(View.GONE);
 
-       //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+       setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
     }
 
     //region Photos

@@ -35,12 +35,22 @@ public class TimerPool extends Pool<TimerData> {
 
     @Override
     protected void setInstanceData(@NonNull TimerData obj, Object[] data) {
-        obj.set((RecipeStep) data[0]);
+        if (data[0] instanceof RecipeStep) {
+            obj.set((RecipeStep) data[0]);
+        }else if (data[0] instanceof TimerList.TimerState) {
+            obj.readState((TimerList.TimerState) data[0]);
+        }
     }
 
     public TimerData addTimer(@NonNull RecipeStep step) {
         int id = addPoolItem(new Object[]{step});
         idLookup.put(Pair.create(step.recipe, step.id), id);
+        return get(id);
+    }
+
+    public TimerData addTimer(@NonNull TimerList.TimerState state) {
+        int id = addPoolItem(new Object[]{state});
+        idLookup.put(Pair.create(state.getRecipeId(), state.getStepId()), id);
         return get(id);
     }
 

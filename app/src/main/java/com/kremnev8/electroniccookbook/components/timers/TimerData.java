@@ -5,6 +5,9 @@ import android.os.SystemClock;
 import com.kremnev8.electroniccookbook.common.IPoolable;
 import com.kremnev8.electroniccookbook.components.recipe.model.RecipeStep;
 
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 public class TimerData implements IPoolable {
     private int timerId;
 
@@ -16,6 +19,7 @@ public class TimerData implements IPoolable {
     public int recipeId;
     public int stepId;
     public String stepName;
+    public Lock lock = new ReentrantLock();
 
     private static final TimerData empty = new TimerData();
 
@@ -28,24 +32,31 @@ public class TimerData implements IPoolable {
     }
 
     public void cancel() {
+        lock.lock();
         isRunning = false;
         isPaused = false;
         mStopTimeInFuture = 0;
+        lock.unlock();
     }
 
     public void start() {
+        lock.lock();
         isRunning = true;
         isPaused = false;
         if (mMillisInFuture <= 0) {
+            lock.unlock();
             return;
         }
         mStopTimeInFuture = SystemClock.elapsedRealtime() + mMillisInFuture;
+        lock.unlock();
     }
 
     public void pause(){
+        lock.lock();
         mMillisInFuture = mStopTimeInFuture - SystemClock.elapsedRealtime();
         mStopTimeInFuture = 0;
         isPaused = true;
+        lock.unlock();
     }
 
     public long getTimeLeft(){
@@ -76,5 +87,30 @@ public class TimerData implements IPoolable {
         mMillisInFuture = 0;
         mStopTimeInFuture = 0;
         isRunning = false;
+    }
+
+    public TimerList.TimerState saveState(){
+        return TimerList.TimerState
+                .newBuilder()
+                .setMStopTimeInFuture(mStopTimeInFuture)
+                .setMMillisInFuture(mMillisInFuture)
+                .setRecipeId(recipeId)
+                .setStepId(stepId)
+                .setIsRunning(isRunning)
+                .setIsPaused(isPaused)
+                .setStepName(stepName)
+                .build();
+    }
+
+    public void readState(TimerList.TimerState state){
+        lock.lock();
+        mStopTimeInFuture = state.getMStopTimeInFuture();
+        mMillisInFuture = state.getMMillisInFuture();
+        recipeId = state.getRecipeId();
+        stepId = state.getStepId();
+        isRunning = state.getIsRunning();
+        isPaused = state.getIsPaused();
+        stepName = state.getStepName();
+        lock.unlock();
     }
 }

@@ -10,6 +10,8 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.ViewDataBinding;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.common.base.Strings;
@@ -39,11 +41,13 @@ class BindableViewHolder<VT extends ItemViewModel>
 
     @Nullable
     private YouTubePlayer youTubePlayer = null;
+    private final LifecycleOwner lifecycleOwner;
 
     public BindableViewHolder(ViewDataBinding binding, IStartDragListener<VT> startDragListener) {
         super(binding.getRoot());
         this.binding = binding;
         this.startDragListener = startDragListener;
+        lifecycleOwner = MainActivity.Instance.getCurrentFragment();
     }
 
 
@@ -74,13 +78,15 @@ class BindableViewHolder<VT extends ItemViewModel>
     }
 
     private void initYouTubePlayer(IHasYouTubePlayer hasYouTubePlayer, String videoId) {
+        YouTubePlayerView youTubePlayerView = binding.getRoot().findViewById(hasYouTubePlayer.getYouTubePlayerID());
+
         if (youTubePlayer != null){
+            youTubePlayerView.onStateChanged(lifecycleOwner, Lifecycle.Event.ON_START);
             youTubePlayer.cueVideo(videoId, 0f);
             return;
         }
 
-        YouTubePlayerView youTubePlayerView = binding.getRoot().findViewById(hasYouTubePlayer.getYouTubePlayerID());
-        MainActivity.Instance.getCurrentFragment().getLifecycle().addObserver(youTubePlayerView);
+        lifecycleOwner.getLifecycle().addObserver(youTubePlayerView);
 
         IFramePlayerOptions iFramePlayerOptions = new IFramePlayerOptions.Builder()
                 .controls(1)
@@ -107,6 +113,13 @@ class BindableViewHolder<VT extends ItemViewModel>
             ICanBeReordered canBeReordered = (ICanBeReordered) viewModel;
             View dragHandle = binding.getRoot().findViewById(canBeReordered.getDragHandleId());
             dragHandle.setOnTouchListener(null);
+        }
+        if (viewModel instanceof IHasYouTubePlayer){
+            IHasYouTubePlayer hasYouTubePlayer = (IHasYouTubePlayer) viewModel;
+            if (youTubePlayer != null) {
+                YouTubePlayerView youTubePlayerView = binding.getRoot().findViewById(hasYouTubePlayer.getYouTubePlayerID());
+                youTubePlayerView.onStateChanged(lifecycleOwner, Lifecycle.Event.ON_STOP);
+            }
         }
     }
 
