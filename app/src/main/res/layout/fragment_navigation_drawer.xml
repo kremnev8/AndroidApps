@@ -99,9 +99,10 @@
             android:gravity="center|start"
             android:insetLeft="20dp"
             android:insetRight="20dp"
-            android:text="@string/settings_label"
             android:onClick="@{viewModel::settingsButtonClicked}"
-            android:textColor="@color/black" />
+            android:text="@string/settings_label"
+            android:textColor="@color/black"
+            android:visibility="gone" />
 
     </LinearLayout>
 </layout>

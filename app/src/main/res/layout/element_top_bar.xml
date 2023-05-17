@@ -42,7 +42,7 @@
         android:background="@color/invisible"
         android:contentDescription="@string/menu_desc"
         android:scaleType="fitXY"
-        android:src="@drawable/row_256"
+        android:src="@drawable/ic_menu"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:tint="@color/black" />
@@ -57,6 +57,6 @@
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_steps" />
+        app:srcCompat="@drawable/ic_filters" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
