@@ -68,7 +68,7 @@
     <string name="login_successful_message">Вход успешен</string>
     <string name="drag_handle_desc">Кнопка перетаскивания</string>
     <string name="add_media_label">Добавить медиа</string>
-    <string name="select_youtube_uri">Введите ссылку на видео YouTube</string>
+    <string name="select_media_uri">Введите ссылку на изображение или видео YouTube</string>
     <string name="filter_label">Фильтр</string>
     <string name="sort_by_label">Сортировать</string>
     <string name="recent_label">Недавнее</string>

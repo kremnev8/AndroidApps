@@ -51,7 +51,6 @@ import com.kremnev8.electroniccookbook.interfaces.ILoginSuccessCallback;
 import com.kremnev8.electroniccookbook.interfaces.IMediaProvider;
 import com.kremnev8.electroniccookbook.interfaces.IMediaRequestCallback;
 import com.kremnev8.electroniccookbook.interfaces.IMenu;
-import com.kremnev8.electroniccookbook.interfaces.ISearchStateProvider;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.FullscreenListener;
 
 import java.io.File;
@@ -337,7 +336,7 @@ public class MainActivity
 
     private AlertDialog createSelectVideoDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.select_youtube_uri);
+        builder.setTitle(R.string.select_media_uri);
 
 // Set up the input
         final EditText input = new EditText(this);
