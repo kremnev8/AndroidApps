@@ -45,7 +45,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
-        android:id="@+id/drawerMenuView"
+        android:id="@+id/drawerNavigationView"
         android:layout_width="300dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
@@ -54,12 +54,31 @@
         android:baselineAligned="false">
 
         <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/drawerMenu"
+            android:id="@+id/navigationMenu"
             android:name="com.kremnev8.electroniccookbook.components.tabs.fragment.NavigationDrawerFragment"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             tools:layout="@layout/fragment_navigation_drawer" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/drawerFiltersView"
+        android:layout_width="300dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        android:background="@color/invisible"
+        android:fitsSystemWindows="true"
+        android:baselineAligned="false">
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/filtersMenu"
+            android:name="com.kremnev8.electroniccookbook.components.tabs.fragment.FiltersDrawerFragment"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            tools:layout="@layout/fragment_filters_drawer" />
 
     </LinearLayout>
 

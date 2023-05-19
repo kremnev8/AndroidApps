@@ -7,15 +7,19 @@ import android.util.Log;
 
 import androidx.lifecycle.SavedStateHandle;
 
+import com.google.common.base.Splitter;
 import com.kremnev8.electroniccookbook.MainActivity;
 import com.kremnev8.electroniccookbook.common.recycler.SimpleListViewModel;
 import com.kremnev8.electroniccookbook.components.profile.model.Profile;
 import com.kremnev8.electroniccookbook.components.recipe.edit.fragment.RecipeEditFragment;
 import com.kremnev8.electroniccookbook.components.recipe.list.itemviewmodel.RecipeItemViewModel;
 import com.kremnev8.electroniccookbook.components.recipe.model.Recipe;
+import com.kremnev8.electroniccookbook.components.tabs.model.SearchData;
 import com.kremnev8.electroniccookbook.database.DatabaseExecutor;
 import com.kremnev8.electroniccookbook.interfaces.IFragmentController;
 import com.kremnev8.electroniccookbook.interfaces.IProfileProvider;
+
+import java.util.Date;
 
 import javax.inject.Inject;
 
@@ -29,6 +33,7 @@ public class RecipesListViewModel extends SimpleListViewModel<Recipe> {
     private final IFragmentController fragmentController;
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
     private int profileId;
+    private final Splitter splitter = Splitter.on(',').omitEmptyStrings();
 
     @Inject
     RecipesListViewModel(SavedStateHandle handle, DatabaseExecutor databaseExecutor, IProfileProvider profileProvider, IFragmentController fragmentController) {
@@ -48,11 +53,23 @@ public class RecipesListViewModel extends SimpleListViewModel<Recipe> {
         });
     }
 
+    public void onSearchChanged(SearchData searchData){
+        itemViewModelHolder.setFilterAndComparator(
+                searchData.getRecipeSearchFilter(),
+                searchData.geRecipeComparator()
+        );
+    }
+
+    public boolean getTest(){
+        return true;
+    }
+
     public void addRecipe(){
         if (profileId == 0) return;
 
         Recipe recipe = new Recipe();
         recipe.profileId = profileId;
+        recipe.lastModified = new Date();
         databaseExecutor.upsertWithCallback(recipe, itemId -> {
             Bundle args = new Bundle();
             recipe.id = (int)itemId;

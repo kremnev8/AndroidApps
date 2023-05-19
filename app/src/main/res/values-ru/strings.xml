@@ -69,4 +69,14 @@
     <string name="drag_handle_desc">Кнопка перетаскивания</string>
     <string name="add_media_label">Добавить медиа</string>
     <string name="select_youtube_uri">Введите ссылку на видео YouTube</string>
+    <string name="filter_label">Фильтр</string>
+    <string name="sort_by_label">Сортировать</string>
+    <string name="recent_label">Недавнее</string>
+    <string name="with_ingredients_label">С ингредиентами</string>
+    <string name="without_ingredients_label">Без ингредиентов</string>
+    <string name="include_hint">Включить</string>
+    <string name="exclude_hint">Исключить</string>
+    <string name="search_hint">Применить</string>
+    <string name="search_icon_desc">Иконка поиска</string>
+    <string name="none_label">Не сортировать</string>
 </resources>

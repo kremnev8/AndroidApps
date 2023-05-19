@@ -13,14 +13,16 @@ import com.kremnev8.electroniccookbook.components.recipe.model.Recipe;
 
 import java.util.List;
 
+import io.reactivex.rxjava3.core.Flowable;
+
 @Dao
 public interface RecipeDao {
 
     @Query("SELECT * FROM recipe WHERE profileId = :profileId")
-    LiveData<List<Recipe>> getRecipes(int profileId);
+    Flowable<List<Recipe>> getRecipes(int profileId);
 
     @Query("SELECT * FROM recipe WHERE id = :id")
-    LiveData<Recipe> getRecipe(int id);
+    Flowable<Recipe> getRecipe(int id);
 
     @Upsert(entity = Recipe.class)
     long upsert(Recipe recipe);

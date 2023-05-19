@@ -17,11 +17,12 @@ import java.util.List;
 
 public class BindableRecyclerViewAdapter<VT extends ItemViewModel>
         extends RecyclerView.Adapter<BindableViewHolder<VT>>
-        implements ItemMoveCallback.ItemTouchHelperContract<VT>, IStartDragListener<VT> {
+        implements ItemMoveCallback.ItemTouchHelperContract<VT>, IStartDragListener<VT>, IHasOnTwos {
 
     private List<VT> itemViewModels = new ArrayList<>();
     private final HashMap<Integer, Integer> viewTypeToLayoutId = new HashMap<>();
     private ItemTouchHelper itemTouchHelper;
+    private boolean onTwos;
 
     private final int firstColor;
     private final int secondColor;
@@ -58,7 +59,9 @@ public class BindableRecyclerViewAdapter<VT extends ItemViewModel>
     }
 
     private void setItemBackgroundColor(@NonNull BindableViewHolder<VT> holder) {
-        if (holder.position % 2 == 0){
+        int val = holder.position % (onTwos ? 4 : 2);
+
+        if (val == 0 || val == 3){
             holder.itemView.setBackgroundColor(firstColor);
         }else{
             holder.itemView.setBackgroundColor(secondColor);
@@ -150,5 +153,10 @@ public class BindableRecyclerViewAdapter<VT extends ItemViewModel>
         if (itemTouchHelper != null){
             itemTouchHelper.startDrag(viewHolder);
         }
+    }
+
+    @Override
+    public void setOnTwos(boolean onTwos) {
+        this.onTwos = onTwos;
     }
 }

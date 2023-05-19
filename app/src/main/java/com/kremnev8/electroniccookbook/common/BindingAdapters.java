@@ -12,12 +12,14 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.kremnev8.electroniccookbook.MainActivity;
 import com.kremnev8.electroniccookbook.R;
 import com.kremnev8.electroniccookbook.common.recycler.BindableRecyclerViewAdapter;
+import com.kremnev8.electroniccookbook.common.recycler.IHasOnTwos;
 import com.kremnev8.electroniccookbook.common.recycler.IReorderCallback;
 import com.kremnev8.electroniccookbook.common.recycler.ItemMoveCallback;
 import com.kremnev8.electroniccookbook.common.recycler.ItemViewModel;
@@ -37,6 +39,15 @@ public class BindingAdapters {
     public static <VT extends ItemViewModel> void bindItemViewModels(RecyclerView recyclerView, List<VT> itemViewModels) {
         BindableRecyclerViewAdapter<VT> adapter = getOrCreateAdapter(recyclerView);
         adapter.updateItems(itemViewModels);
+    }
+
+    @androidx.databinding.BindingAdapter("isTwoRows")
+    public static void isTwoRows(View view, boolean value) {
+        if (view instanceof RecyclerView){
+            IHasOnTwos hasOnTwos = (IHasOnTwos)((RecyclerView)view).getAdapter();
+            assert hasOnTwos != null;
+            hasOnTwos.setOnTwos(value);
+        }
     }
 
     public static <VT extends ItemViewModel> BindableRecyclerViewAdapter<VT> getOrCreateAdapter(RecyclerView recyclerView) {

@@ -51,11 +51,4 @@ public class NavigationDrawerFragment extends Fragment {
 
         return binding.getRoot();
     }
-
-    @Override
-    public void onConfigurationChanged(@NonNull Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        getParentFragmentManager().beginTransaction().detach(NavigationDrawerFragment.this).commit();
-        getParentFragmentManager().beginTransaction().attach(NavigationDrawerFragment.this).commit();
-    }
 }

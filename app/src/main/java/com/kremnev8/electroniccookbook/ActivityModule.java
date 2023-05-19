@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 
 import com.kremnev8.electroniccookbook.components.profile.model.Profile;
 import com.kremnev8.electroniccookbook.components.timers.ITimerService;
+import com.kremnev8.electroniccookbook.interfaces.IAction;
 import com.kremnev8.electroniccookbook.interfaces.IDrawerController;
 import com.kremnev8.electroniccookbook.interfaces.IFragmentController;
 import com.kremnev8.electroniccookbook.interfaces.ILoginSuccessCallback;
@@ -53,6 +54,16 @@ public class ActivityModule {
             public void closeDrawer(DrawerKind kind) {
                 MainActivity.Instance.closeDrawer(kind);
             }
+
+            @Override
+            public void addOnDrawerStateChangedListener(IAction action) {
+                MainActivity.Instance.addOnDrawerStateChangedListener(action);
+            }
+
+            @Override
+            public void removeListener(IAction action) {
+                MainActivity.Instance.removeListener(action);
+            }
         };
     }
 
@@ -68,6 +79,16 @@ public class ActivityModule {
             @Override
             public void showLoginDialog(ILoginSuccessCallback callback, Profile profile) {
                 MainActivity.Instance.showLoginDialog(callback, profile);
+            }
+
+            @Override
+            public Fragment getCurrentFragment() {
+                return MainActivity.Instance.getCurrentFragment();
+            }
+
+            @Override
+            public boolean isViewingInFullScreen() {
+                return MainActivity.Instance.isViewingInFullScreen();
             }
         };
     }

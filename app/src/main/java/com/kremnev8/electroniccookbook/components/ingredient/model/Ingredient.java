@@ -17,6 +17,7 @@ import com.kremnev8.electroniccookbook.components.recipe.model.Recipe;
 
 import java.text.DecimalFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.stream.Collectors;
 
 @Entity(tableName = "ingredients",indices = {
@@ -48,6 +49,9 @@ public class Ingredient implements Parcelable {
 
     @ColumnInfo(name = "units")
     public String units;
+
+    @ColumnInfo(name = "lastModified", defaultValue = "0")
+    public Date lastModified;
 
     public Ingredient(){}
 
@@ -104,6 +108,12 @@ public class Ingredient implements Parcelable {
         return pair;
     }
 
+
+    public static class AmountPair{
+        public float amount;
+        public String units;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -112,18 +122,23 @@ public class Ingredient implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(this.id);
+        dest.writeInt(this.profileId);
         dest.writeString(this.name);
         dest.writeString(this.iconUri);
         dest.writeFloat(this.amount);
         dest.writeString(this.units);
+        dest.writeLong(this.lastModified != null ? this.lastModified.getTime() : -1);
     }
 
     protected Ingredient(Parcel in) {
         this.id = in.readInt();
+        this.profileId = in.readInt();
         this.name = in.readString();
         this.iconUri = in.readString();
         this.amount = in.readFloat();
         this.units = in.readString();
+        long tmpLastModified = in.readLong();
+        this.lastModified = tmpLastModified == -1 ? null : new Date(tmpLastModified);
     }
 
     public static final Parcelable.Creator<Ingredient> CREATOR = new Parcelable.Creator<>() {
@@ -137,9 +152,4 @@ public class Ingredient implements Parcelable {
             return new Ingredient[size];
         }
     };
-
-    public static class AmountPair{
-        public float amount;
-        public String units;
-    }
 }

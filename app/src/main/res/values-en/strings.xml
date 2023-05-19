@@ -78,5 +78,15 @@
     <string name="drag_handle_desc">Drag Handle</string>
     <string name="add_media_label">Add Media</string>
     <string name="select_youtube_uri">Enter YouTube video uri</string>
+    <string name="filter_label">Filter</string>
+    <string name="sort_by_label">Sort By</string>
+    <string name="recent_label">Recent</string>
+    <string name="with_ingredients_label">With Ingredients</string>
+    <string name="without_ingredients_label">Without Ingredients</string>
+    <string name="include_hint">Include</string>
+    <string name="exclude_hint">Exclude</string>
+    <string name="search_hint">Apply</string>
+    <string name="search_icon_desc">Search Icon</string>
+    <string name="none_label">No sort</string>
 
 </resources>

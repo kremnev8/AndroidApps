@@ -44,12 +44,14 @@ import com.kremnev8.electroniccookbook.components.timers.TimersService;
 import com.kremnev8.electroniccookbook.contract.TakePictureWithUriReturnContract;
 import com.kremnev8.electroniccookbook.database.DatabaseExecutor;
 import com.kremnev8.electroniccookbook.databinding.ActivityMainBinding;
+import com.kremnev8.electroniccookbook.interfaces.IAction;
 import com.kremnev8.electroniccookbook.interfaces.IDrawerController;
 import com.kremnev8.electroniccookbook.interfaces.IFragmentController;
 import com.kremnev8.electroniccookbook.interfaces.ILoginSuccessCallback;
 import com.kremnev8.electroniccookbook.interfaces.IMediaProvider;
 import com.kremnev8.electroniccookbook.interfaces.IMediaRequestCallback;
 import com.kremnev8.electroniccookbook.interfaces.IMenu;
+import com.kremnev8.electroniccookbook.interfaces.ISearchStateProvider;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.FullscreenListener;
 
 import java.io.File;
@@ -86,7 +88,8 @@ public class MainActivity
     private AlertDialog photoDialog;
     private AlertDialog mediaDialog;
     private AlertDialog videoUriDialog;
-    Handler mainHandler = new Handler(Looper.getMainLooper());
+    private final Handler mainHandler = new Handler(Looper.getMainLooper());
+    private final List<IAction> drawerStateListeners = new ArrayList<>();
 
     @Inject
     DatabaseExecutor executor;
@@ -125,7 +128,7 @@ public class MainActivity
 
         binding.topBar.menuButton.setOnClickListener(v -> toggleDrawer(DrawerKind.NAVIGATION));
 
-        binding.drawerLayout.closeDrawer(binding.drawerMenuView);
+        binding.drawerLayout.closeDrawer(binding.drawerNavigationView);
 
         fragmentManager = getSupportFragmentManager();
         updateCurrentFragment();
@@ -159,6 +162,11 @@ public class MainActivity
 
     public Fragment getCurrentFragment() {
         return fragmentManager.findFragmentById(R.id.fragmentContainerView);
+    }
+
+    @Override
+    public boolean isViewingInFullScreen() {
+        return isFullscreen;
     }
 
     public <T extends Fragment> void setFragment(Class<T> clazz, @Nullable Bundle args) {
@@ -196,9 +204,9 @@ public class MainActivity
     public View getDrawerView(DrawerKind kind) {
         switch (kind) {
             case NAVIGATION:
-                return binding.drawerMenuView;
+                return binding.drawerNavigationView;
             case FILTERS:
-                return null;
+                return binding.drawerFiltersView;
         }
         return null;
     }
@@ -212,6 +220,7 @@ public class MainActivity
         } else {
             binding.drawerLayout.openDrawer(drawer);
         }
+        notifyDrawerStateListeners();
     }
 
     public void closeDrawer(DrawerKind kind) {
@@ -219,6 +228,23 @@ public class MainActivity
         if (drawer == null) return;
 
         binding.drawerLayout.closeDrawer(drawer);
+        notifyDrawerStateListeners();
+    }
+
+    private void notifyDrawerStateListeners(){
+        for (var stateListener: drawerStateListeners) {
+            stateListener.action();
+        }
+    }
+
+    @Override
+    public void addOnDrawerStateChangedListener(IAction action) {
+        drawerStateListeners.add(action);
+    }
+
+    @Override
+    public void removeListener(IAction action) {
+        drawerStateListeners.remove(action);
     }
 
     public void showLoginDialog(ILoginSuccessCallback callback, Profile profile) {

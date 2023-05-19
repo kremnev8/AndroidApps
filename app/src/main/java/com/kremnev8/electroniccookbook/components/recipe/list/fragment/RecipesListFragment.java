@@ -16,8 +16,13 @@ import com.kremnev8.electroniccookbook.R;
 import com.kremnev8.electroniccookbook.common.ContextMenuKind;
 import com.kremnev8.electroniccookbook.common.recycler.ItemView;
 import com.kremnev8.electroniccookbook.components.recipe.list.viewmodel.RecipesListViewModel;
+import com.kremnev8.electroniccookbook.components.tabs.model.SearchData;
 import com.kremnev8.electroniccookbook.databinding.FragmentRecipesListBinding;
+import com.kremnev8.electroniccookbook.interfaces.IDrawerController;
 import com.kremnev8.electroniccookbook.interfaces.IMenu;
+import com.kremnev8.electroniccookbook.interfaces.ISearchStateProvider;
+
+import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -27,6 +32,10 @@ public class RecipesListFragment extends Fragment implements IMenu {
     private RecipesListViewModel recipesListViewModel;
     private FragmentRecipesListBinding binding;
 
+    @Inject
+    IDrawerController drawerController;
+    @Inject
+    ISearchStateProvider searchStateProvider;
 
     public static RecipesListFragment newInstance() {
         return new RecipesListFragment();
@@ -45,7 +54,13 @@ public class RecipesListFragment extends Fragment implements IMenu {
 
         registerForContextMenu(binding.recipeList);
 
+        searchStateProvider.getSearchData().observe(getViewLifecycleOwner(), this::onSearchChanged);
+
         return binding.getRoot();
+    }
+
+    public void onSearchChanged(SearchData searchData){
+        recipesListViewModel.onSearchChanged(searchData);
     }
 
     @Override
@@ -71,7 +86,7 @@ public class RecipesListFragment extends Fragment implements IMenu {
 
     @Override
     public int getMenuName() {
-        return R.string.recipe_label;
+        return R.string.recipes_label;
     }
 
     @Override
@@ -81,11 +96,11 @@ public class RecipesListFragment extends Fragment implements IMenu {
 
     @Override
     public int getActionImage() {
-        return 0;
+        return R.drawable.ic_filters;
     }
 
     @Override
     public void onAction() {
-
+        drawerController.toggleDrawer(IDrawerController.DrawerKind.FILTERS);
     }
 }

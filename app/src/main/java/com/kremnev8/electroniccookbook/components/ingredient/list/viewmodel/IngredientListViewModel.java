@@ -4,9 +4,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
-import android.util.Pair;
 
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.SavedStateHandle;
 
 import com.kremnev8.electroniccookbook.MainActivity;
@@ -14,11 +12,14 @@ import com.kremnev8.electroniccookbook.common.recycler.SimpleListViewModel;
 import com.kremnev8.electroniccookbook.components.ingredient.edit.fragment.IngredientEditFragment;
 import com.kremnev8.electroniccookbook.components.ingredient.model.Ingredient;
 import com.kremnev8.electroniccookbook.components.profile.model.Profile;
+import com.kremnev8.electroniccookbook.components.tabs.model.SearchData;
 import com.kremnev8.electroniccookbook.database.DatabaseExecutor;
 import com.kremnev8.electroniccookbook.interfaces.IFragmentController;
 import com.kremnev8.electroniccookbook.interfaces.IProfileProvider;
 
-import java.util.List;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.Date;
 
 import javax.inject.Inject;
 
@@ -33,9 +34,11 @@ public class IngredientListViewModel extends SimpleListViewModel<Ingredient> {
     private int profileId;
 
     @Inject
-    IngredientListViewModel(SavedStateHandle handle, DatabaseExecutor databaseExecutor, IProfileProvider profileProvider, IFragmentController fragmentController) {
+    IngredientListViewModel(SavedStateHandle handle, DatabaseExecutor databaseExecutor,
+                            IProfileProvider profileProvider, IFragmentController fragmentController) {
         super(handle, databaseExecutor);
         this.fragmentController = fragmentController;
+
         profileProvider
                 .getCurrentProfile()
                 .subscribeOn(Schedulers.computation())
@@ -53,12 +56,20 @@ public class IngredientListViewModel extends SimpleListViewModel<Ingredient> {
         });
     }
 
+    public void onSearchChanged(SearchData searchData){
+        itemViewModelHolder.setFilterAndComparator(
+                searchData.getIngredientSearchFilter(),
+                searchData.geIngredientComparator()
+        );
+    }
+
     public void addIngredient(){
         if (profileId == 0) return;
 
         Bundle args = new Bundle();
         Ingredient ingredient = new Ingredient();
         ingredient.profileId = profileId;
+        ingredient.lastModified = new Date();
         args.putParcelable(IngredientEditFragment.InspectIngredient, ingredient);
         fragmentController.setFragment(IngredientEditFragment.class, args);
     }

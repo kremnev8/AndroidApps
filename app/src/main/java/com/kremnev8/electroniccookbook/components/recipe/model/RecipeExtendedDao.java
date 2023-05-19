@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
+import io.reactivex.rxjava3.core.Flowable;
+
 public interface RecipeExtendedDao extends RecipeDao {
 
     LiveData<List<Recipe>> getRecipesWithData(int profileId);

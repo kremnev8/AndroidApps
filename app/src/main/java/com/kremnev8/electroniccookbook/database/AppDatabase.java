@@ -11,11 +11,13 @@ import androidx.room.RenameColumn;
 import androidx.room.RenameTable;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.TypeConverters;
 import androidx.room.migration.AutoMigrationSpec;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.kremnev8.electroniccookbook.IngredientDataProvider;
+import com.kremnev8.electroniccookbook.common.Converters;
 import com.kremnev8.electroniccookbook.components.ingredient.model.IngredientDao;
 import com.kremnev8.electroniccookbook.components.ingredient.model.Ingredient;
 import com.kremnev8.electroniccookbook.components.profile.model.ProfileDao;
@@ -42,7 +44,7 @@ import java.util.concurrent.Executors;
         Profile.class,
         RecipeStepCache.class,
         RecipeIngredientCache.class},
-        version = 11,
+        version = 12,
         autoMigrations = {
                 @AutoMigration(from = 1, to = 2, spec = AppDatabase.UriRenameMigration.class),
                 @AutoMigration(from = 2, to = 3),
@@ -53,8 +55,10 @@ import java.util.concurrent.Executors;
                 @AutoMigration(from = 8, to = 9),
                 @AutoMigration(from = 9, to = 10, spec = AppDatabase.ProfileSegregationMigration.class),
                 @AutoMigration(from = 10, to = 11, spec = AppDatabase.DeleteIngredientLinkMigration.class),
+                @AutoMigration(from = 11, to = 12)
         }
 )
+@TypeConverters({Converters.class})
 public abstract class AppDatabase extends RoomDatabase implements DaoAccess {
 
     private static final String DATABASE_NAME = "app_database.db";

@@ -87,7 +87,7 @@
             android:gravity="center|start"
             android:insetLeft="20dp"
             android:insetRight="20dp"
-            android:text="@string/recipe_label"
+            android:text="@string/recipes_label"
             android:onClick="@{viewModel::recipesButtonClicked}"
             android:textColor="@color/black" />
 

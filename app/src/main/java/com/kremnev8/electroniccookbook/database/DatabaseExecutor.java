@@ -1,6 +1,7 @@
 package com.kremnev8.electroniccookbook.database;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.LiveDataReactiveStreams;
 
 import com.google.common.base.Strings;
 import com.kremnev8.electroniccookbook.components.ingredient.model.Ingredient;
@@ -20,12 +21,16 @@ import com.kremnev8.electroniccookbook.components.recipe.model.RecipeStepDao;
 import com.kremnev8.electroniccookbook.components.recipe.model.RecipeViewIngredientCache;
 import com.kremnev8.electroniccookbook.components.recipe.model.RecipeViewStepCache;
 
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Flowable;
+import io.reactivex.rxjava3.core.Scheduler;
 import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class DatabaseExecutor implements
         IngredientDao,
@@ -56,11 +61,13 @@ public class DatabaseExecutor implements
 
     @Override
     public void insert(Ingredient ingredient) {
+        ingredient.lastModified = new Date();
         executor.execute(() -> daoAccess.ingredientDao().insert(ingredient));
     }
 
     @Override
     public void update(Ingredient ingredient) {
+        ingredient.lastModified = new Date();
         executor.execute(() -> daoAccess.ingredientDao().update(ingredient));
     }
 
@@ -75,47 +82,55 @@ public class DatabaseExecutor implements
     }
 
     @Override
-    public LiveData<List<Recipe>> getRecipes(int profileId) {
+    public Flowable<List<Recipe>> getRecipes(int profileId) {
         return daoAccess.recipeDao().getRecipes(profileId);
     }
 
     @Override
-    public LiveData<Recipe> getRecipe(int id) {
+    public Flowable<Recipe> getRecipe(int id) {
         return daoAccess.recipeDao().getRecipe(id);
     }
 
     @Override
     public LiveData<List<Recipe>> getRecipesWithData(int profileId) {
-        LiveData<List<Recipe>> recipes = getRecipes(profileId);
-        if (recipes.getValue() != null) {
-            for (var recipe : recipes.getValue()) {
-                recipe.ingredients = getRecipeIngredients(recipe.id);
-                recipe.steps = getRecipeSteps(recipe.id);
-            }
-        }
+        var flowable = getRecipes(profileId)
+                .map(recipes -> {
+                    for (var recipe : recipes) {
+                        recipe.ingredients = getRecipeIngredientsDirect(recipe.id).blockingGet();
+                        recipe.steps = getRecipeStepsDirect(recipe.id).blockingGet();
+                    }
+                    return recipes;
+                })
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread());
 
-        return recipes;
+        return LiveDataReactiveStreams.fromPublisher(flowable);
     }
 
     @Override
     public LiveData<Recipe> getRecipeWithData(int id) {
-        LiveData<Recipe> recipe = getRecipe(id);
-        if (recipe.getValue() != null) {
-            recipe.getValue().ingredients = getRecipeIngredients(id);
-            recipe.getValue().steps = getRecipeSteps(id);
-        }
+        var flowable = getRecipe(id)
+                .map(recipe -> {
+                    recipe.ingredients = getRecipeIngredientsDirect(recipe.id).blockingGet();
+                    recipe.steps = getRecipeStepsDirect(recipe.id).blockingGet();
+                    return recipe;
+                })
+                .subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread());
 
-        return recipe;
+        return LiveDataReactiveStreams.fromPublisher(flowable);
     }
 
     @Override
     public long upsert(Recipe recipe) {
+        recipe.lastModified = new Date();
         executor.execute(() -> daoAccess.recipeDao().upsert(recipe));
         return -1;
     }
 
     public void upsertWithCallback(Recipe recipe, IInsertCallback callback) {
         executor.execute(() -> {
+            recipe.lastModified = new Date();
             long id = daoAccess.recipeDao().upsert(recipe);
             callback.onComplete(id);
         });
@@ -124,6 +139,7 @@ public class DatabaseExecutor implements
     @Override
     public void update(Recipe recipe) {
         executor.execute(() -> {
+            recipe.lastModified = new Date();
             daoAccess.recipeDao().update(recipe);
             daoAccess.recipeStepCacheDao().clearRecipeCache(recipe.id);
         });
@@ -167,23 +183,23 @@ public class DatabaseExecutor implements
 
     @Override
     public void insertWithData(Recipe recipe) {
-        if (recipe.ingredients != null && recipe.ingredients.getValue() != null) {
-            for (var ingredient : recipe.ingredients.getValue()) {
+        if (recipe.ingredients != null) {
+            for (var ingredient : recipe.ingredients) {
                 ingredient.recipe = recipe.id;
             }
         }
-        if (recipe.steps != null && recipe.steps.getValue() != null) {
-            for (var step : recipe.steps.getValue()) {
+        if (recipe.steps != null) {
+            for (var step : recipe.steps) {
                 step.recipe = recipe.id;
             }
         }
         executor.execute(() -> {
             daoAccess.recipeDao().upsert(recipe);
             if (recipe.steps != null)
-                daoAccess.recipeStepDao().upsertAllSteps(recipe.steps.getValue());
-            if (recipe.ingredients != null && recipe.ingredients.getValue() != null) {
-                daoAccess.recipeIngredientDao().upsertAllIngredients(recipe.ingredients.getValue());
-                for (var recipeIngredient : recipe.ingredients.getValue()) {
+                daoAccess.recipeStepDao().upsertAllSteps(recipe.steps);
+            if (recipe.ingredients != null) {
+                daoAccess.recipeIngredientDao().upsertAllIngredients(recipe.ingredients);
+                for (var recipeIngredient : recipe.ingredients) {
                     if (Strings.isNullOrEmpty(recipeIngredient.ingredientName)) continue;
 
                     Ingredient ingredient = daoAccess.ingredientDao().findIngredient(recipeIngredient.ingredientName);

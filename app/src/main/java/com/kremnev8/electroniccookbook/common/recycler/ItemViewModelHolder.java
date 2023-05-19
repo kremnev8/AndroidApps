@@ -1,17 +1,24 @@
 package com.kremnev8.electroniccookbook.common.recycler;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ItemViewModelHolder<T> {
 
     private final IItemViewModelSource<T, ItemViewModel> itemViewModelActivator;
     private ItemViewModel footerItemViewModel;
+
+    private ISearchFilter<T> searchFilter;
+    private Comparator<T> comparator;
 
     protected LiveData<List<T>> rawData;
     protected MutableLiveData<ArrayList<ItemViewModel>> viewModels = new MutableLiveData<>();
@@ -50,6 +57,13 @@ public class ItemViewModelHolder<T> {
         rawData.observeForever(this::updateViewData);
     }
 
+    public void setFilterAndComparator(@Nullable ISearchFilter<T> searchFilter, @Nullable Comparator<T> comparator) {
+        this.searchFilter = searchFilter;
+        this.comparator = comparator;
+        if (rawData != null && rawData.getValue() != null)
+            updateViewData(rawData.getValue());
+    }
+
     public ArrayList<ItemViewModel> createViewData(){
         if (footerItemViewModel != null){
             var list = new ArrayList<ItemViewModel>(1);
@@ -63,6 +77,17 @@ public class ItemViewModelHolder<T> {
     public void updateViewData(List<T> newData){
         var viewModelsList = viewModels.getValue();
         assert viewModelsList != null;
+        Stream<T> stream = newData.stream();
+
+        if (searchFilter != null)
+            stream = stream.filter(t -> searchFilter.shouldShow(t));
+
+        if (comparator != null)
+            stream = stream.sorted(comparator);
+
+        if (searchFilter != null || comparator != null)
+            newData = stream.collect(Collectors.toList());
+
         int size = newData.size();
 
         if (footerItemViewModel != null){

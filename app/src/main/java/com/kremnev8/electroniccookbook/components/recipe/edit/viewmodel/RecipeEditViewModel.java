@@ -119,8 +119,8 @@ public class RecipeEditViewModel extends SimpleViewModel<Recipe> implements IMed
     }
 
     public void saveData() {
-        model.steps = stepsHolder.getLiveData();
-        model.ingredients = ingredientsHolder.getLiveData();
+        model.steps = stepsHolder.getList();
+        model.ingredients = ingredientsHolder.getList();
         databaseExecutor.insertWithData(model);
     }
 

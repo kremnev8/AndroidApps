@@ -1,5 +1,6 @@
 package com.kremnev8.electroniccookbook.components.recipe.view.fragment;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +20,10 @@ import com.kremnev8.electroniccookbook.components.recipe.edit.fragment.RecipeEdi
 import com.kremnev8.electroniccookbook.components.recipe.view.RecipeViewStateAdapter;
 import com.kremnev8.electroniccookbook.components.recipe.view.viewmodel.RecipeViewModel;
 import com.kremnev8.electroniccookbook.databinding.FragmentRecipeViewBinding;
+import com.kremnev8.electroniccookbook.interfaces.IFragmentController;
 import com.kremnev8.electroniccookbook.interfaces.IMenu;
+
+import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -35,6 +39,10 @@ public class RecipeViewFragment
     private FragmentRecipeViewBinding binding;
     private RecipeViewStateAdapter adapter;
     private int scrollToStep = -1;
+
+    @Inject
+    IFragmentController fragmentController;
+    private int lastOrientation = Configuration.ORIENTATION_PORTRAIT;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -61,6 +69,17 @@ public class RecipeViewFragment
         binding.setViewModel(viewModel);
 
         return binding.getRoot();
+    }
+
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (!fragmentController.isViewingInFullScreen() &&
+            lastOrientation != newConfig.orientation) {
+            getParentFragmentManager().beginTransaction().detach(RecipeViewFragment.this).commit();
+            getParentFragmentManager().beginTransaction().attach(RecipeViewFragment.this).commit();
+            lastOrientation = newConfig.orientation;
+        }
     }
 
     @Override

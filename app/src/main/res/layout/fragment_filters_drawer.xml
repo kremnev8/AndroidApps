@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.kremnev8.electroniccookbook.components.tabs.viewmodel.FiltersDrawerViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/invisible"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:background="@color/invisible" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/light_gray">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/light_gray"
+            android:orientation="vertical"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="100dp">
+
+
+            <TextView
+                android:id="@+id/filterLabel"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:gravity="center|start"
+                android:text="@string/filter_label"
+                android:textSize="28sp" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/imageView3"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:contentDescription="@string/search_icon_desc"
+                    android:src="@drawable/ic_search"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <EditText
+                    android:id="@+id/searchField"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:ems="10"
+                    android:hint="@string/search_hint"
+                    android:importantForAutofill="no"
+                    android:inputType="textPersonName"
+                    android:paddingStart="30dp"
+                    android:text="@={viewModel.searchData.search}"
+                    android:textColorHint="@color/dark_gray"
+                    android:textSize="20sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="RtlSymmetry" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="20dp">
+
+                <TextView
+                    android:id="@+id/sortByLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:text="@string/sort_by_label"
+                    android:textSize="24sp" />
+
+                <RadioGroup
+                    android:id="@+id/searchRadioGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checkedButton="@={viewModel.searchData.searchButtonId}">
+
+                    <RadioButton
+                        android:id="@+id/noSearch"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/none_label"
+                        tools:ignore="TextContrastCheck" />
+
+                    <RadioButton
+                        android:id="@+id/searchByName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/name_label"
+                        tools:ignore="TextContrastCheck" />
+
+                    <RadioButton
+                        android:id="@+id/searchByRecent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/recent_label" />
+                </RadioGroup>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="10dp"
+                app:isVisibleOrGone="@{viewModel.isRecipeList}">
+
+                <TextView
+                    android:id="@+id/withIngredientsLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:text="@string/with_ingredients_label"
+                    android:textSize="24sp" />
+
+                <EditText
+                    android:id="@+id/withField"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:ems="10"
+                    android:hint="@string/include_hint"
+                    android:importantForAutofill="no"
+                    android:inputType="textPersonName"
+                    android:text="@={viewModel.searchData.include}"
+                    android:textColorHint="@color/dark_gray"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="10dp"
+                app:isVisibleOrGone="@{viewModel.isRecipeList}">
+
+                <TextView
+                    android:id="@+id/withoutIngredientsLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:text="@string/without_ingredients_label"
+                    android:textSize="24sp" />
+
+                <EditText
+                    android:id="@+id/withoutField"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:ems="10"
+                    android:hint="@string/exclude_hint"
+                    android:importantForAutofill="no"
+                    android:inputType="textPersonName"
+                    android:imeOptions="actionDone"
+                    android:text="@={viewModel.searchData.exclude}"
+                    android:textColorHint="@color/dark_gray"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="30dp">
+            <Button
+                android:id="@+id/searchButton"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/search_hint"
+                android:onClick="@{() -> viewModel.confirmSearch()}"/>
+            </FrameLayout>
+
+
+        </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+</layout>
