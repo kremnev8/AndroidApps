@@ -187,14 +187,18 @@ public class ImportRecipeWorker extends Worker {
             String urlStr = image.attr("src");
             if (Strings.isNullOrEmpty(urlStr)) continue;
 
-            FutureTarget<Bitmap> futureBitmap = Glide.with(getApplicationContext())
-                    .asBitmap()
-                    .load(urlStr)
-                    .submit();
-            Bitmap bitmap = futureBitmap.get();
-            if (bitmap.getWidth() > 400 && bitmap.getHeight() > 400) {
-                data.putString("image", urlStr);
-                break;
+            try {
+                FutureTarget<Bitmap> futureBitmap = Glide.with(getApplicationContext())
+                        .asBitmap()
+                        .load(urlStr)
+                        .submit();
+                Bitmap bitmap = futureBitmap.get();
+                if (bitmap.getWidth() > 400 && bitmap.getHeight() > 400) {
+                    data.putString("image", urlStr);
+                    break;
+                }
+            }catch (Exception e){
+                // ignored
             }
         }
     }
@@ -286,6 +290,7 @@ public class ImportRecipeWorker extends Worker {
     private void checkClass(Elements elements, String kind) {
         for (var item : elements) {
             var text = item.text();
+            item.select("script, style, .hidden").remove();
             if (Strings.isNullOrEmpty(text.trim())) continue;
 
             if (dataDict.containsKey(kind)) {
@@ -300,8 +305,10 @@ public class ImportRecipeWorker extends Worker {
         for (var item : elements) {
             var kind = item.attr("itemprop");
             var text = item.attr("content");
-            if (Strings.isNullOrEmpty(text))
+            if (Strings.isNullOrEmpty(text)) {
+                item.select("script, style, .hidden").remove();
                 text = item.text();
+            }
             if (Strings.isNullOrEmpty(text.trim())) continue;
 
             if (dataDict.containsKey(kind)) {
