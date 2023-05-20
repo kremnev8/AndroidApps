@@ -202,6 +202,20 @@ public class MainActivity
         return fragmentManager.findFragmentById(R.id.fragmentContainerView);
     }
 
+
+    @Override
+    public void onBackPressed() {
+        if (isDrawerOpen(DrawerKind.NAVIGATION)){
+            closeDrawer(DrawerKind.NAVIGATION);
+            return;
+        }else if (isDrawerOpen(DrawerKind.FILTERS)){
+            closeDrawer(DrawerKind.FILTERS);
+            return;
+        }
+
+        super.onBackPressed();
+    }
+
     @Override
     public boolean isViewingInFullScreen() {
         return isFullscreen;
@@ -267,6 +281,13 @@ public class MainActivity
 
         binding.drawerLayout.closeDrawer(drawer);
         notifyDrawerStateListeners();
+    }
+
+    public boolean isDrawerOpen(DrawerKind kind){
+        View drawer = getDrawerView(kind);
+        if (drawer == null) return false;
+
+        return binding.drawerLayout.isDrawerOpen(drawer);
     }
 
     private void notifyDrawerStateListeners(){

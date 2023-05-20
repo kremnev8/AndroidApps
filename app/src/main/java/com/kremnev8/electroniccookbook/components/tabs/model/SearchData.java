@@ -13,6 +13,7 @@ import com.kremnev8.electroniccookbook.components.recipe.model.RecipeIngredient;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -26,8 +27,8 @@ public class SearchData {
     private String include = "";
     private String exclude = "";
 
-    private List<String> includeNames;
-    private List<String> excludeNames;
+    private final List<String> includeNames = new ArrayList<>();
+    private final List<String> excludeNames = new ArrayList<>();
 
     public String getInclude() {
         return include;
@@ -69,7 +70,11 @@ public class SearchData {
 
     private void splitInto(String str, List<String> strings) {
         strings.clear();
-        splitter.splitToStream(str).forEachOrdered(strings::add);
+        splitter.splitToStream(str).forEachOrdered(s -> {
+            s = s.trim();
+            if (!Strings.isNullOrEmpty(s))
+                strings.add(s);
+        });
     }
 
     private boolean ingredientsMatches(@Nullable List<RecipeIngredient> ingredients) {

@@ -93,8 +93,14 @@ public class Ingredient implements Parcelable {
         AmountPair pair = new AmountPair();
         String[] parts = string.split(" ");
         if (parts.length == 1){
-            pair.amount = 0;
-            pair.units = string;
+            Float amount = Floats.tryParse(string);
+            if (amount == null) {
+                pair.amount = 0;
+                pair.units = string;
+            }else{
+                pair.amount = amount;
+                pair.units = "";
+            }
         }else if (parts.length > 1){
             Float amount = Floats.tryParse(parts[0]);
             if (amount == null){
