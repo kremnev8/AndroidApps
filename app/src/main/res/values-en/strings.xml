@@ -93,5 +93,8 @@
     <string name="import_hint">Paste link to the website to import recipe</string>
     <string name="paste_url_hint">Paste URL</string>
     <string name="import_action">Import</string>
+    <string name="welcome_to_all_label">Welcome to Electronic Cook Book App</string>
+    <string name="start_using">Start Using</string>
+    <string name="start_message">Using this app you can create, import and view all of your personal recipes in one app</string>
 
 </resources>

@@ -154,22 +154,6 @@ public abstract class AppDatabase extends RoomDatabase implements DaoAccess {
     }
 
     public static Callback callback = new Callback() {
-        @Override
-        public void onCreate(@NonNull SupportSQLiteDatabase db) {
-            super.onCreate(db);
-
-            ExecutorService executor = Executors.newSingleThreadExecutor();
-
-            executor.execute(() -> {
-                //Background work here
-                IngredientDao ingredientDao = instance.ingredientDao();
-                IngredientDataProvider dataProvider = new IngredientDataProvider();
-
-                for (Ingredient ingredient : dataProvider.getIngredientData()) {
-                    ingredientDao.insert(ingredient);
-                }
-            });
-        }
 
         @Override
         public void onOpen(@NonNull SupportSQLiteDatabase db) {

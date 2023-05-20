@@ -84,4 +84,7 @@
     <string name="import_hint">Вставьте ссылку на сайт для импорта репепта</string>
     <string name="paste_url_hint">Вставьте ссылку</string>
     <string name="import_action">Импортировать</string>
+    <string name="welcome_to_all_label">Добро пожаловать в Электронную кулинарную книгу</string>
+    <string name="start_using">Начать использовать</string>
+    <string name="start_message">В данном приложении вы можете создавать, импортировать и просматривать ваши персональные рецепты.\n\nПриложение не использует интернет, кроме когда вы имортируете рецепты.\n\nПожайлуста создайте ваш профиль пользователя.</string>
 </resources>

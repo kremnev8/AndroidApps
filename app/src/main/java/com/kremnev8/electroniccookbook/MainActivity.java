@@ -37,6 +37,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.kremnev8.electroniccookbook.components.profile.dialog.fragment.LoginFragment;
+import com.kremnev8.electroniccookbook.components.profile.edit.fragment.ProfileEditFragment;
 import com.kremnev8.electroniccookbook.components.profile.model.Profile;
 import com.kremnev8.electroniccookbook.components.recipe.model.ShowRecipeData;
 import com.kremnev8.electroniccookbook.components.recipe.view.fragment.RecipeViewFragment;
@@ -51,6 +52,7 @@ import com.kremnev8.electroniccookbook.interfaces.ILoginSuccessCallback;
 import com.kremnev8.electroniccookbook.interfaces.IMediaProvider;
 import com.kremnev8.electroniccookbook.interfaces.IMediaRequestCallback;
 import com.kremnev8.electroniccookbook.interfaces.IMenu;
+import com.kremnev8.electroniccookbook.interfaces.IProfileProvider;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.FullscreenListener;
 
 import java.io.File;
@@ -61,6 +63,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function0;
 
@@ -92,6 +95,8 @@ public class MainActivity
 
     @Inject
     DatabaseExecutor executor;
+    @Inject
+    IProfileProvider profileProvider;
 
     ActivityResultLauncher<String> mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(),
             uri -> {
@@ -129,6 +134,21 @@ public class MainActivity
 
         binding.drawerLayout.closeDrawer(binding.drawerNavigationView);
 
+        binding.startUsingButton.setOnClickListener(v -> {
+            profileProvider.setIsFirstLoad(false);
+            profileProvider.getCurrentProfile()
+                    .firstOrError()
+                    .subscribeOn(Schedulers.computation())
+                    .subscribe(profile -> {
+                        mainHandler.post(() -> {
+                            binding.firstLoadPage.setVisibility(View.GONE);
+                            Bundle args = new Bundle();
+                            args.putParcelable(ProfileEditFragment.ProfileData, profile);
+                            setFragment(ProfileEditFragment.class, args);
+                        });
+                    }, throwable -> Log.e("App", "Error while getting profile", throwable));
+        });
+
         fragmentManager = getSupportFragmentManager();
         updateCurrentFragment();
         loginFragment = new LoginFragment();
@@ -143,6 +163,18 @@ public class MainActivity
             startService(intent);
         bindService(intent, serviceConnection, BIND_IMPORTANT);
         fragmentManager.addOnBackStackChangedListener(this::updateCurrentFragment);
+
+        profileProvider.getIsFirstLoad()
+                .subscribeOn(Schedulers.computation())
+                .subscribe(this::onFirstTimeLoadValue, throwable -> Log.e("App", "Error while getting is first load", throwable));
+    }
+
+    private void onFirstTimeLoadValue(Boolean firstTime) {
+        mainHandler.post(() -> {
+            if (firstTime){
+                binding.firstLoadPage.setVisibility(View.VISIBLE);
+            }
+        });
     }
 
     @Override

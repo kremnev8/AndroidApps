@@ -29,6 +29,7 @@ public class ProfileModule implements IProfileProvider {
     private DatabaseExecutor executor;
 
     private static final Preferences.Key<Integer> CURRENT_PROFILE = PreferencesKeys.intKey("currentProfile");
+    private static final Preferences.Key<Boolean> FIRST_LOAD = PreferencesKeys.booleanKey("firstLoad");
 
     private static Integer getOrDefaultProfileId(Preferences prefs) {
         Integer profileId = prefs.get(CURRENT_PROFILE);
@@ -65,6 +66,27 @@ public class ProfileModule implements IProfileProvider {
         return dataStore.data()
                 .map(ProfileModule::getOrDefaultProfileId)
                 .flatMap(executor::getProfile);
+    }
+
+    @Override
+    public Flowable<Boolean> getIsFirstLoad() {
+        return dataStore.data()
+                .map(preferences -> {
+                    var isFirstLoad = preferences.get(FIRST_LOAD);
+                    if (isFirstLoad == null)
+                        return true;
+                    else
+                        return isFirstLoad;
+                });
+    }
+
+    @Override
+    public void setIsFirstLoad(boolean firstTime){
+        dataStore.updateDataAsync(prefs1 -> {
+            var mutPref = prefs1.toMutablePreferences();
+            mutPref.set(FIRST_LOAD, firstTime);
+            return Single.just(mutPref);
+        }).subscribe();
     }
 
     @Provides
