@@ -10,6 +10,11 @@
         <item>Select Media</item>
     </string-array>
 
+    <string-array name="create_recipe_options">
+        <item>Create New Recipe</item>
+        <item>Import Recipe</item>
+    </string-array>
+
     <!--general-->
     <string name="amount_label">Amount</string>
     <string name="about_label">About</string>
@@ -94,5 +99,10 @@
     <string name="search_hint">Apply</string>
     <string name="search_icon_desc">Search Icon</string>
     <string name="none_label">No sort</string>
+    <string name="create_recipe_label">Create Recipe</string>
+    <string name="import_recipe_label">Import Recipe</string>
+    <string name="import_hint">Paste link to the website to import recipe</string>
+    <string name="paste_url_hint">Paste URL</string>
+    <string name="import_action">Import</string>
 
 </resources>

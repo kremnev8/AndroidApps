@@ -79,4 +79,9 @@
     <string name="search_hint">Применить</string>
     <string name="search_icon_desc">Иконка поиска</string>
     <string name="none_label">Не сортировать</string>
+    <string name="create_recipe_label">Создать рецепт</string>
+    <string name="import_recipe_label">Импортировать Рецепт</string>
+    <string name="import_hint">Вставьте ссылку на сайт для импорта репепта</string>
+    <string name="paste_url_hint">Вставьте ссылку</string>
+    <string name="import_action">Импортировать</string>
 </resources>

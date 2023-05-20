@@ -1,5 +1,7 @@
 package com.kremnev8.electroniccookbook.components.recipe.list.fragment;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,13 +14,16 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.kremnev8.electroniccookbook.MainActivity;
 import com.kremnev8.electroniccookbook.R;
 import com.kremnev8.electroniccookbook.common.ContextMenuKind;
 import com.kremnev8.electroniccookbook.common.recycler.ItemView;
+import com.kremnev8.electroniccookbook.components.recipe.importPage.fragment.ImportRecipeFragment;
 import com.kremnev8.electroniccookbook.components.recipe.list.viewmodel.RecipesListViewModel;
 import com.kremnev8.electroniccookbook.components.tabs.model.SearchData;
 import com.kremnev8.electroniccookbook.databinding.FragmentRecipesListBinding;
 import com.kremnev8.electroniccookbook.interfaces.IDrawerController;
+import com.kremnev8.electroniccookbook.interfaces.IFragmentController;
 import com.kremnev8.electroniccookbook.interfaces.IMenu;
 import com.kremnev8.electroniccookbook.interfaces.ISearchStateProvider;
 
@@ -27,11 +32,14 @@ import javax.inject.Inject;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class RecipesListFragment extends Fragment implements IMenu {
+public class RecipesListFragment extends Fragment implements IMenu, DialogInterface.OnClickListener {
 
     private RecipesListViewModel recipesListViewModel;
     private FragmentRecipesListBinding binding;
+    private AlertDialog addRecipeDialog;
 
+    @Inject
+    IFragmentController fragmentController;
     @Inject
     IDrawerController drawerController;
     @Inject
@@ -50,7 +58,9 @@ public class RecipesListFragment extends Fragment implements IMenu {
         recipesListViewModel = new ViewModelProvider(this).get(RecipesListViewModel.class);
         binding.setViewModel(recipesListViewModel);
 
-        binding.addButton.setOnClickListener(v -> recipesListViewModel.addRecipe());
+        addRecipeDialog = createAddRecipeDialog();
+
+        binding.addButton.setOnClickListener(v -> addRecipeDialog.show());
 
         registerForContextMenu(binding.recipeList);
 
@@ -82,6 +92,22 @@ public class RecipesListFragment extends Fragment implements IMenu {
             recipesListViewModel.deleteItem(extra.index);
         }
         return true;
+    }
+
+    private AlertDialog createAddRecipeDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle(R.string.create_recipe_label)
+                .setItems(R.array.create_recipe_options, this);
+        return builder.create();
+    }
+
+    @Override
+    public void onClick(DialogInterface dialog, int index) {
+        if (index == 0)
+            recipesListViewModel.addRecipe();
+        else if (index == 1)
+            fragmentController.setFragment(ImportRecipeFragment.class, null);
+        dialog.dismiss();
     }
 
     @Override

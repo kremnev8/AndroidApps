@@ -28,7 +28,6 @@ import java.util.concurrent.Executors;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Flowable;
-import io.reactivex.rxjava3.core.Scheduler;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
@@ -215,6 +214,43 @@ public class DatabaseExecutor implements
             daoAccess.recipeStepCacheDao().clearRecipeCache(recipe.id);
             daoAccess.recipeIngredientCacheDao().clearIngredientCache(recipe.id);
         });
+    }
+
+    public long insertWithDataBlocking(Recipe recipe) {
+        long id = daoAccess.recipeDao().upsert(recipe);
+        recipe.id = (int)id;
+
+        if (recipe.ingredients != null) {
+            for (var ingredient : recipe.ingredients) {
+                ingredient.recipe = recipe.id;
+            }
+        }
+        if (recipe.steps != null) {
+            for (var step : recipe.steps) {
+                step.recipe = recipe.id;
+            }
+        }
+
+        if (recipe.steps != null)
+            daoAccess.recipeStepDao().upsertAllSteps(recipe.steps);
+        if (recipe.ingredients != null) {
+            daoAccess.recipeIngredientDao().upsertAllIngredients(recipe.ingredients);
+            for (var recipeIngredient : recipe.ingredients) {
+                if (Strings.isNullOrEmpty(recipeIngredient.ingredientName)) continue;
+
+                Ingredient ingredient = daoAccess.ingredientDao().findIngredient(recipeIngredient.ingredientName);
+                if (ingredient == null) {
+                    ingredient = new Ingredient();
+                    ingredient.profileId = recipe.profileId;
+                    ingredient.name = recipeIngredient.ingredientName;
+                    daoAccess.ingredientDao().insert(ingredient);
+                }
+            }
+        }
+
+        daoAccess.recipeStepCacheDao().clearRecipeCache(recipe.id);
+        daoAccess.recipeIngredientCacheDao().clearIngredientCache(recipe.id);
+        return id;
     }
 
     @Override
