@@ -91,7 +91,7 @@ public class RecipeEditViewModel extends SimpleViewModel<Recipe> implements IMed
     }
 
     public void takePhotoButtonClicked(View view){
-        handler.postDelayed(() -> photoProvider.requestPhoto(this), 100);
+        handler.postDelayed(() -> photoProvider.requestMedia(this, false), 100);
     }
 
     @Bindable

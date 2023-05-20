@@ -45,7 +45,7 @@
             android:gravity="center|start"
             android:hint="@string/amount_label"
             android:minHeight="48dp"
-            android:text="@{itemViewModel.ingredient.ingredient.amountString}"
+            android:text="@{itemViewModel.amountString}"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

@@ -6,6 +6,7 @@ import androidx.databinding.Bindable;
 
 import com.kremnev8.electroniccookbook.R;
 import com.kremnev8.electroniccookbook.common.recycler.ItemViewModel;
+import com.kremnev8.electroniccookbook.components.ingredient.model.Ingredient;
 import com.kremnev8.electroniccookbook.components.recipe.model.RecipeViewIngredientCache;
 import com.kremnev8.electroniccookbook.database.DatabaseExecutor;
 
@@ -13,6 +14,7 @@ public class RecipeViewIngredientItemViewModel extends ItemViewModel {
 
     public RecipeViewIngredientCache ingredient;
     private final DatabaseExecutor executor;
+    private float currentRatio = 1;
 
     public RecipeViewIngredientItemViewModel(RecipeViewIngredientCache ingredient, DatabaseExecutor executor) {
         this.ingredient = ingredient;
@@ -30,6 +32,14 @@ public class RecipeViewIngredientItemViewModel extends ItemViewModel {
         executor.upsert(ingredient.cache);
     }
 
+    public String getAmountString(){
+        return Ingredient.getAmountString(ingredient.ingredient.amount * currentRatio, ingredient.ingredient.units);
+    }
+
+    public void onYieldChanged(float ratio){
+        currentRatio = ratio;
+        notifyChange();
+    }
 
     @Override
     public void setItem(Object item) {

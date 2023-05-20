@@ -16,19 +16,93 @@
         android:background="@color/background"
         tools:context=".components.recipe.edit.fragment.RecipeEditFragment">
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/amountLayout"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:background="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="70dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/textView6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="@string/yield_label"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/minusButton"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <EditText
+                    android:id="@+id/editTextNumber"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:text="@={`` + viewModel.currentYield}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/textView6"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageButton
+                    android:id="@+id/plusButton"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="10dp"
+                    android:backgroundTint="@color/primary_color"
+                    android:contentDescription="@string/button_plus_label"
+                    android:onClick="@{() -> viewModel.onIncreaseYieldClicked()}"
+                    android:scaleType="fitCenter"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toEndOf="@+id/editTextNumber"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_plus" />
+
+                <ImageButton
+                    android:id="@+id/minusButton"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:backgroundTint="@color/primary_color"
+                    android:contentDescription="@string/button_minus_label"
+                    android:onClick="@{() -> viewModel.onDecreaseYieldClicked()}"
+                    android:scaleType="fitCenter"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_minus"
+                    tools:ignore="ImageContrastCheck" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/stepsList"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
 
             android:minHeight="50dp"
             android:nestedScrollingEnabled="false"
             android:overScrollMode="ifContentScrolls"
             app:itemViewModels="@{viewModel.ingredients}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/amountLayout"
             tools:itemCount="5"
             tools:listitem="@layout/item_recipe_view_ingredient" />
 

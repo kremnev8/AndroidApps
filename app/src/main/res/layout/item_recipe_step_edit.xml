@@ -147,6 +147,16 @@
             app:layout_constraintTop_toBottomOf="@+id/stepName"
             app:layout_constraintVertical_bias="0.0" />
 
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            app:isVisibleOrGone="@{itemViewModel.hasMedia}"
+            android:onClick="@{() -> itemViewModel.clearMedia()}"
+            app:layout_constraintBottom_toBottomOf="@+id/imageMedia"
+            app:layout_constraintEnd_toEndOf="@+id/imageMedia"
+            app:srcCompat="@drawable/ic_close" />
+
 
     </com.kremnev8.electroniccookbook.common.recycler.ItemView>
 </layout>

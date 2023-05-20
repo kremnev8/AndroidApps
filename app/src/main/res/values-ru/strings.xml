@@ -8,7 +8,7 @@
     <string-array name="add_media_dialog_options">
         <item>Сделать фото</item>
         <item>Выбрать фото</item>
-        <item>Выбрать видео</item>
+        <item>Выбрать контент</item>
     </string-array>
 
     <string name="about_label">About</string>

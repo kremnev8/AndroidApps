@@ -53,7 +53,7 @@ public class IngredientEditViewModel extends SimpleViewModel<Ingredient> impleme
     }
 
     public void addPhotoClicked(View view){
-        handler.postDelayed(() -> photoProvider.requestPhoto(this), 100);
+        handler.postDelayed(() -> photoProvider.requestMedia(this, false), 100);
     }
 
     @Override

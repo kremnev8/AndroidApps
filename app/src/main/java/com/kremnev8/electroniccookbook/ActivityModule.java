@@ -35,8 +35,8 @@ public class ActivityModule {
             }
 
             @Override
-            public void requestMedia(IMediaRequestCallback callback) {
-                MainActivity.Instance.requestMedia(callback);
+            public void requestMedia(IMediaRequestCallback callback, boolean allowVideos) {
+                MainActivity.Instance.requestMedia(callback, allowVideos);
             }
         };
     }

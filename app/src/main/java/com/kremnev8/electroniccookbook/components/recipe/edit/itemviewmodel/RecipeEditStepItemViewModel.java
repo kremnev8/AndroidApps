@@ -35,7 +35,7 @@ public class RecipeEditStepItemViewModel
 
     @Bindable
     public boolean getHasMedia(){
-        return Strings.isNullOrEmpty(step.mediaUri);
+        return !Strings.isNullOrEmpty(step.mediaUri);
     }
 
     @Bindable
@@ -61,6 +61,11 @@ public class RecipeEditStepItemViewModel
             vId = matcher.group(1);
         }
         return vId;
+    }
+
+    public void clearMedia(){
+        step.mediaUri = "";
+        notifyChange();
     }
 
     @Bindable
@@ -99,7 +104,7 @@ public class RecipeEditStepItemViewModel
     }
 
     public void addMediaButtonClicked(View view){
-        photoProvider.requestMedia(this);
+        photoProvider.requestMedia(this, true);
     }
 
     @Override

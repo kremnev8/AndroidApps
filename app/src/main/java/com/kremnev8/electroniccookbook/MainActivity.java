@@ -16,7 +16,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -85,11 +87,14 @@ public class MainActivity
     private LoginFragment loginFragment;
 
     private boolean isFullscreen;
+    private boolean allowVideos;
 
     private IMediaRequestCallback lastRequester;
     private AlertDialog photoDialog;
     private AlertDialog mediaDialog;
-    private AlertDialog videoUriDialog;
+    private AlertDialog mediaUriDialog;
+    private EditText mediaUriEditText;
+
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
     private final List<IAction> drawerStateListeners = new ArrayList<>();
 
@@ -127,7 +132,7 @@ public class MainActivity
         Instance = this;
         photoDialog = createMediaDialog(R.array.add_photo_dialog_options);
         mediaDialog = createMediaDialog(R.array.add_media_dialog_options);
-        videoUriDialog = createSelectVideoDialog();
+        mediaUriDialog = createSelectVideoDialog();
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -327,8 +332,9 @@ public class MainActivity
         photoDialog.show();
     }
 
-    public void requestMedia(IMediaRequestCallback callback) {
+    public void requestMedia(IMediaRequestCallback callback, boolean allowVideos) {
         lastRequester = callback;
+        this.allowVideos = allowVideos;
         mediaDialog.show();
     }
 
@@ -363,8 +369,11 @@ public class MainActivity
             MainActivity.this.tryTakePhoto();
         else if (index == 1)
             MainActivity.this.tryPickPhoto();
-        else if (index == 2)
-            videoUriDialog.show();
+        else if (index == 2) {
+            mediaUriEditText.setError(null);
+            mediaUriEditText.setText("");
+            mediaUriDialog.show();
+        }
         dialog.dismiss();
     }
 
@@ -373,15 +382,42 @@ public class MainActivity
         builder.setTitle(R.string.select_media_uri);
 
 // Set up the input
-        final EditText input = new EditText(this);
+        mediaUriEditText = new EditText(this);
 // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_URI);
-        builder.setView(input);
+        mediaUriEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_URI);
+        mediaUriEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
-// Set up the buttons
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (allowVideos) return;
+
+                String url = mediaUriEditText.getText().toString();
+                if (url.contains("youtube.com") ||
+                    url.contains("youtu.be")){
+                    String message = getApplicationContext().getResources().getString(R.string.video_not_allowed);
+                    mediaUriEditText.setError(message);
+                }
+            }
+        });
+        builder.setView(mediaUriEditText);
+
+        // Set up the buttons
         builder.setPositiveButton("OK", (dialog, which) -> {
             if (lastRequester != null) {
-                lastRequester.onMediaSelected(input.getText().toString());
+                String url = mediaUriEditText.getText().toString();
+                if ((url.contains("youtube.com") ||
+                        url.contains("youtu.be")) && !allowVideos){
+                    return;
+                }
+
+                lastRequester.onMediaSelected(url);
                 lastRequester = null;
             }
         });

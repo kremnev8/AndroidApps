@@ -60,7 +60,7 @@ public class ProfileEditViewModel extends SimpleViewModel<Profile> implements IM
     }
 
     public void addPhotoClicked(View view){
-        handler.postDelayed(() -> photoProvider.requestPhoto(this), 100);
+        handler.postDelayed(() -> photoProvider.requestMedia(this, false), 100);
     }
 
     @Override

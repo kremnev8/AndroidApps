@@ -167,6 +167,7 @@ public class TimersService extends Service implements Runnable, ITimerService {
             return;
 
         ApplicationModule.timerDataStore.data()
+                .firstOrError()
                 .map(TimerList::getTimersList)
                 .subscribeOn(Schedulers.computation())
                 .subscribe(timerStates -> mainHandler.post(() -> {

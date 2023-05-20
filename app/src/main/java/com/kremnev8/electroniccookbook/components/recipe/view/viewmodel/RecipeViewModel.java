@@ -3,11 +3,14 @@ package com.kremnev8.electroniccookbook.components.recipe.view.viewmodel;
 import android.os.Handler;
 import android.os.Looper;
 
+import androidx.databinding.Bindable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.ViewModel;
 
+import com.kremnev8.electroniccookbook.BR;
+import com.kremnev8.electroniccookbook.common.ObservableViewModel;
 import com.kremnev8.electroniccookbook.common.recycler.ItemViewModel;
 import com.kremnev8.electroniccookbook.common.recycler.ItemViewModelHolder;
 import com.kremnev8.electroniccookbook.components.recipe.model.Recipe;
@@ -29,13 +32,14 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 @HiltViewModel
-public class RecipeViewModel extends ViewModel implements ITimerCallback {
+public class RecipeViewModel extends ObservableViewModel implements ITimerCallback {
 
     public LiveData<Recipe> recipe;
 
     Handler mainHandler = new Handler(Looper.getMainLooper());
     public final DatabaseExecutor databaseExecutor;
     private final ITimerService timers;
+    private int currentYield;
 
     protected ItemViewModelHolder<RecipeViewStepCache> stepsModelsHolder;
     protected ItemViewModelHolder<RecipeViewIngredientCache> ingredientsModelsHolder;
@@ -59,6 +63,7 @@ public class RecipeViewModel extends ViewModel implements ITimerCallback {
 
     public void setData(int recipeId) {
         this.recipe = databaseExecutor.getRecipeWithData(recipeId);
+        recipe.observeForever(this::onGotRecipe);
 
         databaseExecutor.getOrCreateRecipeCache(recipeId)
                 .subscribeOn(Schedulers.computation())
@@ -76,6 +81,45 @@ public class RecipeViewModel extends ViewModel implements ITimerCallback {
         stepsModelsHolder.onCleared();
         ingredientsModelsHolder.onCleared();
         timers.stopListening(this);
+    }
+
+    private void onGotRecipe(Recipe recipe){
+        currentYield = recipe.yield;
+        this.recipe.removeObserver(this::onGotRecipe);
+        updateIngredientsState();
+    }
+
+    @Bindable
+    public int getCurrentYield() {
+        return currentYield;
+    }
+
+    public void setCurrentYield(int currentYield) {
+        this.currentYield = currentYield;
+        updateIngredientsState();
+    }
+
+    public void onIncreaseYieldClicked(){
+        currentYield++;
+        updateIngredientsState();
+    }
+
+    public void onDecreaseYieldClicked(){
+        currentYield--;
+        updateIngredientsState();
+    }
+
+    private void updateIngredientsState(){
+        notifyPropertyChanged(BR.currentYield);
+        var viewModels = ingredientsModelsHolder.getViewModels().getValue();
+        var recipeData = recipe.getValue();
+        if (viewModels == null || recipeData == null) return;
+        if (recipeData.yield == 0) return;
+
+        for (var viewModel : viewModels) {
+            var ingredientItemViewModel = (RecipeViewIngredientItemViewModel)viewModel;
+            ingredientItemViewModel.onYieldChanged(currentYield / (float)recipeData.yield);
+        }
     }
 
     @Override
