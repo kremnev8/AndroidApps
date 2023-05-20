@@ -20,7 +20,7 @@ import com.kremnev8.electroniccookbook.interfaces.ILoginSuccessCallback;
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class LoginFragment extends DialogFragment {
+public class LoginFragment extends DialogFragment implements ILoginSuccessCallback {
 
     public static final String ProfileData = "ProfileData";
 
@@ -44,7 +44,7 @@ public class LoginFragment extends DialogFragment {
             loginViewModel.setProfile(profile);
         }
 
-        loginViewModel.setLoginSuccessCallback(loginSuccessCallback);
+        loginViewModel.setLoginSuccessCallback(this);
 
         binding.passwordField.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -66,13 +66,17 @@ public class LoginFragment extends DialogFragment {
 
     public void setLoginSuccessCallback(ILoginSuccessCallback loginSuccessCallback) {
         this.loginSuccessCallback = loginSuccessCallback;
-        if (loginViewModel != null)
-            loginViewModel.setLoginSuccessCallback(loginSuccessCallback);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    @Override
+    public void OnSuccessfulLogin() {
+        loginSuccessCallback.OnSuccessfulLogin();
+        dismiss();
     }
 }

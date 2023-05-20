@@ -10,6 +10,7 @@
     </data>
 
     <com.kremnev8.electroniccookbook.common.recycler.ItemView
+        android:id="@+id/recipeItemLayout"
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:maxHeight="150dp"

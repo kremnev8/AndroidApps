@@ -9,6 +9,7 @@
             type="com.kremnev8.electroniccookbook.components.recipe.edit.viewmodel.RecipeEditViewModel" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/recipeEditLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

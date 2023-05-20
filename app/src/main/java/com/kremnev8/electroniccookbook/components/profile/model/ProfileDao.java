@@ -8,12 +8,16 @@ import androidx.room.Upsert;
 import java.util.List;
 
 import io.reactivex.rxjava3.core.Flowable;
+import io.reactivex.rxjava3.core.Single;
 
 @Dao
 public interface ProfileDao {
 
     @Query("SELECT * FROM profile")
     LiveData<List<Profile>> getProfiles();
+
+    @Query("SELECT * FROM profile")
+    Single<List<Profile>> getProfilesBlocking();
 
     @Query("SELECT * FROM profile WHERE id = :id")
     Flowable<Profile> getProfile(int id);

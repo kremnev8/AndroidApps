@@ -53,6 +53,9 @@ public class LoginViewModel extends ObservableViewModel {
 
     public void setProfile(Profile profile){
         this.profile = profile;
+        password = "";
+        loginFormState.clear();
+        notifyChange();
     }
 
     public void setLoginSuccessCallback(ILoginSuccessCallback loginSuccessCallback) {
@@ -63,12 +66,14 @@ public class LoginViewModel extends ObservableViewModel {
         boolean result = profileProvider.loginIntoProfile(profile, password);
         if (result){
             loginFormState.showMessage(R.string.login_successful_message, Color.WHITE);
+            notifyChange();
 
             if (loginSuccessCallback != null)
                 loginSuccessCallback.OnSuccessfulLogin();
         }else{
-            loginFormState.showError(R.string.invalid_password);
+            loginFormState.showError(R.string.login_failed);
         }
+        notifyChange();
     }
 
     private boolean isPasswordValid(String password) {

@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.kremnev8.electroniccookbook.ApplicationModule;
 import com.kremnev8.electroniccookbook.CookBookApplication;
 import com.kremnev8.electroniccookbook.MainActivity;
 import com.kremnev8.electroniccookbook.R;
@@ -106,7 +107,7 @@ public class RecipeEditFragment
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
-        CookBookApplication.InputMethodManager.hideSoftInputFromWindow(binding.getRoot().getWindowToken(), 0);
+        ApplicationModule.InputMethodManager.hideSoftInputFromWindow(binding.getRoot().getWindowToken(), 0);
     }
 
     @Override

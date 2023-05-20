@@ -16,22 +16,22 @@ import androidx.room.migration.AutoMigrationSpec;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-import com.kremnev8.electroniccookbook.IngredientDataProvider;
 import com.kremnev8.electroniccookbook.common.Converters;
-import com.kremnev8.electroniccookbook.components.ingredient.model.IngredientDao;
+import com.kremnev8.electroniccookbook.common.Util;
 import com.kremnev8.electroniccookbook.components.ingredient.model.Ingredient;
+import com.kremnev8.electroniccookbook.components.ingredient.model.IngredientDao;
+import com.kremnev8.electroniccookbook.components.profile.model.Profile;
 import com.kremnev8.electroniccookbook.components.profile.model.ProfileDao;
-import com.kremnev8.electroniccookbook.components.recipe.model.RecipeDao;
-import com.kremnev8.electroniccookbook.components.recipe.model.RecipeIngredientCacheDao;
-import com.kremnev8.electroniccookbook.components.recipe.model.RecipeIngredientDao;
-import com.kremnev8.electroniccookbook.components.recipe.model.RecipeStepCacheDao;
-import com.kremnev8.electroniccookbook.components.recipe.model.RecipeStepDao;
 import com.kremnev8.electroniccookbook.components.recipe.model.Recipe;
+import com.kremnev8.electroniccookbook.components.recipe.model.RecipeDao;
 import com.kremnev8.electroniccookbook.components.recipe.model.RecipeIngredient;
 import com.kremnev8.electroniccookbook.components.recipe.model.RecipeIngredientCache;
+import com.kremnev8.electroniccookbook.components.recipe.model.RecipeIngredientCacheDao;
+import com.kremnev8.electroniccookbook.components.recipe.model.RecipeIngredientDao;
 import com.kremnev8.electroniccookbook.components.recipe.model.RecipeStep;
 import com.kremnev8.electroniccookbook.components.recipe.model.RecipeStepCache;
-import com.kremnev8.electroniccookbook.components.profile.model.Profile;
+import com.kremnev8.electroniccookbook.components.recipe.model.RecipeStepCacheDao;
+import com.kremnev8.electroniccookbook.components.recipe.model.RecipeStepDao;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -64,7 +64,7 @@ public abstract class AppDatabase extends RoomDatabase implements DaoAccess {
     private static final String DATABASE_NAME = "app_database.db";
 
     @DeleteColumn(tableName = "recipeIngredient", columnName = "ingredient")
-    public static class DeleteIngredientLinkMigration implements AutoMigrationSpec{
+    public static class DeleteIngredientLinkMigration implements AutoMigrationSpec {
 
     }
 
@@ -144,9 +144,16 @@ public abstract class AppDatabase extends RoomDatabase implements DaoAccess {
         if (instance == null) {
             synchronized (AppDatabase.class) {
                 if (instance == null) {
-                    instance = Room.databaseBuilder(context, AppDatabase.class, DATABASE_NAME)
-                            .addCallback(callback)
-                            .build();
+
+                    if (Util.isRunningTest()) {
+                        instance = Room.inMemoryDatabaseBuilder(context, AppDatabase.class)
+                                .addCallback(callback)
+                                .build();
+                    } else {
+                        instance = Room.databaseBuilder(context, AppDatabase.class, DATABASE_NAME)
+                                .addCallback(callback)
+                                .build();
+                    }
                 }
             }
         }
@@ -161,7 +168,7 @@ public abstract class AppDatabase extends RoomDatabase implements DaoAccess {
             ExecutorService executor = Executors.newSingleThreadExecutor();
             executor.execute(() -> {
                 ProfileDao profileDao = instance.profileDao();
-                if (!profileDao.hasProfile(1)){
+                if (!profileDao.hasProfile(1)) {
                     Profile profile = new Profile();
                     profile.name = "Default Profile";
                     profile.passwordRequired = false;

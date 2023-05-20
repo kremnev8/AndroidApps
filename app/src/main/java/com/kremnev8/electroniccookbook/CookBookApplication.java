@@ -24,28 +24,8 @@ import dagger.hilt.android.HiltAndroidApp;
 @HiltAndroidApp
 public class CookBookApplication extends Application implements Configuration.Provider {
 
-    public static NotificationManager NotificationManager;
-    public static InputMethodManager InputMethodManager;
-
-    public static RxDataStore<Preferences> dataStore;
-    public static RxDataStore<TimerList> timerDataStore;
-
-    public static WorkManager manager;
-
     @Inject
     HiltWorkerFactory workerFactory;
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-
-        NotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        InputMethodManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-        dataStore = new RxPreferenceDataStoreBuilder(getApplicationContext(),"settings").build();
-        timerDataStore = new RxDataStoreBuilder<>(getApplicationContext(), "timers.pb", new TimerStateSerializer()).build();
-
-        manager = WorkManager.getInstance(getApplicationContext());
-    }
 
     @NonNull
     @Override

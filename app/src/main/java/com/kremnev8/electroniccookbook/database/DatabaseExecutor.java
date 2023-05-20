@@ -54,6 +54,11 @@ public class DatabaseExecutor implements
     }
 
     @Override
+    public Single<List<Ingredient>> getIngredientsOnce(int profileId) {
+        return daoAccess.ingredientDao().getIngredientsOnce(profileId);
+    }
+
+    @Override
     public Ingredient findIngredient(String name) {
         return daoAccess.ingredientDao().findIngredient(name);
     }
@@ -147,6 +152,11 @@ public class DatabaseExecutor implements
     @Override
     public LiveData<List<Profile>> getProfiles() {
         return daoAccess.profileDao().getProfiles();
+    }
+
+    @Override
+    public Single<List<Profile>> getProfilesBlocking() {
+        return daoAccess.profileDao().getProfilesBlocking();
     }
 
     @Override

@@ -10,6 +10,7 @@
     </data>
 
     <com.kremnev8.electroniccookbook.common.recycler.ItemView
+        android:id="@+id/ingredientItemLayout"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:background="?attr/selectableItemBackground"

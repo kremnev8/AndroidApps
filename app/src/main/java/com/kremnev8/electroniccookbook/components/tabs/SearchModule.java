@@ -1,5 +1,7 @@
 package com.kremnev8.electroniccookbook.components.tabs;
 
+import android.os.Looper;
+
 import androidx.annotation.OptIn;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -22,7 +24,10 @@ public class SearchModule implements ISearchStateProvider {
     private final MutableLiveData<SearchData> searchData = new MutableLiveData<>();
 
     public SearchModule() {
-        searchData.setValue(new SearchData());
+        if (Looper.myLooper() == Looper.getMainLooper())
+            searchData.setValue(new SearchData());
+        else
+            searchData.postValue(new SearchData());
     }
 
     @Override

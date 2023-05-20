@@ -23,6 +23,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.OptIn;
 import androidx.core.app.NotificationCompat;
 
+import com.kremnev8.electroniccookbook.ApplicationModule;
 import com.kremnev8.electroniccookbook.CookBookApplication;
 import com.kremnev8.electroniccookbook.MainActivity;
 import com.kremnev8.electroniccookbook.R;
@@ -75,7 +76,7 @@ public class TimersService extends Service implements Runnable, ITimerService {
         timer.start();
         notify(timer);
 
-        CookBookApplication.timerDataStore.updateDataAsync(timerList -> {
+        ApplicationModule.timerDataStore.updateDataAsync(timerList -> {
             var res = timerList.toBuilder()
                     .addTimers(timer.saveState())
                     .build();
@@ -99,7 +100,7 @@ public class TimersService extends Service implements Runnable, ITimerService {
         else
             timer.pause();
         notify(timer);
-        CookBookApplication.timerDataStore.updateDataAsync(timerList -> {
+        ApplicationModule.timerDataStore.updateDataAsync(timerList -> {
             var index = findTimer(step.recipe, step.id, timerList);
             if (!index.isPresent())
                 return Single.just(timerList);
@@ -126,7 +127,7 @@ public class TimersService extends Service implements Runnable, ITimerService {
 
     private void removeTimer(int recipeId, int stepId){
         timers.removeTimer(recipeId, stepId);
-        CookBookApplication.timerDataStore.updateDataAsync(timerList -> {
+        ApplicationModule.timerDataStore.updateDataAsync(timerList -> {
             var index = findTimer(recipeId, stepId, timerList);
             if (!index.isPresent())
                 return Single.just(timerList);
@@ -165,14 +166,14 @@ public class TimersService extends Service implements Runnable, ITimerService {
         if (hasInitializedTimers)
             return;
 
-        CookBookApplication.timerDataStore.data()
+        ApplicationModule.timerDataStore.data()
                 .map(TimerList::getTimersList)
                 .subscribeOn(Schedulers.computation())
                 .subscribe(timerStates -> mainHandler.post(() -> {
                     for (var timerState : timerStates) {
                         timers.addTimer(timerState);
                     }
-                }));
+                }), throwable -> Log.e("App", "Error while getting profile", throwable));
         hasInitializedTimers = true;
     }
 
@@ -221,7 +222,7 @@ public class TimersService extends Service implements Runnable, ITimerService {
             builder.setContentText(newMessage);
 
         Notification notification = builder.build();
-        CookBookApplication.NotificationManager.notify(NOTIFICATION_ID, notification);
+        ApplicationModule.NotificationManager.notify(NOTIFICATION_ID, notification);
         return notification;
     }
 
@@ -250,7 +251,7 @@ public class TimersService extends Service implements Runnable, ITimerService {
                 .build();
         notification.flags |= Notification.FLAG_INSISTENT;
 
-        CookBookApplication.NotificationManager.notify(notificationId, notification);
+        ApplicationModule.NotificationManager.notify(notificationId, notification);
     }
 
     private void start() {

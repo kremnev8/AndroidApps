@@ -20,6 +20,7 @@ import androidx.work.WorkManager;
 
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
+import com.kremnev8.electroniccookbook.ApplicationModule;
 import com.kremnev8.electroniccookbook.CookBookApplication;
 import com.kremnev8.electroniccookbook.common.MainThreadExecutor;
 import com.kremnev8.electroniccookbook.common.ObservableViewModel;
@@ -94,8 +95,8 @@ public class ImportRecipeViewModel extends ObservableViewModel implements Future
                 .addTag(IMPORT_WORK_TAG)
                 .build();
 
-         CookBookApplication.manager.beginUniqueWork(IMPORT_WORK_TAG, ExistingWorkPolicy.KEEP, workRequest).enqueue();
-        CookBookApplication.manager.getWorkInfoByIdLiveData(workRequest.getId())
+        ApplicationModule.manager.beginUniqueWork(IMPORT_WORK_TAG, ExistingWorkPolicy.KEEP, workRequest).enqueue();
+        ApplicationModule.manager.getWorkInfoByIdLiveData(workRequest.getId())
                         .observeForever(this::onSuccess);
 
         notifyChange();

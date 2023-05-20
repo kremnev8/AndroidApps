@@ -97,6 +97,8 @@ public class MainActivity
     DatabaseExecutor executor;
     @Inject
     IProfileProvider profileProvider;
+    @Inject
+    ApplicationModule applicationModule;
 
     ActivityResultLauncher<String> mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(),
             uri -> {
@@ -473,7 +475,7 @@ public class MainActivity
 
         if (intent.hasExtra(NOTIFICATION_ID_EXTRA)) {
             int notificationId = intent.getIntExtra(NOTIFICATION_ID_EXTRA, 0);
-            CookBookApplication.NotificationManager.cancel(notificationId);
+            applicationModule.NotificationManager.cancel(notificationId);
         }
 
         if (intent.hasExtra(SHOW_RECIPE_EXTRA)) {

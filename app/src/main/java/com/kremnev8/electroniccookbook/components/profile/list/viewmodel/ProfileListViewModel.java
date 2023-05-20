@@ -1,6 +1,8 @@
 package com.kremnev8.electroniccookbook.components.profile.list.viewmodel;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 
 import androidx.lifecycle.SavedStateHandle;
 
@@ -12,6 +14,7 @@ import com.kremnev8.electroniccookbook.common.recycler.SimpleListViewModel;
 import com.kremnev8.electroniccookbook.components.profile.edit.fragment.ProfileEditFragment;
 import com.kremnev8.electroniccookbook.components.profile.list.itemviewmodel.ProfileItemViewModel;
 import com.kremnev8.electroniccookbook.components.profile.model.Profile;
+import com.kremnev8.electroniccookbook.components.recipe.list.fragment.RecipesListFragment;
 import com.kremnev8.electroniccookbook.database.DatabaseExecutor;
 import com.kremnev8.electroniccookbook.interfaces.IClickHandler;
 import com.kremnev8.electroniccookbook.interfaces.IFragmentController;
@@ -27,6 +30,8 @@ public class ProfileListViewModel extends SimpleListViewModel<Profile> implement
 
     private final IFragmentController fragmentController;
     private final IProfileProvider profileProvider;
+    private final Handler mainHandler = new Handler(Looper.getMainLooper());
+
 
     @Inject
     public ProfileListViewModel(SavedStateHandle handle, DatabaseExecutor databaseExecutor, IFragmentController fragmentController,IProfileProvider profileProvider) {
@@ -78,6 +83,8 @@ public class ProfileListViewModel extends SimpleListViewModel<Profile> implement
 
     @Override
     public void OnSuccessfulLogin() {
-
+        mainHandler.postDelayed(() -> {
+            MainActivity.Instance.setFragment(RecipesListFragment.class, null);
+        }, 500);
     }
 }

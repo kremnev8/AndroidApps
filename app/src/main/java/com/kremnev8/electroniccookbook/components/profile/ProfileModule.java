@@ -1,17 +1,16 @@
 package com.kremnev8.electroniccookbook.components.profile;
 
-import static com.kremnev8.electroniccookbook.CookBookApplication.dataStore;
-
 import androidx.annotation.OptIn;
 import androidx.datastore.preferences.core.Preferences;
 import androidx.datastore.preferences.core.PreferencesKeys;
 
+import com.kremnev8.electroniccookbook.ApplicationModule;
 import com.kremnev8.electroniccookbook.common.Passwords;
+import com.kremnev8.electroniccookbook.common.Util;
 import com.kremnev8.electroniccookbook.components.profile.model.Profile;
 import com.kremnev8.electroniccookbook.database.DatabaseExecutor;
 import com.kremnev8.electroniccookbook.interfaces.IProfileProvider;
 
-import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -28,6 +27,7 @@ public class ProfileModule implements IProfileProvider {
 
     private DatabaseExecutor executor;
 
+
     private static final Preferences.Key<Integer> CURRENT_PROFILE = PreferencesKeys.intKey("currentProfile");
     private static final Preferences.Key<Boolean> FIRST_LOAD = PreferencesKeys.booleanKey("firstLoad");
 
@@ -41,7 +41,7 @@ public class ProfileModule implements IProfileProvider {
     }
 
     private static void setCurrentProfileInternal(int id){
-        dataStore.updateDataAsync(prefs1 -> {
+        ApplicationModule.dataStore.updateDataAsync(prefs1 -> {
             var mutPref = prefs1.toMutablePreferences();
             mutPref.set(CURRENT_PROFILE, id);
             return Single.just(mutPref);
@@ -63,15 +63,18 @@ public class ProfileModule implements IProfileProvider {
 
     @Override
     public Flowable<Profile> getCurrentProfile() {
-        return dataStore.data()
+        return ApplicationModule.dataStore.data()
                 .map(ProfileModule::getOrDefaultProfileId)
                 .flatMap(executor::getProfile);
     }
 
     @Override
     public Flowable<Boolean> getIsFirstLoad() {
-        return dataStore.data()
+        return ApplicationModule.dataStore.data()
                 .map(preferences -> {
+                    if (Util.isRunningTest())
+                        return false;
+
                     var isFirstLoad = preferences.get(FIRST_LOAD);
                     if (isFirstLoad == null)
                         return true;
@@ -82,7 +85,7 @@ public class ProfileModule implements IProfileProvider {
 
     @Override
     public void setIsFirstLoad(boolean firstTime){
-        dataStore.updateDataAsync(prefs1 -> {
+        ApplicationModule.dataStore.updateDataAsync(prefs1 -> {
             var mutPref = prefs1.toMutablePreferences();
             mutPref.set(FIRST_LOAD, firstTime);
             return Single.just(mutPref);
