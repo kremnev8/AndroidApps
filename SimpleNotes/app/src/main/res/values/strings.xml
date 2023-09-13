@@ -1,0 +1,17 @@
+<resources>
+    <string-array name="add_photo_dialog_options">
+        <item>Take Photo</item>
+        <item>Select Photo</item>
+    </string-array>
+
+    <string name="app_name">SimpleNotes</string>
+    <string name="cancel_note_editing_desc">Cancel note editing</string>
+    <string name="add_photo_button_desc">Add photo action button</string>
+    <string name="save_button_desc">Save</string>
+    <string name="add_photo_text">Add Photo</string>
+    <string name="user_image_desc">User Image</string>
+    <string name="remove_button_desc">Remove Image Button</string>
+    <string name="add_media_label">Add Media</string>
+    <string name="title_activity_test">TestActivity</string>
+    <string name="add_note_button_desc">Add Note Button</string>
+</resources>
