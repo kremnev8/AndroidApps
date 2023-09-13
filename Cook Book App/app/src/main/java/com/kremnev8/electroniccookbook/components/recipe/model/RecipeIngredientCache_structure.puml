@@ -1,0 +1,459 @@
+@startuml
+
+/' diagram meta data start
+config=StructureConfiguration;
+{
+  "projectClassification": {
+    "searchMode": "OpenProject", // OpenProject, AllProjects
+    "includedProjects": "",
+    "pathEndKeywords": "*.impl",
+    "isClientPath": "",
+    "isClientName": "",
+    "isTestPath": "",
+    "isTestName": "",
+    "isMappingPath": "",
+    "isMappingName": "",
+    "isDataAccessPath": "",
+    "isDataAccessName": "",
+    "isDataStructurePath": "",
+    "isDataStructureName": "",
+    "isInterfaceStructuresPath": "",
+    "isInterfaceStructuresName": "",
+    "isEntryPointPath": "",
+    "isEntryPointName": "",
+    "treatFinalFieldsAsMandatory": false
+  },
+  "graphRestriction": {
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "removeByInheritance": "", // inheritance/annotation based filtering is done in a second step
+    "removeByAnnotation": "",
+    "removeByClassPackage": "", // cleanup the graph after inheritance/annotation based filtering is done
+    "removeByClassName": "",
+    "cutMappings": false,
+    "cutEnum": true,
+    "cutTests": true,
+    "cutClient": true,
+    "cutDataAccess": true,
+    "cutInterfaceStructures": true,
+    "cutDataStructures": true,
+    "cutGetterAndSetter": true,
+    "cutConstructors": true
+  },
+  "graphTraversal": {
+    "forwardDepth": 3,
+    "backwardDepth": 3,
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "hideMappings": false,
+    "hideDataStructures": false,
+    "hidePrivateMethods": true,
+    "hideInterfaceCalls": true, // indirection: implementation -> interface (is hidden) -> implementation
+    "onlyShowApplicationEntryPoints": false, // root node is included
+    "useMethodCallsForStructureDiagram": "ForwardOnly" // ForwardOnly, BothDirections, No
+  },
+  "details": {
+    "aggregation": "GroupByClass", // ByClass, GroupByClass, None
+    "showClassGenericTypes": true,
+    "showMethods": false,
+    "showMethodParameterNames": false,
+    "showMethodParameterTypes": false,
+    "showMethodReturnType": false,
+    "showPackageLevels": 2,
+    "showDetailedClassStructure": false
+  },
+  "rootClass": "com.kremnev8.electroniccookbook.components.recipe.model.RecipeIngredientCache",
+  "extensionCallbackMethod": "" // qualified.class.name#methodName - signature: public static String method(String)
+}
+diagram meta data end '/
+
+
+
+digraph g {
+    rankdir="TB"
+    splines=polyline
+    
+
+'nodes 
+subgraph cluster_1406064824 { 
+   	label=kremnev8
+	labeljust=l
+	fillcolor="#ececec"
+	style=filled
+   
+   subgraph cluster_951447827 { 
+   	label=electroniccookbook
+	labeljust=l
+	fillcolor="#d8d8d8"
+	style=filled
+   
+   AppDatabase_Impl416963517[
+	label="(C)AppDatabase_Impl"
+	style=filled
+	shape=rect
+	fillcolor="#FFFFFF"
+];
+
+DatabaseExecutor416963517[
+	label="(C)DatabaseExecutor"
+	style=filled
+	shape=rect
+	fillcolor="#FFFFFF"
+];
+
+ImportRecipeViewModel972690522[
+	label="(C)ImportRecipeViewModel"
+	style=filled
+	shape=rect
+	fillcolor="#FFFFFF"
+];
+
+ImportRecipeViewModel_Factory972690522[
+	label="(C)ImportRecipeViewModel_Factory"
+	style=filled
+	shape=rect
+	fillcolor="#FFFFFF"
+];
+
+ImportRecipeWorker1365474852[
+	label="(C)ImportRecipeWorker"
+	style=filled
+	shape=rect
+	fillcolor="#FFFFFF"
+];
+
+ImportRecipeWorker_Factory1365474852[
+	label="(C)ImportRecipeWorker_Factory"
+	style=filled
+	shape=rect
+	fillcolor="#FFFFFF"
+];
+
+IngredientDao_Impl514445532[
+	label="(C)IngredientDao_Impl"
+	style=filled
+	shape=rect
+	fillcolor="#FFFFFF"
+];
+
+IngredientEditViewModel_Factory184303507[
+	label="(C)IngredientEditViewModel_Factory"
+	style=filled
+	shape=rect
+	fillcolor="#FFFFFF"
+];
+
+IngredientListViewModel_Factory395565569[
+	label="(C)IngredientListViewModel_Factory"
+	style=filled
+	shape=rect
+	fillcolor="#FFFFFF"
+];
+
+ItemViewModel757146342[
+	label="(C)ItemViewModel"
+	style=filled
+	shape=rect
+	fillcolor="#FFFFFF"
+];
+
+MainActivity1982687782[
+	label="(C)MainActivity"
+	style=filled
+	shape=rect
+	fillcolor="#FFFFFF"
+];
+
+MainActivity_MembersInjector1982687782[
+	label="(C)MainActivity_MembersInjector"
+	style=filled
+	shape=rect
+	fillcolor="#FFFFFF"
+];
+
+NavigationDrawerFragment2120110256[
+	label="(C)NavigationDrawerFragment"
+	style=filled
+	shape=rect
+	fillcolor="#FFFFFF"
+];
+
+NavigationDrawerFragment_MembersInjector2120110256[
+	label="(C)NavigationDrawerFragment_MembersInjector"
+	style=filled
+	shape=rect
+	fillcolor="#FFFFFF"
+];
+
+OnClickListenerImpl1838722605[
+	label="(C)OnClickListenerImpl"
+	style=filled
+	shape=rect
+	fillcolor="#FFFFFF"
+];
+
+ProfileDao_Impl61501588[
+	label="(C)ProfileDao_Impl"
+	style=filled
+	shape=rect
+	fillcolor="#FFFFFF"
+];
+
+ProfileEditViewModel_Factory502313035[
+	label="(C)ProfileEditViewModel_Factory"
+	style=filled
+	shape=rect
+	fillcolor="#FFFFFF"
+];
+
+ProfileListViewModel_Factory77556041[
+	label="(C)ProfileListViewModel_Factory"
+	style=filled
+	shape=rect
+	fillcolor="#FFFFFF"
+];
+
+ProfileModule2116116377[
+	label="(C)ProfileModule"
+	style=filled
+	shape=rect
+	fillcolor="#FFFFFF"
+];
+
+ProfileModule_ProvideProfileModuleFactory2116116377[
+	label="(C)ProfileModule_ProvideProfileModuleFactory"
+	style=filled
+	shape=rect
+	fillcolor="#FFFFFF"
+];
+
+RecipeAboutFragment2038944553[
+	label="(C)RecipeAboutFragment"
+	style=filled
+	shape=rect
+	fillcolor="#FFFFFF"
+];
+
+RecipeDao_Impl642759385[
+	label="(C)RecipeDao_Impl"
+	style=filled
+	shape=rect
+	fillcolor="#FFFFFF"
+];
+
+RecipeEditViewModel_Factory74923248[
+	label="(C)RecipeEditViewModel_Factory"
+	style=filled
+	shape=rect
+	fillcolor="#FFFFFF"
+];
+
+RecipeIngredientCache642759385[
+	label="(C)RecipeIngredientCache"
+	style=filled
+	shape=rect
+	fillcolor="#FFFFFF"
+];
+
+RecipeIngredientCacheDao_Impl642759385[
+	label="(C)RecipeIngredientCacheDao_Impl"
+	style=filled
+	shape=rect
+	fillcolor="#FFFFFF"
+];
+
+RecipeIngredientDao_Impl642759385[
+	label="(C)RecipeIngredientDao_Impl"
+	style=filled
+	shape=rect
+	fillcolor="#FFFFFF"
+];
+
+RecipeIngredientsFragment2038944553[
+	label="(C)RecipeIngredientsFragment"
+	style=filled
+	shape=rect
+	fillcolor="#FFFFFF"
+];
+
+RecipeStepCacheDao_Impl642759385[
+	label="(C)RecipeStepCacheDao_Impl"
+	style=filled
+	shape=rect
+	fillcolor="#FFFFFF"
+];
+
+RecipeStepDao_Impl642759385[
+	label="(C)RecipeStepDao_Impl"
+	style=filled
+	shape=rect
+	fillcolor="#FFFFFF"
+];
+
+RecipeStepsFragment2038944553[
+	label="(C)RecipeStepsFragment"
+	style=filled
+	shape=rect
+	fillcolor="#FFFFFF"
+];
+
+RecipeViewFragment2038944553[
+	label="(C)RecipeViewFragment"
+	style=filled
+	shape=rect
+	fillcolor="#FFFFFF"
+];
+
+RecipeViewIngredientCache642759385[
+	label="(C)RecipeViewIngredientCache"
+	style=filled
+	shape=rect
+	fillcolor="#FFFFFF"
+];
+
+RecipeViewIngredientItemViewModel1531340616[
+	label="(C)RecipeViewIngredientItemViewModel"
+	style=filled
+	shape=rect
+	fillcolor="#FFFFFF"
+];
+
+RecipeViewModel1136249323[
+	label="(C)RecipeViewModel"
+	style=filled
+	shape=rect
+	fillcolor="#FFFFFF"
+];
+
+RecipeViewModel_Factory1136249323[
+	label="(C)RecipeViewModel_Factory"
+	style=filled
+	shape=rect
+	fillcolor="#FFFFFF"
+];
+
+RecipeViewStepItemViewModel1531340616[
+	label="(C)RecipeViewStepItemViewModel"
+	style=filled
+	shape=rect
+	fillcolor="#FFFFFF"
+];
+
+RecipesListViewModel_Factory504945828[
+	label="(C)RecipesListViewModel_Factory"
+	style=filled
+	shape=rect
+	fillcolor="#FFFFFF"
+];
+
+SimpleListViewModel757146342[
+	label="(C)SimpleListViewModel"
+	style=filled
+	shape=rect
+	fillcolor="#FFFFFF"
+];
+
+SimpleViewModel2049847629[
+	label="(C)SimpleViewModel"
+	style=filled
+	shape=rect
+	fillcolor="#FFFFFF"
+];
+
+TimersService867143134[
+	label="(C)TimersService"
+	style=filled
+	shape=rect
+	fillcolor="#FFFFFF"
+];
+} 
+} 
+
+'edges    
+AppDatabase_Impl416963517 -> DatabaseExecutor416963517[label="_profileDao
+[0..1]", arrowhead=none];
+AppDatabase_Impl416963517 -> RecipeIngredientCacheDao_Impl642759385[label="_recipeIngredientCacheDao
+[0..1]", arrowhead=none];
+DatabaseExecutor416963517 -> IngredientDao_Impl514445532[arrowhead=none];
+DatabaseExecutor416963517 -> ProfileDao_Impl61501588[arrowhead=none];
+DatabaseExecutor416963517 -> RecipeDao_Impl642759385[arrowhead=none];
+DatabaseExecutor416963517 -> RecipeIngredientDao_Impl642759385[arrowhead=none];
+DatabaseExecutor416963517 -> RecipeStepCacheDao_Impl642759385[arrowhead=none];
+DatabaseExecutor416963517 -> RecipeStepDao_Impl642759385[arrowhead=none];
+ImportRecipeViewModel972690522 -> DatabaseExecutor416963517[label="databaseExecutor
+[0..1]"];
+ImportRecipeViewModel_Factory972690522 -> DatabaseExecutor416963517[label="databaseExecutorProvider
+[0..1]"];
+ImportRecipeWorker1365474852 -> DatabaseExecutor416963517[label="databaseExecutor
+[0..1]"];
+ImportRecipeWorker_Factory1365474852 -> DatabaseExecutor416963517[label="databaseExecutorProvider
+[0..1]"];
+IngredientEditViewModel_Factory184303507 -> DatabaseExecutor416963517[label="databaseExecutorProvider
+[0..1]"];
+IngredientListViewModel_Factory395565569 -> DatabaseExecutor416963517[label="databaseExecutorProvider
+[0..1]"];
+ItemViewModel757146342 -> RecipeViewIngredientItemViewModel1531340616[arrowhead=none, arrowtail=empty, dir=both];
+MainActivity1982687782 -> DatabaseExecutor416963517[label="executor
+[0..1]"];
+MainActivity_MembersInjector1982687782 -> DatabaseExecutor416963517[label="executorProvider
+[0..1]"];
+NavigationDrawerFragment2120110256 -> DatabaseExecutor416963517[label="executor
+[0..1]"];
+NavigationDrawerFragment_MembersInjector2120110256 -> DatabaseExecutor416963517[label="executorProvider
+[0..1]"];
+OnClickListenerImpl1838722605 -> RecipeViewIngredientItemViewModel1531340616[label="value
+[0..1]"];
+ProfileEditViewModel_Factory502313035 -> DatabaseExecutor416963517[label="databaseExecutorProvider
+[0..1]"];
+ProfileListViewModel_Factory77556041 -> DatabaseExecutor416963517[label="databaseExecutorProvider
+[0..1]"];
+ProfileModule2116116377 -> DatabaseExecutor416963517[label="executor
+[0..1]"];
+ProfileModule_ProvideProfileModuleFactory2116116377 -> DatabaseExecutor416963517[label="executorProvider
+[0..1]"];
+RecipeAboutFragment2038944553 -> RecipeViewModel1136249323[label="viewModel
+[0..1]"];
+RecipeEditViewModel_Factory74923248 -> DatabaseExecutor416963517[label="databaseExecutorProvider
+[0..1]"];
+RecipeIngredientCacheDao_Impl642759385 -> DatabaseExecutor416963517[arrowhead=none];
+RecipeIngredientCacheDao_Impl642759385 -> RecipeIngredientCache642759385[label="__upsertionAdapterOfRecipeIngredientCache
+[0..1]"];
+RecipeIngredientsFragment2038944553 -> RecipeViewModel1136249323[label="viewModel
+[0..1]"];
+RecipeStepsFragment2038944553 -> RecipeViewModel1136249323[label="viewModel
+[0..1]"];
+RecipeViewFragment2038944553 -> RecipeViewModel1136249323[label="viewModel
+[0..1]"];
+RecipeViewIngredientCache642759385 -> RecipeIngredientCache642759385[label="cache
+[0..1]"];
+RecipeViewIngredientItemViewModel1531340616 -> DatabaseExecutor416963517[label="executor
+[0..1]"];
+RecipeViewIngredientItemViewModel1531340616 -> RecipeViewIngredientCache642759385[label="ingredient
+[0..1]"];
+RecipeViewModel1136249323 -> DatabaseExecutor416963517[label="databaseExecutor
+[0..1]"];
+RecipeViewModel1136249323 -> RecipeViewIngredientCache642759385[label="ingredientsModelsHolder
+[0..1]"];
+RecipeViewModel_Factory1136249323 -> DatabaseExecutor416963517[label="databaseExecutorProvider
+[0..1]"];
+RecipeViewStepItemViewModel1531340616 -> DatabaseExecutor416963517[label="executor
+[0..1]"];
+RecipesListViewModel_Factory504945828 -> DatabaseExecutor416963517[label="databaseExecutorProvider
+[0..1]"];
+SimpleListViewModel757146342 -> DatabaseExecutor416963517[label="databaseExecutor
+[0..1]"];
+SimpleViewModel2049847629 -> DatabaseExecutor416963517[label="databaseExecutor
+[0..1]"];
+TimersService867143134 -> RecipeViewModel1136249323[label="callbacks
+[0..*]", arrowhead=none];
+    
+}
+@enduml
